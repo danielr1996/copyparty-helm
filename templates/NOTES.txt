@@ -1,3 +1,5 @@
+Welcome to 💾🎉 copyparty. Please report any issues to https://github.com/9001/copyparty/issues and be sure to check out the documentation (insert link here) and helm deployment guide (insert link here)
+
 1. Get the application URL by running these commands:
 {{- if .Values.ingress.enabled }}
 {{- range $host := .Values.ingress.hosts }}

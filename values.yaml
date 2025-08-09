@@ -127,26 +127,29 @@ copyparty:
         groups:
           - group1: rwm
       volflags:
-        enableSymlinkDeduplication: false
-        enableHardlinkDeduplication: false
-        noSymlinkFallback: false
-        enableReflinkDeduplication: false
-        deduplicationSafetyFactor: hash
-        noClone: false
-        rejectDuplicateFiles: false
-        standardDirChmod: 755
-        standardFileChmod: 644
-        standardChownUID: 573
-        standardChownGID: 999
-        # Whether to use sparse files: force|auto|deny
-        useSparse: auto
+        FSOptions:
+          enableSymlinkDeduplication: false
+          enableHardlinkDeduplication: false
+          noSymlinkFallback: false
+          enableReflinkDeduplication: false
+          deduplicationSafetyFactor: hash
+          noClone: false
+          rejectDuplicateFiles: false
+          standardDirChmod: 755
+          standardFileChmod: 644
+          standardChownUID: 573
+          standardChownGID: 999
+          # Whether to use sparse files: force|auto|deny
+          useSparse: auto
+          enableMagic: false
+          namelessUploadName: 'put-{now.6f}-{cip}.bin'
+          putChecksum: sha512
+          bupChecksum: sha512
+
         webdav:
           enableFullWrite: false
         noSubfolders: false
-        enableMagic: false
-        namelessUploadName: 'put-{now.6f}-{cip}.bin'
-        putChecksum: sha512
-        bupChecksum: sha512
+
         zipDownload:
           enabled: true
           enableCompressedTar: true
@@ -175,7 +178,8 @@ copyparty:
           size: 1g
         maxFileCount: 4k
         returnMediaLinks: false
-        writeOnlyInReadme: false
+        yolo:
+          writeOnlyInReadme: false
         randomFileName:
           enabled: false
           # randomized filenames length
@@ -193,20 +197,15 @@ copyparty:
 
         # ensure 1 GiB free disk space
         minimumFreeDiskSpace: 1g
-    ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-    ###// upload rotation -- (moves all uploads into the specified folder structure) \\00000000000\
 
         # 3 levels of subfolders with 100 entries in each
         rotatingFolderStructure: 100,3
 
         # date-formatted organizing
-        rotatingFilename: %Y-%m/%d-%H
+        rotatingFilename: '%Y-%m/%d-%H'
 
         # uploads are deleted after 1 hour
         lifetime: 3600
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// database, general \\00000000000000000000000000000000000000000000000000000000000000000000\
 
         up2k:
           enable: true
@@ -234,163 +233,227 @@ copyparty:
           dirSizeMode: recursive
           # disable db if file foo doesn't exist
           landmark: foo
+          # show dotfiles in search results (volflags: dotsrch | nodotsrch)
+          searchShowDotFiles: false
+          filesystemRescanInterval: 86400
+          # never forget indexed files, even when deleted from disk -- makes it impossible to ever upload the same file twice -- only useful for offloading uploads to a cloud service or something
+          # 📂 also available as volflag "noforget"
+          forgetDeletedFiles: true
+          # remove uploader-IP from database (and make unpost impossible) MIN minutes after upload, for GDPR reasons. Default [0] is never-forget. [1440]=day, [10080]=week, [43200]=month.
+          # 📂 also available as volflag "forget_ip"
+          forgetIP: 0
+          # database durability profile; sets the tradeoff between robustness and speed, see --help-dbd
+          # 📂 also available as volflag "dbd"
+          # acid = extremely safe but slow; the old default. Should never lose any data no matter what
+          # swal = 2.4x faster uploads yet 99.9% as safe -- theoretical chance of losing metadata for the ~200 most recently uploaded files if there's a power-loss or your OS crashes
+          # wal = another 21x faster on HDDs yet 90% as safe; same pitfall as swal except more likely
+          # yolo = another 1.5x faster, and removes the occasional sudden upload-pause while the disk syncs, but now you're at risk of losing the entire database in a powerloss / OS-crash
+          dbDurability: wal
+          # on upload: check all volumes for dupes, not just the target volume (probably buggy, not recommended)
+          # 📂 also available as volflag "xlink"
+          crosslink: false
+          # num cpu cores to use for file hashing; set 0 or 1 for single-core hashing
+          # default is autodetect but max 5
+          hashingThreadCount: auto
+          # regex: exclude files from search results if the file-URL matches PTN (case-sensitive)
+          # 📂 also available as volflag "srch_excl"
+          searchExcludeRegex: password|logs/[0-9]  # hint (any URL containing 'password' or 'logs/DIGIT'), default is unset
 
-
-
-        # enable multimedia indexing; makes it possible to search for tags
-        e2t
-
-        # scan existing files for tags on startup; also sets -e2t
-        e2ts
-
-        # delete all metadata from DB (full rescan); also sets -e2ts
-        e2tsr
-
-        # disables metadata collection for existing files
-        d2ts
-
-
-        # scan for new files every 60sec, same as --re-maxage
-        scan: 60
-
-        # skips hashing file contents if path matches *.iso
-        nohash: \.iso$
-
-        # fully ignores the contents at paths matching *.iso
-        noidx: \.iso$
-
-        # don't forget files when deleted from disk
-        noforget
-
-        # forget uploader-IP after 30 days (GDPR)
-        forget_ip: 43200
-
-        # never store uploader-IP in the db; disables unpost
-        no_db_ip
+        metadataDB:
+          enable: true
+          scanOnStartup: true
+          rebuildOnStartup: false
+          tagsToIndex:
+            - .files
+            - circle
+            - album
+            - .tn
+            - artist
+            - title
+            - .bpm
+            - key
+            - .dur
+            - .q
+            - .vq
+            - .aq
+            - vc
+            - ac
+            - fmt
+            - res
+            - .fps
+            - ahash
+            - vhash
+          tagsToHide:
+            - .vq
+            - .aq
+            - vc
+            - ac
+            - fmt
+            - res
+            - .fps
+          tagParsers:
+            .bpm: ~/bin/audio-bpm.py
+            key: f,t5,~/bin/audio-key.py
 
         # avoid excessive reindexing on android sdcardfs
-        fat32
+        avoidExcessiveReindexing: false
 
-        # database speed-durability tradeoff
-        dbd: [acid|swal|wal|yolo]
+        security:
+          # never follow symlinks leaving the volume root, unless the link is into another volume where the user has similar access
+          followSymlinksLeavingVolRoot: false
+          # stay within the filesystem of the volume root; do not descend into other devices (symlink or bind-mount to another HDD, ...)
+          leaveVolRootFS: false
+          # adds http and html headers asking search engines to not index anything
+          # 📂 also available as volflag "norobots"
+          forbidRobots: true
+        thumbnails:
+          # all thumbnails
+          # 📂 disable also available as volflag "dthumb"
+          enable: true
+          # video thumbnails
+          # 📂 disable also available as volflag "dvthumb"
+          enableVideoThumnails: true
+          # audio thumbnails (spectrograms)
+          # 📂 disable also available as volflag "dathumb"
+          enableAudioThumbnails: true
+          enableImageThumbnails: true
+          # 📂 also available as volflag "thsize"
+          thumbnailSize: 320x256  # default
+          # @TODO: Better name
+          pngquant: true
+          # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force.
+          # crop|nocrop|force-crop|force-nocrop
+          thumbnailCrop: crop  # default
+          # show thumbs at 3x resolution; client can override in UI unless force. [y]=yes, [n]=no, [fy]=force-yes, [fn]=force-no
+          # yes|force-yes|no|force-no
+          showAt3xSize: yes
+          # conversion timeout in seconds
+          # 📂 also available as volflag "convt"
+          maxConversionTime: 60  # default
+          filenameOverrides:
+            - 7z: /.icons/archive.png
+            - exe: /.icons/glass-of-red-liquid.png
 
-        # cross-volume dupe detection / linking (dangerous)
-        xlink
+        eventHandlers:
+          on404:
+            - ~/bin/on404.py
+            - ~/bin/on404season2electricboogaloo.py
+          on403:
+            - ~/bin/on403.py
 
-        # do not descend into other filesystems
-        xdev
+        eventHooks:
+          preUpload:
+            - ~/bin/execute-before-upload.py
+          postUpload:
+            - ~/bin/execute-after-upload.py
+          postAllUploads:
+            - ~/bin/execute-idle-upload.py
+          preCopy:
+            - ~/bin/execute-before-copy.py
+          postCopy:
+            - ~/bin/execute-after-copy.py
+          preMoveRename:
+            - ~/bin/execute-before-rename.py
+          postMoveRename:
+            - ~/bin/execute-after-rename.py
+          preDelete:
+            - ~/bin/execute-before-delete.py
+          postDelete:
+            - ~/bin/execute-after-delete.py
+          onMessage:
+            - ~/bin/execute-on-message.py
+          onBan:
+            - ~/bin/execute-on-ban.py
+        ui:
+          # show grid/thumbnails by default
+          # 📂 also available as volflag "grid"
+          useGrid: false
+          # select files in grid by ctrl-click
+          # 📂 also available as volflag "gsel"
+          groupSelection: true
+          #useLocalTime: true
+          # language; one of the following: eng|nor|chi
+          #language: eng
+          # default theme to use (0..7)
+          #theme: 0
+          #themeCount: 8
+          # default audio/video volume percent
+          #defaultVolume: 50
+          # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: href -href ext sz ts tags/Album tags/.tn
+          # 📂 also available as volflag "sort"
+          sortBy: href  # default
+          # default-enable natural sort of filenames with leading numbers
+          # 📂 also available as volflag "nsort"
+          naturalSort: true
+          # number of sorting rules to include in media URLs by default
+          # 📂 also available as volflag "hsortn"
+          # @TODO: Come up with a better name
+          hsortn: 2  # default
+          # default-enable seeing dotfiles; only takes effect if user has the necessary permissions
+          #seeDotfiles: true
+          # number of confirmations to show when deleting files (2/1/0)
+          #deleteConfirmationCount: 2  # default
+          # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\.(js|css)$]
+          # 📂 also available as volflag "unlist"
+          unlistItems: REGEX  # placeholder
+          # favicon-text [ foreground [ background ] ], set blank to disable
+          #favicon: c 000 none  # default
+          #spinner: 🌲
+          # URL to additional CSS to include in the filebrowser html
+          #additionalFilebrowserCSS: /.res/rice.css  # hint; default is unset
+          # URL to additional JS to include in the filebrowser html
+          #additionalFilebrowserJS: /.res/mousetrail.js  # hint; default is unset
+          # URL to additional JS to include in all other pages
+          #additionalOtherJS: /.res/snowflakes.jpg  # hint; default is unset
+          # text to append to the <head> of all HTML pages (except for basic-browser); can be @PATH to send the contents of a file at PATH, and/or begin with % to render as jinja2 template
+          # 📂 also available as volflag "html_head"
+          htmlHead: <script>alert(1);</script>  # hint; default is unset
+          #overrideWithIndexHTML: false
+          #displayAsPlaintext:
+            # - txt
+            # - nfo
+            # - diz
+            # - cue
+            # - readme
+          # max size of embedded textfiles on ?doc= (anything bigger will be lazy-loaded by JS)
+          #maxSize: 64
+          # title / service-name to show in html documents
+          #documentTitle: copyparty @ --name  # default (--name will copy from global-option `name`)
+          # powered-by link; disable with -nb
+          #poweredByURL: https://github.com/9001/copyparty  # default
+          # show version on the control panel (incompatible with -nb)
+          #showVersion: true
+          # configure the option to enable/disable k304 on the controlpanel (workaround for buggy reverse-proxies); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
+          #k304: 0  # default
+          # configure the option to enable/disable no304 on the controlpanel (workaround for buggy caching in browsers); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
+          #no304: 0  # default
+          # list of capabilities to allow in the iframe 'sandbox' attribute for README.md docs (volflag=md_sbf); see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox
+          markdownSandboxIFrameCapabilities: 
+            - downloads
+            - forms
+            - popups
+            - scripts 
+            - top-navigation-by-user-activation  # default
+          # list of capabilities to allow in the iframe 'sandbox' attribute for prologue/epilogue docs
+          # 📂 also available as volflag "lg_sbf"
+          logueSandboxIFrameCapabilities: 
+            - downloads
+            - forms
+            - popups
+            - scripts
+            - top-navigation-by-user-activation  # default
+          # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen]
+          # 📂 also available as volflag "md_sba"
+          markdownAllowIFrameCapabilities: fullscreen  # hint; default is blank
+          # the value of the iframe 'allow' attribute for prologue/epilogue docs (volflag=lg_sba); see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy#iframes
+          logueAllowIFrameCapabilities: TXT  # placeholder
 
-        # do not follow symlinks leaving the volume root
-        xvol
+          # (don't) sandbox README/PREADME.md documents (volflags: no_sb_md | sb_md)
+          sandboxMarkdown: true
 
-        # show dotfiles in search results
-        dotsrch
+          # (don't) sandbox prologue/epilogue docs (volflags: no_sb_lg | sb_lg); enables non-js support
+          sandboxLogues:
 
-        # hide dotfiles in search results (default)
-        nodotsrch
-
-        # exclude search results with URL matching this regex
-        srch_excl
-
-        # media-tags to index/display
-        mte: artist,title
-
-        # media-tags to hide by default
-        mth: fmt,res,ac
-
-        # uses the "audio-bpm.py" program to generate ".bpm" tags from uploads (f = overwrite tags)
-        mtp: .bpm=f,audio-bpm.py
-
-        # collects two tags at once
-        mtp: ahash,vhash=media-hash.py
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// thumbnails \\000000000000000000000000000000000000000000000000000000000000000000000000000\
-
-        # disables all thumbnails
-        dthumb
-
-        # disables video thumbnails
-        dvthumb
-
-        # disables audio thumbnails (spectrograms)
-        dathumb
-
-        # disables image thumbnails
-        dithumb
-
-        # compress audio waveforms 33% better
-        pngquant
-
-        # thumbnail res; WxH
-        thsize
-
-        # center-cropping (y/n/fy/fn)
-        crop
-
-        # 3x resolution (y/n/fy/fn)
-        th3x
-
-        # conversion timeout in seconds
-        convt
-
-        # use /b.png as thumbnail for file-extension s
-        ext_th: s=/b.png
-
-      eventHandlers:
-        on404:
-          - ~/bin/on404.py
-          - ~/bin/on404season2electricboogaloo.py
-        on403:
-          - ~/bin/on403.py
-
-      eventHooks:
-        preUpload:
-          - ~/bin/execute-before-upload.py
-        postUpload:
-          - ~/bin/execute-after-upload.py
-        postAllUploads:
-          - ~/bin/execute-idle-upload.py
-        preCopy:
-          - ~/bin/execute-before-copy.py
-        postCopy:
-          - ~/bin/execute-after-copy.py
-        preMoveRename:
-          - ~/bin/execute-before-rename.py
-        postMoveRename:
-          - ~/bin/execute-after-rename.py
-        preDelete:
-          - ~/bin/execute-before-delete.py
-        postDelete:
-          - ~/bin/execute-after-delete.py
-        onMessage:
-          - ~/bin/execute-on-message.py
-        onBan:
-          - ~/bin/execute-on-ban.py
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// client and ux \\000000000000000000000000000000000000000000000000000000000000000000000000\
-
-        # show grid/thumbnails by default
-        grid
-
-        # select files in grid by ctrl-click
-        gsel
-
-        # default sort order
-        sort
-
-        # natural-sort of leading digits in filenames
-        nsort
-
-        # number of sort-rules to add to media URLs
-        hsortn
-
-        # dont list files matching REGEX
-        unlist
-
-        # includes TXT in the <head>, or @PATH for file at PATH
-        html_head: <script>alert(1);</script>
 
         # theme color (a hint for webbrowsers, discord, etc.)
         tcolor: #fc0
@@ -398,41 +461,12 @@ copyparty:
         # don't show total folder size
         nodirsz
 
-        # allows indexing by search engines (default)
-        robots
-
-        # kindly asks search engines to leave
-        norobots
-
         # don't list read-access in controlpanel
         unlistcr
 
         # don't list write-access in controlpanel
         unlistcw
 
-        # disable js sandbox for markdown files
-        no_sb_md
-
-        # disable js sandbox for prologue/epilogue
-        no_sb_lg
-
-        # enable js sandbox for markdown files (default)
-        sb_md
-
-        # enable js sandbox for prologue/epilogue (default)
-        sb_lg
-
-        # list of markdown-sandbox safeguards to disable
-        md_sbf
-
-        # list of *logue-sandbox safeguards to disable
-        lg_sbf
-
-        # value of iframe allow-prop for markdown-sandbox
-        md_sba
-
-        # value of iframe allow-prop for *logue-sandbox
-        lg_sba
 
         # return html and markdown as text/html
         nohtml
@@ -556,12 +590,6 @@ copyparty:
 
         # disable race-the-beam (download unfinished uploads)
         nopipe
-
-        # ms-windows: timeout for renaming busy files
-        mv_retry
-
-        # ms-windows: timeout for deleting busy files
-        rm_retry
 
         # ask webdav clients to login for all folders
         davauth
@@ -711,13 +739,6 @@ copyparty:
     # disable race-the-beam (lockstep download of files which are currently being uploaded)
     # 📂 also available as volflag "nopipe"
     disableBeamRacing: false
-    # disable streaming a growing files with ?tail
-    # 📂 also available as volflag "notail"
-    disableFileStreaming: false
-
-    # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead
-    # 📂 also available as volflag "no_db_ip"
-    dontWriteIPtoDB: false
     # force randomized filenames, --nrand chars long
     # 📂 also available as volflag "randomFileName.enabled"
     randomFileName:
@@ -778,10 +799,10 @@ copyparty:
     # do a sanity/safety check of all volumes on startup; arguments USER,VOL,FLAGS (see --help-ls); example [**,*,ln,p,r]
     startupDiskCheck: '**,*,ln,p,r'  # hint; default is unset
     # never follow symlinks leaving the volume root, unless the link is into another volume where the user has similar access
-    # 📂 also available as volflag "xvol"
+    # 📂 also available as volflag "followSymlinksLeavingVolRoot"
     followSymlinksLeavingVolRoot: false
     # stay within the filesystem of the volume root; do not descend into other devices (symlink or bind-mount to another HDD, ...)
-    # 📂 also available as volflag "xdev"
+    # 📂 also available as volflag "leaveVolRootFS"
     leaveVolRootFS: false
     # disallow moving dotfiles; makes it impossible to move folders containing dotfiles
     noMovingDotfiles: false
@@ -1105,15 +1126,15 @@ copyparty:
 
   thumbnails:
     # all thumbnails
-    # 📂 disable also available as volflag "dthumb"
+    # 📂 disable also available as volflag "thumbnails.enable"
     enable: true
     # video thumbnails
-    # 📂 disable also available as volflag "dvthumb"
+    # 📂 disable also available as volflag "enableVideoThumnails"
     enableVideoThumnails: true
     # audio thumbnails (spectrograms)
-    # 📂 disable also available as volflag "dathumb"
+    # 📂 disable also available as volflag "enableAudioThumbnails"
     enableAudioThumbnails: true
-    # 📂 also available as volflag "thsize"
+    # 📂 also available as volflag "thumbnailSize"
     thumbnailSize: 320x256  # default
     # num cpu cores to use for generating thumbnails
     # default is auto, but you can specify a number
@@ -1237,6 +1258,9 @@ copyparty:
     # check if file was replaced (new fd) if idle for SEC seconds
     # 📂 also available as volflag "tail_fd"
     checkForNewFileDescriptorOnIdle: 1
+    # disable streaming a growing files with ?tail
+    # 📂 also available as volflag "notail"
+    disableFileStreaming: false
   
   rss:
     # enable RSS output (experimental)
@@ -1300,7 +1324,7 @@ copyparty:
     # default is autodetect but max 5
     hashingThreadCount: auto
     # rescan filesystem for changes every SEC seconds; 0=off
-    # 📂 also available as volflag "scan"
+    # 📂 also available as volflag "filesystemRescanInterval"
     filesystemRescanInterval: 86400
     # defer any scheduled volume reindexing until SEC seconds after last db write (uploads, renames, ...)
     dbWriteCooldown: 10
@@ -1311,8 +1335,11 @@ copyparty:
     # regex: exclude files from search results if the file-URL matches PTN (case-sensitive)
     # 📂 also available as volflag "srch_excl"
     searchExcludeRegex: password|logs/[0-9]  # hint (any URL containing 'password' or 'logs/DIGIT'), default is unset
-    # show dotfiles in search results (volflags: dotsrch | nodotsrch)
+    # show dotfiles in search results (volflags: searchShowDotFiles)
     searchShowDotFiles: false
+    # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead
+    # 📂 also available as volflag "no_db_ip"
+    dontWriteIPtoDB: false
 
   metadataDB:
     enable: true
@@ -1464,6 +1491,9 @@ copyparty:
     theme: 0
     themeCount: 8
     # default audio/video volume percent
+    # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: href -href ext sz ts tags/Album tags/.tn
+    # 📂 also available as volflag "sort"
+    sortBy: href  # default
     defaultVolume: 50
     # default-enable natural sort of filenames with leading numbers
     # 📂 also available as volflag "nsort"

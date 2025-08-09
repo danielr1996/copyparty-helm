@@ -183,7 +183,414 @@ copyparty:
           lenth: 9
         # web-client: default setting for when to replace/overwrite existing files; never|if-client-newer|always
         duplicateFileBehavior: if-client-newer
-        
+        # [f]orce [c]lient-last-modified or [u]pload-time
+        uploadTimestampingMode: fc
+        # allow aborting unfinished uploads? 0=no 1=strict 2=ip-chk 3=acct-chk
+        abortIncompleteUploads: 1
+
+        # allow filesizes between 1 KiB and 3MiB
+        uploadSizeRange: 1k-3m
+
+        # ensure 1 GiB free disk space
+        minimumFreeDiskSpace: 1g
+    ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+    ###// upload rotation -- (moves all uploads into the specified folder structure) \\00000000000\
+
+        # 3 levels of subfolders with 100 entries in each
+        rotn: 100,3
+
+        # date-formatted organizing
+        rotf: %Y-%m/%d-%H
+
+        # uploads are deleted after 1 hour
+        lifetime: 3600
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// database, general \\00000000000000000000000000000000000000000000000000000000000000000000\
+
+        # enable database; makes files searchable + enables upload-undo
+        e2d
+
+        # scan writable folders for new files on startup; also sets -e2d
+        e2ds
+
+        # scans all folders for new files on startup; also sets -e2d
+        e2dsa
+
+        # enable multimedia indexing; makes it possible to search for tags
+        e2t
+
+        # scan existing files for tags on startup; also sets -e2t
+        e2ts
+
+        # delete all metadata from DB (full rescan); also sets -e2ts
+        e2tsr
+
+        # disables metadata collection for existing files
+        d2ts
+
+        # verify integrity on startup by hashing files and comparing to db
+        e2v
+
+        # when e2v fails, update the db (assume on-disk files are good)
+        e2vu
+
+        # when e2v fails, panic and quit copyparty
+        e2vp
+
+        # disables onboot indexing, overrides -e2ds*
+        d2ds
+
+        # disables metadata collection, overrides -e2t*
+        d2t
+
+        # disables file verification, overrides -e2v*
+        d2v
+
+        # disables all database stuff, overrides -e2*
+        d2d
+
+        # puts thumbnails and indexes at that location
+        hist: /tmp/cdb
+
+        # puts indexes at that location
+        dbpath: /tmp/cdb
+
+        # disable db if file foo doesn't exist
+        landmark: foo
+
+        # scan for new files every 60sec, same as --re-maxage
+        scan: 60
+
+        # skips hashing file contents if path matches *.iso
+        nohash: \.iso$
+
+        # fully ignores the contents at paths matching *.iso
+        noidx: \.iso$
+
+        # don't forget files when deleted from disk
+        noforget
+
+        # forget uploader-IP after 30 days (GDPR)
+        forget_ip: 43200
+
+        # never store uploader-IP in the db; disables unpost
+        no_db_ip
+
+        # avoid excessive reindexing on android sdcardfs
+        fat32
+
+        # database speed-durability tradeoff
+        dbd: [acid|swal|wal|yolo]
+
+        # cross-volume dupe detection / linking (dangerous)
+        xlink
+
+        # do not descend into other filesystems
+        xdev
+
+        # do not follow symlinks leaving the volume root
+        xvol
+
+        # show dotfiles in search results
+        dotsrch
+
+        # hide dotfiles in search results (default)
+        nodotsrch
+
+        # exclude search results with URL matching this regex
+        srch_excl
+
+        # media-tags to index/display
+        mte: artist,title
+
+        # media-tags to hide by default
+        mth: fmt,res,ac
+
+        # uses the "audio-bpm.py" program to generate ".bpm" tags from uploads (f = overwrite tags)
+        mtp: .bpm=f,audio-bpm.py
+
+        # collects two tags at once
+        mtp: ahash,vhash=media-hash.py
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// thumbnails \\000000000000000000000000000000000000000000000000000000000000000000000000000\
+
+        # disables all thumbnails
+        dthumb
+
+        # disables video thumbnails
+        dvthumb
+
+        # disables audio thumbnails (spectrograms)
+        dathumb
+
+        # disables image thumbnails
+        dithumb
+
+        # compress audio waveforms 33% better
+        pngquant
+
+        # thumbnail res; WxH
+        thsize
+
+        # center-cropping (y/n/fy/fn)
+        crop
+
+        # 3x resolution (y/n/fy/fn)
+        th3x
+
+        # conversion timeout in seconds
+        convt
+
+        # use /b.png as thumbnail for file-extension s
+        ext_th: s=/b.png
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// handlers -- (better explained in --help-handlers) \\000000000000000000000000000000000000\
+
+        # handle 404s by executing PY file
+        on404: ~/bin/hook.py
+
+        # handle 403s by executing PY file
+        on403: ~/bin/hook.py
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// event hooks -- (better explained in --help-hooks) \\000000000000000000000000000000000000\
+
+        # execute CMD before a file upload starts
+        xbu: ~/bin/hook.py
+
+        # execute CMD after  a file upload finishes
+        xau: ~/bin/hook.py
+
+        # execute CMD after  all uploads finish and volume is idle
+        xiu: ~/bin/hook.py
+
+        # execute CMD before a file copy
+        xbc: ~/bin/hook.py
+
+        # execute CMD after  a file copy
+        xac: ~/bin/hook.py
+
+        # execute CMD before a file rename/move
+        xbr: ~/bin/hook.py
+
+        # execute CMD after  a file rename/move
+        xar: ~/bin/hook.py
+
+        # execute CMD before a file delete
+        xbd: ~/bin/hook.py
+
+        # execute CMD after  a file delete
+        xad: ~/bin/hook.py
+
+        # execute CMD on message
+        xm: ~/bin/hook.py
+
+        # execute CMD if someone gets banned
+        xban: ~/bin/hook.py
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// client and ux \\000000000000000000000000000000000000000000000000000000000000000000000000\
+
+        # show grid/thumbnails by default
+        grid
+
+        # select files in grid by ctrl-click
+        gsel
+
+        # default sort order
+        sort
+
+        # natural-sort of leading digits in filenames
+        nsort
+
+        # number of sort-rules to add to media URLs
+        hsortn
+
+        # dont list files matching REGEX
+        unlist
+
+        # includes TXT in the <head>, or @PATH for file at PATH
+        html_head: <script>alert(1);</script>
+
+        # theme color (a hint for webbrowsers, discord, etc.)
+        tcolor: #fc0
+
+        # don't show total folder size
+        nodirsz
+
+        # allows indexing by search engines (default)
+        robots
+
+        # kindly asks search engines to leave
+        norobots
+
+        # don't list read-access in controlpanel
+        unlistcr
+
+        # don't list write-access in controlpanel
+        unlistcw
+
+        # disable js sandbox for markdown files
+        no_sb_md
+
+        # disable js sandbox for prologue/epilogue
+        no_sb_lg
+
+        # enable js sandbox for markdown files (default)
+        sb_md
+
+        # enable js sandbox for prologue/epilogue (default)
+        sb_lg
+
+        # list of markdown-sandbox safeguards to disable
+        md_sbf
+
+        # list of *logue-sandbox safeguards to disable
+        lg_sbf
+
+        # value of iframe allow-prop for markdown-sandbox
+        md_sba
+
+        # value of iframe allow-prop for *logue-sandbox
+        lg_sba
+
+        # return html and markdown as text/html
+        nohtml
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// opengraph (discord embeds) \\00000000000000000000000000000000000000000000000000000000000\
+
+        # enable OG (disables hotlinking)
+        og
+
+        # sitename; defaults to --name, disable with '-'
+        og_site
+
+        # description text for all files; disable with '-'
+        og_desc
+
+        # thumbnail format; j / jf / jf3 / w / w3 / ...
+        og_th: jf
+
+        # audio title format; default: {{ artist }} - {{ title }}
+        og_title_a
+
+        # video title format; default: {{ title }}
+        og_title_v
+
+        # image title format; default: {{ title }}
+        og_title_i
+
+        # fallback title if there's nothing in the db
+        og_title: foo
+
+        # force default title; do not read from tags
+        og_s_title
+
+        # custom html; see --og-tpl in --help
+        og_tpl
+
+        # you want to add tags manually with og_tpl
+        og_no_head
+
+        # if defined: only send OG html if useragent matches this regex
+        og_ua
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// textfiles \\0000000000000000000000000000000000000000000000000000000000000000000000000000\
+
+        # where to put markdown backups; s=subfolder, v=volHist, n=nope
+        md_hist
+
+        # enable textfile expansion; see --help-exp
+        exp
+
+        # placeholders to expand in markdown files; see --help
+        exp_md
+
+        # placeholders to expand in prologue/epilogue; see --help
+        exp_lg
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// tailing \\000000000000000000000000000000000000000000000000000000000000000000000000000000\
+
+        # disable ?tail (download a growing file continuously)
+        notail
+
+        # check if file was replaced (new fd) every 1 sec
+        tail_fd: 1
+
+        # check for new data every 0.2 sec
+        tail_rate: 0.2
+
+        # kill connection after 30 sec
+        tail_tmax: 30
+
+        # restrict ?tail access (1=admins,2=authed,3=everyone)
+        tail_who: 2
+
+        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
+        ###// others \\0000000000000000000000000000000000000000000000000000000000000000000000000000000\
+
+        # allow all users with read-access to enable the option to show dotfiles in listings
+        dots
+
+        # generates per-file accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
+        fk: 8
+
+        # generates slightly weaker per-file accesskeys, which are then required at the "g" permission; not affected by filesize or inode numbers
+        fka: 8
+
+        # generates per-directory accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
+        dk: 8
+
+        # per-directory accesskeys allow browsing into subdirs
+        dks
+
+        # allow seeing files (not folders) inside a specific folder with "g" perm, and does not require a valid dirkey to do so
+        dky
+
+        # allow '?rss' URL suffix (experimental)
+        rss
+
+        # expensive analysis for mimetype accuracy
+        rmagic
+
+        # restrict viewing the list of recent uploads
+        ups_who: 2
+
+        # restrict access to download-as-zip/tar
+        zip_who: 2
+
+        # reject download-as-zip if more than 9000 files
+        zipmaxn: 9k
+
+        # reject download-as-zip if size over 2 GiB
+        zipmaxs: 2g
+
+        # reply with 'no' if download-as-zip exceeds max
+        zipmaxt: no
+
+        # zip-size-limit does not apply to authenticated users
+        zipmaxu
+
+        # disable race-the-beam (download unfinished uploads)
+        nopipe
+
+        # ms-windows: timeout for renaming busy files
+        mv_retry
+
+        # ms-windows: timeout for deleting busy files
+        rm_retry
+
+        # ask webdav clients to login for all folders
+        davauth
+
+        # show lastmod time of symlink destination, not the link itself (note: this option is always enabled for recursive listings)
+        davrt
 
 
       
@@ -271,7 +678,7 @@ copyparty:
     # do not allow clients (or server config) to schedule an upload to be deleted after a given time
     disableFileExpiry: false
     # allow clients to abort incomplete uploads (requires up2k db to be enabled): [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name
-    # 📂 also available as volflag "u2abort"
+    # 📂 also available as volflag "abortIncompleteUploads"
     abortIncompleteUploads: 1
     # Blank file write grace period (allow writes by anyone after X seconds)
     blankFileGracePeriod: 300
@@ -322,7 +729,7 @@ copyparty:
     # forget unfinished uploads after MIN minutes; impossible to resume them after that (360=6h, 1440=24h)
     snapshotDropTime: 1440
     # how to timestamp uploaded files; [c]=client-last-modified, [u]=upload-time, [fc]=force-c, [fu]=force-u
-    # 📂 also available as volflag "u2ts"
+    # 📂 also available as volflag "uploadTimestampingMode"
     uploadTimestampingMode: c  # default
     # disable race-the-beam (lockstep download of files which are currently being uploaded)
     # 📂 also available as volflag "nopipe"
@@ -345,7 +752,7 @@ copyparty:
     # 📂 also available as volflag "magic"
     enableNamelessMagic: true
     # ensure GiB free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [256m], [4], [2T]
-    # 📂 also available as volflag "df"
+    # 📂 also available as volflag "minimumFreeDiskSpace"
     minimumFreeDiskSpace: 4  # hint; default=0
     # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [0] = only when necessary (non-https), [1] = always (all browsers), [2] = always on chrome/firefox, [3] = always on chrome, [N] = chrome-version N and newer (recommendation: 137)
     forceWASMHashher: 0

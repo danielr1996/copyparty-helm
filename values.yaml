@@ -145,6 +145,7 @@ copyparty:
           namelessUploadName: 'put-{now.6f}-{cip}.bin'
           putChecksum: sha512
           bupChecksum: sha512
+          disableBeamRacing: false
 
         webdav:
           enableFullWrite: false
@@ -453,10 +454,48 @@ copyparty:
 
           # (don't) sandbox prologue/epilogue docs (volflags: no_sb_lg | sb_lg); enables non-js support
           sandboxLogues:
+        tailing:
+          # Who can tail files? nobody|admins|authenticated-with-read-access|everyone
+          who: authenticated-with-read-access
+          # do not allow starting a new tail if more than N active downloads
+          maxCount: 64  
+          # terminate connection after SEC seconds; [0]=never
+          maxTime: 0
+          # check for new data every SEC seconds
+          tailRate: 0.2
+          # check if file was replaced (new fd) if idle for SEC seconds
+          checkForNewFileDescriptorOnIdle: 1
+          # disable streaming a growing files with ?tail
+          disableFileStreaming: false
 
-
-        # theme color (a hint for webbrowsers, discord, etc.)
-        tcolor: #fc0
+        openGraph:
+          # disable hotlinking and return an html document instead; this is required by open-graph, but can also be useful on its own
+          enable: true
+          # only disable hotlinking / engage OG behavior if the useragent matches regex RE
+          openGraphUserAgent: (Discord|Twitter|Slack)bot
+          # do not return the regular copyparty html, but instead load the jinja2 template at PATH (if path contains 'EXT' then EXT will be replaced with the requested file's extension)
+          openGraphTemplate: /var/copyparty/opengraph-EXT.j2
+          # do not automatically add OG entries into <head> (useful if you're doing this yourself in a template or such)
+          noHead: false
+          # thumbnail format; j=jpeg, jf=jpeg-uncropped, jf3=jpeg-uncropped-large, w=webm, ...
+          # @TODO: get clarification on what can be put here
+          thumbnailFormat: jf3
+          # fallback title if there is nothing in the -e2t database
+          fallbackTitle: HEY CHECK THIS OUT  # hint; default is blank
+          # audio title format; takes any metadata key
+          audioTitle: 🎵 {{ artist }} - {{ title }}  # default
+          # video title format; takes any metadata key
+          videoTitle: {{ title }}  # default
+          # image title format; takes any metadata key
+          imageTitle: {{ title }}  # default
+          # force default title; do not read from tags
+          forceDefaultTitle: false
+          # description text; same for all files, disable with [-]
+          description: bottom text  # hint; default is blank
+          # sitename; defaults to --name, disable with [-]
+          siteName: dank memes  # hint; default is blank which means it'll copy the `name` global-option
+          # accent color (3 or 6 hex digits); may also affect safari and/or android-chrome
+          accentColor: 333  # default (copyparty gray)
 
         # don't show total folder size
         nodirsz
@@ -467,48 +506,9 @@ copyparty:
         # don't list write-access in controlpanel
         unlistcw
 
-
         # return html and markdown as text/html
         nohtml
 
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// opengraph (discord embeds) \\00000000000000000000000000000000000000000000000000000000000\
-
-        # enable OG (disables hotlinking)
-        og
-
-        # sitename; defaults to --name, disable with '-'
-        og_site
-
-        # description text for all files; disable with '-'
-        og_desc
-
-        # thumbnail format; j / jf / jf3 / w / w3 / ...
-        og_th: jf
-
-        # audio title format; default: {{ artist }} - {{ title }}
-        og_title_a
-
-        # video title format; default: {{ title }}
-        og_title_v
-
-        # image title format; default: {{ title }}
-        og_title_i
-
-        # fallback title if there's nothing in the db
-        og_title: foo
-
-        # force default title; do not read from tags
-        og_s_title
-
-        # custom html; see --og-tpl in --help
-        og_tpl
-
-        # you want to add tags manually with og_tpl
-        og_no_head
-
-        # if defined: only send OG html if useragent matches this regex
-        og_ua
 
         ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
         ###// textfiles \\0000000000000000000000000000000000000000000000000000000000000000000000000000\
@@ -524,24 +524,6 @@ copyparty:
 
         # placeholders to expand in prologue/epilogue; see --help
         exp_lg
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// tailing \\000000000000000000000000000000000000000000000000000000000000000000000000000000\
-
-        # disable ?tail (download a growing file continuously)
-        notail
-
-        # check if file was replaced (new fd) every 1 sec
-        tail_fd: 1
-
-        # check for new data every 0.2 sec
-        tail_rate: 0.2
-
-        # kill connection after 30 sec
-        tail_tmax: 30
-
-        # restrict ?tail access (1=admins,2=authed,3=everyone)
-        tail_who: 2
 
         ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
         ###// others \\0000000000000000000000000000000000000000000000000000000000000000000000000000000\
@@ -572,24 +554,6 @@ copyparty:
 
         # restrict viewing the list of recent uploads
         ups_who: 2
-
-        # restrict access to download-as-zip/tar
-        zip_who: 2
-
-        # reject download-as-zip if more than 9000 files
-        zipmaxn: 9k
-
-        # reject download-as-zip if size over 2 GiB
-        zipmaxs: 2g
-
-        # reply with 'no' if download-as-zip exceeds max
-        zipmaxt: no
-
-        # zip-size-limit does not apply to authenticated users
-        zipmaxu
-
-        # disable race-the-beam (download unfinished uploads)
-        nopipe
 
         # ask webdav clients to login for all folders
         davauth
@@ -1460,7 +1424,6 @@ copyparty:
     # video title format; takes any metadata key
     # 📂 also available as volflag "og_title_v"
     videoTitle: {{ title }}  # default
-
     # image title format; takes any metadata key
     # 📂 also available as volflag "og_title_i"
     imageTitle: {{ title }}  # default

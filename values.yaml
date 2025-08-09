@@ -197,10 +197,10 @@ copyparty:
     ###// upload rotation -- (moves all uploads into the specified folder structure) \\00000000000\
 
         # 3 levels of subfolders with 100 entries in each
-        rotn: 100,3
+        rotatingFolderStructure: 100,3
 
         # date-formatted organizing
-        rotf: %Y-%m/%d-%H
+        rotatingFilename: %Y-%m/%d-%H
 
         # uploads are deleted after 1 hour
         lifetime: 3600
@@ -208,14 +208,34 @@ copyparty:
         ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
         ###// database, general \\00000000000000000000000000000000000000000000000000000000000000000000\
 
-        # enable database; makes files searchable + enables upload-undo
-        e2d
+        up2k:
+          enable: true
+          # Scan folders on startup: none|writable|all
+          scanOnStartup: all
+          verifyIntegrity:
+            enable: true
+            # What to do on file hash mismatch: Update database, or panic and quit - update|panic
+            onMismatch: update
+          # where to store volume data (db, thumbs); default is a folder named ".hist" inside each volume
+          # 📂 also available as volflag "hist"
+          # @TODO: Come up with a better name
+          hist: PATH
+          # override where the volume databases are to be placed; default is the same as --hist
+          # 📂 also available as volflag "dbpath"
+          dbPath: PATH
+          # Regex for which paths not to hash
+          # 📂 also available as volflag "nohash"
+          noHash: ^/mnt/nas/linux-isos/knoppix/
+          # Regex for which paths not to index
+          # 📂 also available as volflag "noidx"
+          noIndex: ^/mnt/nas/logs/
+          # configure which mode to use to get dir size: recursive, or inode (inode being slightly faster)
+          # 📂 also available as volflag "nodirsz"
+          dirSizeMode: recursive
+          # disable db if file foo doesn't exist
+          landmark: foo
 
-        # scan writable folders for new files on startup; also sets -e2d
-        e2ds
 
-        # scans all folders for new files on startup; also sets -e2d
-        e2dsa
 
         # enable multimedia indexing; makes it possible to search for tags
         e2t
@@ -229,35 +249,6 @@ copyparty:
         # disables metadata collection for existing files
         d2ts
 
-        # verify integrity on startup by hashing files and comparing to db
-        e2v
-
-        # when e2v fails, update the db (assume on-disk files are good)
-        e2vu
-
-        # when e2v fails, panic and quit copyparty
-        e2vp
-
-        # disables onboot indexing, overrides -e2ds*
-        d2ds
-
-        # disables metadata collection, overrides -e2t*
-        d2t
-
-        # disables file verification, overrides -e2v*
-        d2v
-
-        # disables all database stuff, overrides -e2*
-        d2d
-
-        # puts thumbnails and indexes at that location
-        hist: /tmp/cdb
-
-        # puts indexes at that location
-        dbpath: /tmp/cdb
-
-        # disable db if file foo doesn't exist
-        landmark: foo
 
         # scan for new files every 60sec, same as --re-maxage
         scan: 60
@@ -346,50 +337,36 @@ copyparty:
         # use /b.png as thumbnail for file-extension s
         ext_th: s=/b.png
 
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// handlers -- (better explained in --help-handlers) \\000000000000000000000000000000000000\
+      eventHandlers:
+        on404:
+          - ~/bin/on404.py
+          - ~/bin/on404season2electricboogaloo.py
+        on403:
+          - ~/bin/on403.py
 
-        # handle 404s by executing PY file
-        on404: ~/bin/hook.py
-
-        # handle 403s by executing PY file
-        on403: ~/bin/hook.py
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// event hooks -- (better explained in --help-hooks) \\000000000000000000000000000000000000\
-
-        # execute CMD before a file upload starts
-        xbu: ~/bin/hook.py
-
-        # execute CMD after  a file upload finishes
-        xau: ~/bin/hook.py
-
-        # execute CMD after  all uploads finish and volume is idle
-        xiu: ~/bin/hook.py
-
-        # execute CMD before a file copy
-        xbc: ~/bin/hook.py
-
-        # execute CMD after  a file copy
-        xac: ~/bin/hook.py
-
-        # execute CMD before a file rename/move
-        xbr: ~/bin/hook.py
-
-        # execute CMD after  a file rename/move
-        xar: ~/bin/hook.py
-
-        # execute CMD before a file delete
-        xbd: ~/bin/hook.py
-
-        # execute CMD after  a file delete
-        xad: ~/bin/hook.py
-
-        # execute CMD on message
-        xm: ~/bin/hook.py
-
-        # execute CMD if someone gets banned
-        xban: ~/bin/hook.py
+      eventHooks:
+        preUpload:
+          - ~/bin/execute-before-upload.py
+        postUpload:
+          - ~/bin/execute-after-upload.py
+        postAllUploads:
+          - ~/bin/execute-idle-upload.py
+        preCopy:
+          - ~/bin/execute-before-copy.py
+        postCopy:
+          - ~/bin/execute-after-copy.py
+        preMoveRename:
+          - ~/bin/execute-before-rename.py
+        postMoveRename:
+          - ~/bin/execute-after-rename.py
+        preDelete:
+          - ~/bin/execute-before-delete.py
+        postDelete:
+          - ~/bin/execute-after-delete.py
+        onMessage:
+          - ~/bin/execute-on-message.py
+        onBan:
+          - ~/bin/execute-on-ban.py
 
         ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
         ###// client and ux \\000000000000000000000000000000000000000000000000000000000000000000000000\

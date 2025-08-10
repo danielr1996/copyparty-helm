@@ -42,8 +42,26 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+              containerPort: {{ .Values.service.http }}
+            - name: smb
+              containerPort: {{ .Values.service.smb }}
+            - name: ftp
+              containerPort: {{ .Values.service.ftp }}
+            - name: tftp
+              containerPort: {{ .Values.service.tftp }}
+              protocol: UDP
+            - name: ftps
+              containerPort: {{ .Values.service.ftps }}
+            {{- range $i := untilStep (index .Values.service.pftp 0 | int) (index .Values.service.pftp 1 | int)  1 }}
+            - name: pftp-{{$i}}
+              containerPort: {{ $i }}
+             {{- end }}
+            - name: ssdp
+              containerPort: {{ .Values.service.ssdp }}
+              protocol: UDP
+            - name: mdns
+              containerPort: {{ .Values.service.mdns }}
+              protocol: UDP
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

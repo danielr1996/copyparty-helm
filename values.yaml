@@ -17,7 +17,14 @@ podSecurityContext: {}
 securityContext: {}
 service:
   type: ClusterIP
-  port: 3923
+  http: 3923
+  smb: 945
+  ftp: 21
+  tftp: 69
+  ftps: 990
+  pftp: [12000,12099]
+  ssdp: 1900
+  mdns: 5353
 ingress:
   enabled: false
   className: ""

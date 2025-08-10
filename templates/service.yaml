@@ -7,9 +7,34 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: http
+      port: {{ .Values.service.http }}
       targetPort: http
-      protocol: TCP
-      name: http
+    - name: smb
+      port: {{ .Values.service.smb }}
+      targetPort: smb
+    - name: tftp
+      port: {{ .Values.service.tftp }}
+      targetPort: tftp
+      protocol: UDP
+    - name: ftp
+      port: {{ .Values.service.ftp }}
+      targetPort: ftp
+    - name: ftps
+      port: {{ .Values.service.ftps }}
+      targetPort: ftps
+    {{- range $i := untilStep (index .Values.service.pftp 0 | int) (index .Values.service.pftp 1 | int)  1 }}
+    - name: pftp-{{$i}}
+      port: {{ $i }}
+      targetPort: pftp-{{$i}}
+    {{- end }}
+    - name: ssdp
+      port: {{ .Values.service.ssdp }}
+      targetPort: ssdp
+      protocol: UDP
+    - name: mdns
+      port: {{ .Values.service.mdns }}
+      targetPort: mdns
+      protocol: UDP
   selector:
     {{- include "chart.selectorLabels" . | nindent 4 }}

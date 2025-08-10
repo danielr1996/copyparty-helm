@@ -1,9 +1,9 @@
-{{- if quote .Values.existingConfigMap | empty  -}}
+{{- if eq (len .Values.existingConfigMap) 0  -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "chart.configMapName" . }}
 data:
   copyparty.conf: |-
-    {{ tpl (.Files.Get "files/copyparty.conf") . | nindent 4}}
-  {{- end }}
+    {{- tpl (.Files.Get "files/copyparty.conf") . | nindent 4}}
+{{- end }}

@@ -2,8 +2,8 @@
 Expand the name of the ConfigMap.
 */}}
 {{- define "chart.configMapName" -}}
-{{- if quote .Values.existingConfigMap | empty  -}}
-{{ include "chart.fullname"}}-config
+{{- if eq (len .Values.existingConfigMap) 0  -}}
+{{ include "chart.fullname" .}}-config
 {{- else -}}
 {{ .Values.existingConfigMap}}
 {{- end }}

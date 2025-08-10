@@ -79,6 +79,4 @@ storage:
 # Only useful if you have an existing config that you want to reuse.
 existingConfigMap: ""
 copyparty:
-  accounts:
-    - name: u1
-      password: u1
+  accounts: []

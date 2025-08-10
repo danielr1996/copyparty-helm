@@ -141,7 +141,7 @@ copyparty:
           standardChownGID: 999
           # Whether to use sparse files: force|auto|deny
           useSparse: auto
-          enableMagic: false
+          enableMagic: true
           namelessUploadName: 'put-{now.6f}-{cip}.bin'
           putChecksum: sha512
           bupChecksum: sha512
@@ -149,8 +149,12 @@ copyparty:
 
         webdav:
           enableFullWrite: false
+          # force auth for all folders (required by davfs2 when only some folders are world-readable)
+          forceAuth: false
+          # show symlink-destination's lastmodified instead of the link itself; always enabled for recursive listings
+          resolveSymlinkTimestamp: true
         noSubfolders: false
-
+        enableDotfileVisibility: true
         zipDownload:
           enabled: true
           enableCompressedTar: true
@@ -372,63 +376,17 @@ copyparty:
           # select files in grid by ctrl-click
           # 📂 also available as volflag "gsel"
           groupSelection: true
-          #useLocalTime: true
-          # language; one of the following: eng|nor|chi
-          #language: eng
-          # default theme to use (0..7)
-          #theme: 0
-          #themeCount: 8
-          # default audio/video volume percent
-          #defaultVolume: 50
           # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: href -href ext sz ts tags/Album tags/.tn
-          # 📂 also available as volflag "sort"
           sortBy: href  # default
           # default-enable natural sort of filenames with leading numbers
-          # 📂 also available as volflag "nsort"
           naturalSort: true
           # number of sorting rules to include in media URLs by default
-          # 📂 also available as volflag "hsortn"
           # @TODO: Come up with a better name
           hsortn: 2  # default
-          # default-enable seeing dotfiles; only takes effect if user has the necessary permissions
-          #seeDotfiles: true
-          # number of confirmations to show when deleting files (2/1/0)
-          #deleteConfirmationCount: 2  # default
           # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\.(js|css)$]
-          # 📂 also available as volflag "unlist"
           unlistItems: REGEX  # placeholder
-          # favicon-text [ foreground [ background ] ], set blank to disable
-          #favicon: c 000 none  # default
-          #spinner: 🌲
-          # URL to additional CSS to include in the filebrowser html
-          #additionalFilebrowserCSS: /.res/rice.css  # hint; default is unset
-          # URL to additional JS to include in the filebrowser html
-          #additionalFilebrowserJS: /.res/mousetrail.js  # hint; default is unset
-          # URL to additional JS to include in all other pages
-          #additionalOtherJS: /.res/snowflakes.jpg  # hint; default is unset
           # text to append to the <head> of all HTML pages (except for basic-browser); can be @PATH to send the contents of a file at PATH, and/or begin with % to render as jinja2 template
-          # 📂 also available as volflag "html_head"
           htmlHead: <script>alert(1);</script>  # hint; default is unset
-          #overrideWithIndexHTML: false
-          #displayAsPlaintext:
-            # - txt
-            # - nfo
-            # - diz
-            # - cue
-            # - readme
-          # max size of embedded textfiles on ?doc= (anything bigger will be lazy-loaded by JS)
-          #maxSize: 64
-          # title / service-name to show in html documents
-          #documentTitle: copyparty @ --name  # default (--name will copy from global-option `name`)
-          # powered-by link; disable with -nb
-          #poweredByURL: https://github.com/9001/copyparty  # default
-          # show version on the control panel (incompatible with -nb)
-          #showVersion: true
-          # configure the option to enable/disable k304 on the controlpanel (workaround for buggy reverse-proxies); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
-          #k304: 0  # default
-          # configure the option to enable/disable no304 on the controlpanel (workaround for buggy caching in browsers); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
-          #no304: 0  # default
-          # list of capabilities to allow in the iframe 'sandbox' attribute for README.md docs (volflag=md_sbf); see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox
           markdownSandboxIFrameCapabilities: 
             - downloads
             - forms
@@ -436,7 +394,6 @@ copyparty:
             - scripts 
             - top-navigation-by-user-activation  # default
           # list of capabilities to allow in the iframe 'sandbox' attribute for prologue/epilogue docs
-          # 📂 also available as volflag "lg_sbf"
           logueSandboxIFrameCapabilities: 
             - downloads
             - forms
@@ -444,7 +401,6 @@ copyparty:
             - scripts
             - top-navigation-by-user-activation  # default
           # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen]
-          # 📂 also available as volflag "md_sba"
           markdownAllowIFrameCapabilities: fullscreen  # hint; default is blank
           # the value of the iframe 'allow' attribute for prologue/epilogue docs (volflag=lg_sba); see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy#iframes
           logueAllowIFrameCapabilities: TXT  # placeholder
@@ -496,75 +452,69 @@ copyparty:
           siteName: dank memes  # hint; default is blank which means it'll copy the `name` global-option
           # accent color (3 or 6 hex digits); may also affect safari and/or android-chrome
           accentColor: 333  # default (copyparty gray)
+        textfile:
+          # where to store old version of markdown files; subfolder|volume-histpath|nope
+          historyLocation: subfolder
+          # enable textfile expansion -- replace {{self.ip}} and such; see --help-exp
+          textfileExpansion:
+            enable: false
+            # comma/space-separated list of placeholders to expand in markdown files; add/remove stuff on the default list with +hdr_foo or /vf.scan
+            expandMarkdown: 
+              - self.ip
+              - self.ua
+              - self.uname
+              - self.host
+              - cfg.name
+              - cfg.logout
+              - vf.scan
+              - vf.thsize
+              - hdr.cf_ipcountry
+              - srv.itime
+              - srv.htime  # default
+            # comma/space-separated list of placeholders to expand in prologue/epilogue files
+            expandLogues:
+              - self.ip
+              - self.ua
+              - self.uname
+              - self.host
+              - cfg.name
+              - cfg.logout
+              - vf.scan
+              - vf.thsize
+              - hdr.cf_ipcountry
+              - srv.itime
+              - srv.htime  # default
+        rss:
+          # enable RSS output (experimental)
+          enable: false
+        admin:
+          # who can see recent uploads on the ?ru page? [0]=nobody, [1]=admins, [2]=everyone
+          recentUploadVisibility: everyone  # default
 
-        # don't show total folder size
-        nodirsz
+# @TODO: These are unique to volflags. Add respective options.
+# # don't list read-access in controlpanel
+# unlistcr
 
-        # don't list read-access in controlpanel
-        unlistcr
+# # don't list write-access in controlpanel
+# unlistcw
 
-        # don't list write-access in controlpanel
-        unlistcw
+# # return html and markdown as text/html
+# nohtml
 
-        # return html and markdown as text/html
-        nohtml
+# # generates per-file accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
+# fk: 8
 
+# # generates slightly weaker per-file accesskeys, which are then required at the "g" permission; not affected by filesize or inode numbers
+# fka: 8
 
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// textfiles \\0000000000000000000000000000000000000000000000000000000000000000000000000000\
+# # generates per-directory accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
+# dk: 8
 
-        # where to put markdown backups; s=subfolder, v=volHist, n=nope
-        md_hist
+# # per-directory accesskeys allow browsing into subdirs
+# dks
 
-        # enable textfile expansion; see --help-exp
-        exp
-
-        # placeholders to expand in markdown files; see --help
-        exp_md
-
-        # placeholders to expand in prologue/epilogue; see --help
-        exp_lg
-
-        ###000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\
-        ###// others \\0000000000000000000000000000000000000000000000000000000000000000000000000000000\
-
-        # allow all users with read-access to enable the option to show dotfiles in listings
-        dots
-
-        # generates per-file accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
-        fk: 8
-
-        # generates slightly weaker per-file accesskeys, which are then required at the "g" permission; not affected by filesize or inode numbers
-        fka: 8
-
-        # generates per-directory accesskeys, which are then required at the "g" permission; keys are invalidated if filesize or inode changes
-        dk: 8
-
-        # per-directory accesskeys allow browsing into subdirs
-        dks
-
-        # allow seeing files (not folders) inside a specific folder with "g" perm, and does not require a valid dirkey to do so
-        dky
-
-        # allow '?rss' URL suffix (experimental)
-        rss
-
-        # expensive analysis for mimetype accuracy
-        rmagic
-
-        # restrict viewing the list of recent uploads
-        ups_who: 2
-
-        # ask webdav clients to login for all folders
-        davauth
-
-        # show lastmod time of symlink destination, not the link itself (note: this option is always enabled for recursive listings)
-        davrt
-
-
-      
-
-
+# # allow seeing files (not folders) inside a specific folder with "g" perm, and does not require a valid dirkey to do so
+# dky
 
   global:
     # Other config paths to include
@@ -1356,7 +1306,6 @@ copyparty:
       .bpm: ~/bin/audio-bpm.py
       key: f,t5,~/bin/audio-key.py
 
-  # @TODO: Move this somewhere else, this feels weirdly specific
   textfile:
     # where to store old version of markdown files; subfolder|volume-histpath|nope
     # 📂 also available as volflag "md_hist"

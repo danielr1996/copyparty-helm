@@ -75,12 +75,10 @@ storage:
   storageClass: ""
   size: "1Gi"
   accessModes: [ReadWriteOnce]
-config: |
-  [global]
-  e2dsa  # enable file indexing and filesystem scanning
-  e2ts   # enable multimedia indexing
-  ansi   # enable colors in log messages
-  [/]            # create a volume at "/" (the webroot), which will
-    /w           # share /w (the docker data volume)
-      accs:
-        rw: *      # everyone gets read-write access, but
+# Set this to the name of a configmap in the same namespace to load a raw config file instead of generating it with helm.
+# Only useful if you have an existing config that you want to reuse.
+existingConfigMap: ""
+copyparty:
+  accounts:
+    - name: u1
+      password: u1

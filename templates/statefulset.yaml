@@ -89,7 +89,7 @@ spec:
             claimName: {{ include "chart.fullname" . }}-data
         - name: config
           configMap:
-            name: {{ include "chart.fullname" . }}-config
+            name: {{ include "chart.configMapName" . }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

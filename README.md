@@ -8,8 +8,8 @@ See values.yaml for all possible values or values.example.yaml for the values yo
 ```shell 
 helm upgrade --install --create-namespace -n copyparty --wait -f values.yaml copyparty .
 helm upgrade --install --create-namespace -n copyparty --wait -f values.yaml copyparty ghcr.io/danielr1996/copyparty:0.1.0
-helm package .
-helm push copyparty-0.1.0.tgz oci://ghcr.io/danielr1996
+helm package -u -d dist .
+helm push dist/copyparty-x.x.x.tgz oci://ghcr.io/danielr1996
 ```
 
 

@@ -14,13 +14,9 @@ helm push copyparty-0.1.0.tgz oci://ghcr.io/danielr1996
 
 
 # TODO
-- auto scaling / HA ?
+- auto scaling / HA --> not sure if currently possible because of file based db?
 - ci/cd pipeline
-- ingress,lb
-- pvc
 - service monitor
-- postgres/mysql operator
 - extraObjects
 - use latest / proper versioning and syncing between helm appVersion and docker tag (add helper script to automatically get the version from chart yaml or override in values)
 - health checks
-- option to use existing configmap or pvc

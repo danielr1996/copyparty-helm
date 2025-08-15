@@ -1,7 +1,11 @@
-from re import sub
 import re
+from re import sub
 import os
+import sys
 
+# @TODO: Change on merge!
+sys.path.append('../')
+from copyparty.copyparty.cfg import flagcats
 COPYPARTY_MAIN = os.getcwd() + '/../copyparty/copyparty/__main__.py'
 
 def camelCase(s):
@@ -63,16 +67,10 @@ def createConfigMap():
                     pass
                 elif 'add_argument_group' in line:
                     currentGroup = re.sub('\W', '_', camelCase((line.split('"')[1])))
-                    # print("GROUP" + currentGroup)
 
                 else:
                     entry = ''
                     parsedline = ansi_escape.sub('', line)
-                    # print(parsedline)
-
-                    # {{- range .Values.config.mime }}
-                    # mime: {{ . }}
-                    # {{- end }}
                     if 'action="append"' in parsedline:
                         entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
                         entry += '      {{{{- range .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
@@ -117,7 +115,6 @@ def createValuesYAML():
                 else:
                     entry = ''
                     parsedline = ansi_escape.sub('', line)
-                    # print(parsedline)
                     entry = parseHelp(parsedline, entry)
                     entry = parseMetavar(parsedline, entry)
                     entry = parseDefault(parsedline, entry)
@@ -128,6 +125,14 @@ def createValuesYAML():
         with open('example.yaml', 'w') as t:
             t.write(yamlContent)
 
+def createVolume():
+    pass
+
 
 createValuesYAML()
 createConfigMap()
+createVolume()
+for key in flagcats.keys():
+    print(re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))))
+    for l2key in flagcats[key].keys():
+        print('  ' + l2key)

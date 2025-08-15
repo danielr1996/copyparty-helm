@@ -187,5 +187,5 @@ for key in flagcats.keys():
         
         volflags += re.sub('\s{2,6}', '        ', getVariableType(l2key))
         volflags += '        ' + l2key + ':\n'
-with open('example.yaml', 'w+') as t:
+with open('example.yaml', 'a') as t:
     t.write(volflags)

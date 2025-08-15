@@ -75,6 +75,13 @@ storage:
   storageClass: ""
   size: "1Gi"
   accessModes: [ReadWriteOnce]
+  # Set this to the name of a pvc in the same namespace with already existing data. When this is set `restoreFrom` will be ignored.
+  existingPvc: ""
+  restoreFrom:
+    # Set this to the name of a VolumeSnapshot to restore data from. Will be ignored if `existingPvc` is set.
+    name: ""
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
 # Set this to the name of a configmap in the same namespace to load a raw config file instead of generating it with helm.
 # Only useful if you have an existing config that you want to reuse.
 existingConfigMap: ""

@@ -10,6 +10,17 @@ Expand the name of the ConfigMap.
 {{- end }}
 
 {{/*
+Expand the name of the Pvc.
+*/}}
+{{- define "chart.PvcName" -}}
+{{- if eq (len .Values.storage.existingPvc) 0  -}}
+{{ include "chart.fullname" .}}-data
+{{- else -}}
+{{ .Values.storage.existingPvc}}
+{{- end }}
+{{- end }}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "chart.name" -}}

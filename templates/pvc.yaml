@@ -1,11 +1,19 @@
+{{- if eq (len .Values.storage.existingPvc) 0  -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "chart.fullname" . }}-data
+  name: {{ include "chart.PvcName" . }}
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
+  {{ if ne (len .Values.storage.restoreFrom.name) 0  -}}
+  dataSource:
+    {{- toYaml .Values.storage.restoreFrom | nindent 4 }}
+  {{- end }}
   accessModes:
     {{- toYaml .Values.storage.accessModes | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.storage.size}}
   storageClassName: {{ .Values.storage.storageClass }}
+  {{- end }}

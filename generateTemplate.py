@@ -18,43 +18,43 @@ def camelCase(s):
 
 # awk -F\" '/add_argument\("-[^-]/{print(substr($2,2))}' copyparty/__main__.py | sort | tr '\n' ' '
 
-def parseHelp(line, entry):
+def parseHelp(line):
     helpOption = re.search(r'(?<=help=")[^"]*', line)
     if helpOption is not None:
-        return entry + '  # ' + helpOption[0] + '\n'
+        return '  # ' + helpOption[0] + '\n'
     else:
-        return entry
+        return ''
 
-def parseConfig(line, entry):
+def parseConfig(line):
     configOption = '  ' + re.sub('-', '', line.split('"')[1]) + ':\n'
-    return entry + configOption
+    return configOption
 
 def getConfigKey(line):
     return re.sub('-', '', line.split('"')[1])
 
-def parseMetavar(line, entry):
+def parseMetavar(line):
     metavar = re.search(r'(?<=metavar=")[^"]*', line)
     if metavar is not None:
-        return entry + '  # type: ' + metavar[0] + '\n'
+        return '  # type: ' + metavar[0] + '\n'
     elif 'store_true' in line:
-        return entry + '  # type: BOOLEAN\n'
+        return '  # type: BOOLEAN\n'
     else:
-        return entry
+        return ''
 
-def parseRepeatable(line, entry):
+def parseRepeatable(line):
     if 'action="append"' in line:
-        return entry + '  # REPEATABLE: YES (use YAML array) ' + '\n'
+        return '  # REPEATABLE: YES (use YAML array) ' + '\n'
     else:
-        return entry
+        return ''
 
-def parseDefault(line, entry):
+def parseDefault(line):
     default = re.search(r'(?<=default=")[^"]*', line)
     if default is not None:
         if default[0] == '':
-            return entry + '  # default: [empty string] \n'
-        return entry + '  # default: ' + default[0] + '\n'
+            return '  # default: [empty string] \n'
+        return '  # default: ' + default[0] + '\n'
     else:
-        return entry
+        return ''
 
 def createConfigMap():
     with open(COPYPARTY_MAIN) as copyparty:
@@ -115,15 +115,38 @@ def createValuesYAML():
                 else:
                     entry = ''
                     parsedline = ansi_escape.sub('', line)
-                    entry = parseHelp(parsedline, entry)
-                    entry = parseMetavar(parsedline, entry)
-                    entry = parseDefault(parsedline, entry)
-                    entry = parseRepeatable(parsedline, entry)
-                    entry = parseConfig(parsedline, entry)
+                    entry += parseHelp(parsedline)
+                    entry += parseMetavar(parsedline)
+                    entry += parseDefault(parsedline)
+                    entry += parseRepeatable(parsedline)
+                    entry += parseConfig(parsedline)
                     
                     yamlContent += entry
         with open('example.yaml', 'w') as t:
             t.write(yamlContent)
+
+
+def getVariableType(key):
+    with open(COPYPARTY_MAIN) as copyparty:
+        yamlContent = ''
+        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+        for line in copyparty.readlines():
+            if 'add_argument' in line:
+                if  'help sections' in line or '        ap2' in line:
+                    pass
+                elif 'add_argument_group' in line:
+                    yamlContent += '\n' + re.sub('\W', '_', camelCase((line.split('"')[1]))) + ':\n'
+                else:
+                    if key in line:
+                        print('hit')
+                        entry = ''
+                        parsedline = ansi_escape.sub('', line)
+                        entry += parseHelp(parsedline)
+                        entry += parseMetavar(parsedline)
+                        entry += parseDefault(parsedline)
+                        entry += parseRepeatable(parsedline)
+                        return entry
+    return ''
 
 def createVolume():
     pass
@@ -132,7 +155,37 @@ def createVolume():
 createValuesYAML()
 createConfigMap()
 createVolume()
+volflags = """\n\nvolumes:
+  - volumeName1:
+    httpURL: /the/url/to/share/this/volume/on/
+    mountPath: /the/actual/filesystem/path/
+    existingClaim: ""
+    storageClass: "longhorn-nvme"
+    resources:
+      requests:
+        storage: 2Gi
+      limits:
+        # @TODO: Sync with vmaxb
+        storage: 3Gi
+    # @TODO: Move to config since copyparty can't do RWX anyway (or should not at least)
+    accessModes:
+      - ReadWriteOnce
+    volflags:"""
+ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+
 for key in flagcats.keys():
-    print(re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))))
+    volflags += "\n      " + re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))) + ':\n'
     for l2key in flagcats[key].keys():
-        print('  ' + l2key)
+        content = ansi_escape.sub('', flagcats[key][l2key])
+        content = re.sub('\n', '', content)
+        volflags += '        # ' + content + '\n'
+        if '=' in l2key:
+            l2key = l2key.split('=')
+
+            volflags += '        # Example: ' + l2key[1] + '\n'
+            l2key = l2key[0]
+        
+        volflags += re.sub('\s{2,6}', '        ', getVariableType(l2key))
+        volflags += '        ' + l2key + ':\n'
+with open('example.yaml', 'w+') as t:
+    t.write(volflags)

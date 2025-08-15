@@ -25,6 +25,9 @@ def parseConfig(line, entry):
     configOption = '  ' + re.sub('-', '', line.split('"')[1]) + ':\n'
     return entry + configOption
 
+def getConfigKey(line):
+    return re.sub('-', '', line.split('"')[1])
+
 def parseMetavar(line, entry):
     metavar = re.search(r'(?<=metavar=")[^"]*', line)
     if metavar is not None:
@@ -48,6 +51,58 @@ def parseDefault(line, entry):
         return entry + '  # default: ' + default[0] + '\n'
     else:
         return entry
+
+def createConfigMap():
+    with open(COPYPARTY_MAIN) as copyparty:
+        yamlContent = '    [global]\n'
+        currentGroup = ''
+        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+        for line in copyparty.readlines():
+            if 'add_argument' in line:
+                if  'help sections' in line or '        ap2' in line:
+                    pass
+                elif 'add_argument_group' in line:
+                    currentGroup = re.sub('\W', '_', camelCase((line.split('"')[1])))
+                    # print("GROUP" + currentGroup)
+
+                else:
+                    entry = ''
+                    parsedline = ansi_escape.sub('', line)
+                    # print(parsedline)
+
+                    # {{- range .Values.config.mime }}
+                    # mime: {{ . }}
+                    # {{- end }}
+                    if 'action="append"' in parsedline:
+                        entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
+                        entry += '      {{{{- range .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
+                        entry += '      {value}: {{{{ . }}}}\n'.format(value=getConfigKey(line))
+                        entry += '    {{- end }}\n'
+                    elif 'action="store_true"' in parsedline:
+                        entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
+                        entry += '      {value}\n'.format(value=getConfigKey(line))
+                        entry += '    {{- end }}\n'
+                    else: 
+                        entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
+                        entry += '      {value}: {{{{ .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
+                        entry += '    {{- end }}\n'
+                    yamlContent
+                    
+                    yamlContent += entry
+        yamlContent = """apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: copyparty-configmap
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  copyparty.cfg: |
+""" + yamlContent
+        with open('configmap.yaml', 'w') as t:
+            t.write(yamlContent)
 
 def createValuesYAML():
     with open(COPYPARTY_MAIN) as copyparty:
@@ -75,3 +130,4 @@ def createValuesYAML():
 
 
 createValuesYAML()
+createConfigMap()

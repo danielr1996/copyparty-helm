@@ -2,6 +2,7 @@
 generalOptions:
   # REPEATABLE: add config file
   # type: PATH
+  # REPEATABLE: YES (use YAML array) 
   c:
   # max num clients
   # type: NUM
@@ -11,12 +12,15 @@ generalOptions:
   j:
   # REPEATABLE: add account, USER:PASS; example [ed:wark]
   # type: ACCT
+  # REPEATABLE: YES (use YAML array) 
   a:
   # REPEATABLE: add volume, SRC:DST:FLAG; examples [.::r], [/mnt/nas/music:/music:r:aed], see --help-accounts
   # type: VOL
+  # REPEATABLE: YES (use YAML array) 
   v:
   # REPEATABLE: add group, NAME:USER1,USER2,...; example [admins:ed,foo,bar]
   # type: G:N,N
+  # REPEATABLE: YES (use YAML array) 
   grp:
   # require username and password for login; default is just password
   # type: BOOLEAN
@@ -37,6 +41,7 @@ generalOptions:
   name:
   # REPEATABLE: map file EXTension to MIMEtype, for example [jpg=image/jpeg]
   # type: EXT=MIME
+  # REPEATABLE: YES (use YAML array) 
   mime:
   # list default mimetype mapping and exit
   # type: BOOLEAN
@@ -427,6 +432,7 @@ idp_IdentityProvider_UserAuthenticationOptions:
   grpall:
   # REPEATABLE: users with IP matching CIDR are auto-authenticated as username USR; example: [172.16.24.0/24=dave]
   # type: CIDR=USR
+  # REPEATABLE: YES (use YAML array) 
   ipu:
 
 userChangeablePasswordsOptions:
@@ -435,6 +441,7 @@ userChangeablePasswordsOptions:
   chpw:
   # REPEATABLE: do not allow password-changes for this comma-separated list of usernames
   # type: U,U,U
+  # REPEATABLE: YES (use YAML array) 
   chpwno:
   # where to store the passwords database (if you run multiple copyparty instances, make sure they use different DBs)
   # type: PATH
@@ -677,9 +684,11 @@ smb_CifsOptions:
 handlers_SeeHelpHandlers_:
   # REPEATABLE: handle 404s by executing PY file
   # type: PY
+  # REPEATABLE: YES (use YAML array) 
   on404:
   # REPEATABLE: handle 403s by executing PY file
   # type: PY
+  # REPEATABLE: YES (use YAML array) 
   on403:
   # recompile handlers on each request -- expensive but convenient when hacking on stuff
   # type: BOOLEAN
@@ -688,36 +697,47 @@ handlers_SeeHelpHandlers_:
 eventHooks_SeeHelpHooks_:
   # REPEATABLE: execute CMD before a file upload starts
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xbu:
   # REPEATABLE: execute CMD after  a file upload finishes
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xau:
   # REPEATABLE: execute CMD after  all uploads finish and volume is idle
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xiu:
   # REPEATABLE: execute CMD before a file copy
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xbc:
   # REPEATABLE: execute CMD after  a file copy
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xac:
   # REPEATABLE: execute CMD before a file move/rename
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xbr:
   # REPEATABLE: execute CMD after  a file move/rename
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xar:
   # REPEATABLE: execute CMD before a file delete
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xbd:
   # REPEATABLE: execute CMD after  a file delete
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xad:
   # REPEATABLE: execute CMD on message
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xm:
   # REPEATABLE: execute CMD if someone gets banned (pw/404/403/url)
   # type: CMD
+  # REPEATABLE: YES (use YAML array) 
   xban:
   # verbose hooks
   # type: BOOLEAN
@@ -1323,6 +1343,7 @@ metadataDbOptions:
   mtagvv:
   # REPEATABLE: add/replace metadata mapping
   # type: M=t,t,t
+  # REPEATABLE: YES (use YAML array) 
   mtm:
   # tags to index/display (comma-sep.); either an entire replacement list, or add/remove stuff on the default-list with +foo or /bar
   # type: M,M,M
@@ -1332,6 +1353,7 @@ metadataDbOptions:
   mth:
   # REPEATABLE: read tag M using program BIN to parse the file
   # type: M=[f,]BIN
+  # REPEATABLE: YES (use YAML array) 
   mtp:
 
 textfileOptions:
@@ -1465,6 +1487,7 @@ uiOptions:
   favico:
   # REPEATABLE: use thumbnail-image VP for file-extension E, example: [exe=/.res/exe.png] (volflag=ext_th)
   # type: E=VP
+  # REPEATABLE: YES (use YAML array) 
   extth:
   # default: [empty string] 
   mpmc:

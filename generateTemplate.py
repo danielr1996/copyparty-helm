@@ -34,6 +34,12 @@ def parseMetavar(line, entry):
     else:
         return entry
 
+def parseRepeatable(line, entry):
+    if 'action="append"' in line:
+        return entry + '  # REPEATABLE: YES (use YAML array) ' + '\n'
+    else:
+        return entry
+
 def parseDefault(line, entry):
     default = re.search(r'(?<=default=")[^"]*', line)
     if default is not None:
@@ -45,6 +51,8 @@ def parseDefault(line, entry):
 
 def createValuesYAML():
     with open(COPYPARTY_MAIN) as copyparty:
+        yamlContent = ''
+        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
         for line in copyparty.readlines():
             if 'add_argument' in line:
                 if  'help sections' in line or '        ap2' in line:
@@ -58,13 +66,12 @@ def createValuesYAML():
                     entry = parseHelp(parsedline, entry)
                     entry = parseMetavar(parsedline, entry)
                     entry = parseDefault(parsedline, entry)
+                    entry = parseRepeatable(parsedline, entry)
                     entry = parseConfig(parsedline, entry)
                     
                     yamlContent += entry
         with open('example.yaml', 'w') as t:
             t.write(yamlContent)
 
-yamlContent = ''
-ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
 
 createValuesYAML()

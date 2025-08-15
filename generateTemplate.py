@@ -149,13 +149,7 @@ def getVariableType(key):
     return ''
 
 def createVolume():
-    pass
-
-
-createValuesYAML()
-createConfigMap()
-createVolume()
-volflags = """\n\nvolumes:
+    volflags = """\n\nvolumes:
   - volumeName1:
     httpURL: /the/url/to/share/this/volume/on/
     mountPath: /the/actual/filesystem/path/
@@ -171,21 +165,26 @@ volflags = """\n\nvolumes:
     accessModes:
       - ReadWriteOnce
     volflags:"""
-ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+    ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
 
-for key in flagcats.keys():
-    volflags += "\n      " + re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))) + ':\n'
-    for l2key in flagcats[key].keys():
-        content = ansi_escape.sub('', flagcats[key][l2key])
-        content = re.sub('\n', '', content)
-        volflags += '        # ' + content + '\n'
-        if '=' in l2key:
-            l2key = l2key.split('=')
+    for key in flagcats.keys():
+        volflags += "\n      " + re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))) + ':\n'
+        for l2key in flagcats[key].keys():
+            content = ansi_escape.sub('', flagcats[key][l2key])
+            content = re.sub('\n', '', content)
+            volflags += '        # ' + content + '\n'
+            if '=' in l2key:
+                l2key = l2key.split('=')
 
-            volflags += '        # Example: ' + l2key[1] + '\n'
-            l2key = l2key[0]
-        
-        volflags += re.sub('\s{2,6}', '        ', getVariableType(l2key))
-        volflags += '        ' + l2key + ':\n'
-with open('example.yaml', 'a') as t:
-    t.write(volflags)
+                volflags += '        # Example: ' + l2key[1] + '\n'
+                l2key = l2key[0]
+            
+            volflags += re.sub('\s{2,6}', '        ', getVariableType(l2key))
+            volflags += '        ' + l2key + ':\n'
+    with open('example.yaml', 'a') as t:
+        t.write(volflags)
+
+
+createValuesYAML()
+createConfigMap()
+createVolume()

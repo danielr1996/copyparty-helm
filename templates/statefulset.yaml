@@ -86,7 +86,7 @@ spec:
       volumes:
         - name: www
           persistentVolumeClaim:
-            claimName: {{ include "chart.fullname" . }}-data
+            claimName: {{ include "chart.PvcName" . }}
         - name: config
           configMap:
             name: {{ include "chart.configMapName" . }}

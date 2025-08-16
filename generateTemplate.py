@@ -260,7 +260,7 @@ def getVariableType(key):
 
 def createVolume():
     volflags = """\n\nvolumes:
-  volumeName1:
+  name: volumeName1
     httpURL: /the/url/to/share/this/volume/on/
     mountPath: /the/actual/filesystem/path/
     existingClaim: ""
@@ -304,11 +304,11 @@ def createVolume():
 
 def createVolflagConfigMap():
     with open(COPYPARTY_MAIN) as copyparty:
-        yamlContent = """    {{- range $name, $cfg := .Values.volumes }}
-        [{{ $cfg.httpURL }}]
-        {{ $cfg.mountPath }}
+        yamlContent = """    {{- range .Values.volumes }}
+        [{{ .httpURL }}]
+        {{ .mountPath }}
         accs:
-            {{ $cfg.permissions }}
+            {{ .permissions }}
         flags:\n"""
 
         for key in flagcats.keys():
@@ -318,21 +318,21 @@ def createVolflagConfigMap():
                     l2key = l2key.split('=')[0]
                 variableType = getVariableType(l2key)
                 if variableType == 'BOOLEAN':
-                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry = '      {{{{- if .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
                     entry += '        {value}\n'.format(value=l2key)
                     entry += '      {{- end }}\n'
                 elif variableType == 'ARRAY':
-                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
-                    entry += '        {{{{- range $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry = '      {{{{- if .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {{{{- range .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
                     entry += '        {value}: {{{{ . }}}}\n'.format(value=l2key)
                     entry += '      {{- end }}\n'
                 elif variableType == 'NOTFOUND':
-                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
-                    entry += '        {{{{ $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry = '      {{{{- if .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {{{{ .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
                     entry += '      {{- end }}\n'
                 else:
-                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
-                    entry += '        {value}: {{{{ $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry = '      {{{{- if .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {value}: {{{{ .volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
                     entry += '      {{- end }}\n'
                 yamlContent += entry
         yamlContent += '    {{- end }}\n'

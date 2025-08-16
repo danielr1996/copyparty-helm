@@ -90,12 +90,9 @@ def createConfigMap():
         yamlContent = """apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "chart.fullname" . }}-config
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  name: {{ include "copyparty-helm.fullname" . }}-config
+  namespace: {{ .Values.namespace | .Release.namespace }}
+
 data:
   copyparty.cfg: |
 """ + yamlContent
@@ -104,7 +101,8 @@ data:
 
 def createValuesYAML():
     with open(COPYPARTY_MAIN) as copyparty:
-        yamlContent = '''replicaCount: 1
+        yamlContent = '''namespace: copyparty
+replicaCount: 1
 image:
   repository: copyparty/ac
   pullPolicy: IfNotPresent

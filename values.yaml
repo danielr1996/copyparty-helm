@@ -1,3 +1,4 @@
+namespace: copyparty
 replicaCount: 1
 image:
   repository: copyparty/ac

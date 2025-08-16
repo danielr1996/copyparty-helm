@@ -4,7 +4,6 @@ metadata:
   name: {{ include "chart.fullname" . }}-config
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: primary
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -1445,11 +1444,11 @@ data:
       nocfgcmtwarn
     {{- end }}
     {{- range $name, $cfg := .Values.volumes }}
-    [{{ $cfg.httpURL }}]
-      {{ $cfg.mountPath }}
-      accs:
-        {{ $cfg.permissions }}
-      flags:
+        [{{ $cfg.httpURL }}]
+        {{ $cfg.mountPath }}
+        accs:
+            {{ $cfg.permissions }}
+        flags:
       {{- if $cfg.volflags.uploads_General.dedup }}
         dedup
       {{- end }}

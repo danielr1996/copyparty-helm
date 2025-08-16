@@ -260,7 +260,7 @@ def getVariableType(key):
 
 def createVolume():
     volflags = """\n\nvolumes:
-  name: volumeName1
+  - name: volumeName1
     httpURL: /the/url/to/share/this/volume/on/
     mountPath: /the/actual/filesystem/path/
     existingClaim: ""

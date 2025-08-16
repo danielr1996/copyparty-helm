@@ -1443,3 +1443,502 @@ data:
     {{- if .Values.debugOptions.nocfgcmtwarn }}
       nocfgcmtwarn
     {{- end }}
+    {{- range $name, $cfg := .Values.volumes }}
+    [{{ $cfg.httpURL }}]
+      {{ $cfg.mountPath }}
+      accs:
+        {{ $cfg.permissions }}
+      flags:
+      {{- if $cfg.volflags.uploads_General.dedup }}
+        dedup
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.hardlink }}
+        hardlink
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.hardlinkonly }}
+        hardlinkonly
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.reflink }}
+        reflink
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.safededup }}
+        safededup: {{ $cfg.volflags.uploads_General.safededup }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.noclone }}
+        noclone
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nodupe }}
+        nodupe
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.chmod_d }}
+        chmod_d: {{ $cfg.volflags.uploads_General.chmod_d }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.chmod_f }}
+        chmod_f: {{ $cfg.volflags.uploads_General.chmod_f }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.uid }}
+        uid: {{ $cfg.volflags.uploads_General.uid }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.gid }}
+        gid: {{ $cfg.volflags.uploads_General.gid }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.sparse }}
+        sparse: {{ $cfg.volflags.uploads_General.sparse }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nosparse }}
+        {{ $cfg.volflags.uploads_General.nosparse }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.daw }}
+        daw
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nosub }}
+        nosub: {{ $cfg.volflags.uploads_General.nosub }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.magic }}
+        magic
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.put_name }}
+        put_name: {{ $cfg.volflags.uploads_General.put_name }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.put_ck }}
+        put_ck: {{ $cfg.volflags.uploads_General.put_ck }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.bup_ck }}
+        bup_ck: {{ $cfg.volflags.uploads_General.bup_ck }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.gz }}
+        gz
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.xz }}
+        xz
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.pk }}
+        pk: {{ $cfg.volflags.uploads_General.pk }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.maxn }}
+        maxn
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.maxb }}
+        maxb
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.vmaxb }}
+        vmaxb
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.vmaxn }}
+        vmaxn
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.medialinks }}
+        {{ $cfg.volflags.uploadRules.medialinks }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.wo_up_readme }}
+        wo_up_readme
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.rand }}
+        rand
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.nrand }}
+        nrand
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2ow }}
+        u2ow: {{ $cfg.volflags.uploadRules.u2ow }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2ts }}
+        u2ts: {{ $cfg.volflags.uploadRules.u2ts }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2abort }}
+        u2abort: {{ $cfg.volflags.uploadRules.u2abort }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.sz }}
+        sz: {{ $cfg.volflags.uploadRules.sz }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.df }}
+        df: {{ $cfg.volflags.uploadRules.df }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.rotn }}
+        {{ $cfg.volflags.uploadRotation.rotn }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.rotf }}
+        {{ $cfg.volflags.uploadRotation.rotf }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.lifetime }}
+        lifetime: {{ $cfg.volflags.uploadRotation.lifetime }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2d }}
+        e2d: {{ $cfg.volflags.database_General.e2d }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2ds }}
+        e2ds
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2dsa }}
+        e2dsa
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2t }}
+        e2t
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2ts }}
+        e2ts
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2tsr }}
+        e2tsr
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2ts }}
+        {{ $cfg.volflags.database_General.d2ts }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2v }}
+        e2v
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2vu }}
+        e2vu
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2vp }}
+        e2vp
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2ds }}
+        {{ $cfg.volflags.database_General.d2ds }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2t }}
+        {{ $cfg.volflags.database_General.d2t }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2v }}
+        {{ $cfg.volflags.database_General.d2v }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2d }}
+        {{ $cfg.volflags.database_General.d2d }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.hist }}
+        hist
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dbpath }}
+        dbpath: {{ $cfg.volflags.database_General.dbpath }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.landmark }}
+        {{ $cfg.volflags.database_General.landmark }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.scan }}
+        scan
+      {{- end }}
+      {{- if $cfg.volflags.database_General.nohash }}
+        nohash: {{ $cfg.volflags.database_General.nohash }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.noidx }}
+        noidx: {{ $cfg.volflags.database_General.noidx }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.noforget }}
+        noforget
+      {{- end }}
+      {{- if $cfg.volflags.database_General.forget_ip }}
+        forget_ip: {{ $cfg.volflags.database_General.forget_ip }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.no_db_ip }}
+        no_db_ip
+      {{- end }}
+      {{- if $cfg.volflags.database_General.fat32 }}
+        {{ $cfg.volflags.database_General.fat32 }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dbd }}
+        dbd: {{ $cfg.volflags.database_General.dbd }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xlink }}
+        xlink
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xdev }}
+        xdev
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xvol }}
+        xvol
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dotsrch }}
+        dotsrch
+      {{- end }}
+      {{- if $cfg.volflags.database_General.nodotsrch }}
+        nodotsrch
+      {{- end }}
+      {{- if $cfg.volflags.database_General.srch_excl }}
+        srch_excl: {{ $cfg.volflags.database_General.srch_excl }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mte }}
+        mte: {{ $cfg.volflags.database_AudioTags.mte }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mth }}
+        mth: {{ $cfg.volflags.database_AudioTags.mth }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mtp }}
+        mtp
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mtp }}
+        mtp
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dthumb }}
+        dthumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dvthumb }}
+        dvthumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dathumb }}
+        dathumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dithumb }}
+        {{ $cfg.volflags.thumbnails.dithumb }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.pngquant }}
+        {{ $cfg.volflags.thumbnails.pngquant }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.thsize }}
+        thsize: {{ $cfg.volflags.thumbnails.thsize }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.crop }}
+        crop: {{ $cfg.volflags.thumbnails.crop }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.th3x }}
+        th3x: {{ $cfg.volflags.thumbnails.th3x }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.convt }}
+        convt: {{ $cfg.volflags.thumbnails.convt }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.aconvt }}
+        aconvt: {{ $cfg.volflags.thumbnails.aconvt }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.ext_th }}
+        {{- range $cfg.volflags.thumbnails.ext_th }}
+        ext_th: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.handlers.on404 }}
+        {{- range $cfg.volflags.handlers.on404 }}
+        on404: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.handlers.on403 }}
+        {{- range $cfg.volflags.handlers.on403 }}
+        on403: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbu }}
+        {{- range $cfg.volflags.eventHooks.xbu }}
+        xbu: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xau }}
+        {{- range $cfg.volflags.eventHooks.xau }}
+        xau: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xiu }}
+        {{- range $cfg.volflags.eventHooks.xiu }}
+        xiu: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbc }}
+        {{- range $cfg.volflags.eventHooks.xbc }}
+        xbc: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xac }}
+        xac
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbr }}
+        {{- range $cfg.volflags.eventHooks.xbr }}
+        xbr: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xar }}
+        {{- range $cfg.volflags.eventHooks.xar }}
+        xar: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbd }}
+        {{- range $cfg.volflags.eventHooks.xbd }}
+        xbd: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xad }}
+        {{- range $cfg.volflags.eventHooks.xad }}
+        xad: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xm }}
+        xm: {{ $cfg.volflags.eventHooks.xm }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xban }}
+        {{- range $cfg.volflags.eventHooks.xban }}
+        xban: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.grid }}
+        grid
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.gsel }}
+        gsel
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sort }}
+        sort: {{ $cfg.volflags.clientAndUx.sort }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nsort }}
+        nsort
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.hsortn }}
+        hsortn: {{ $cfg.volflags.clientAndUx.hsortn }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlist }}
+        unlist: {{ $cfg.volflags.clientAndUx.unlist }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.html_head }}
+        html_head: {{ $cfg.volflags.clientAndUx.html_head }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.tcolor }}
+        tcolor: {{ $cfg.volflags.clientAndUx.tcolor }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nodirsz }}
+        nodirsz
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.robots }}
+        robots: {{ $cfg.volflags.clientAndUx.robots }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.norobots }}
+        norobots
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlistcr }}
+        {{ $cfg.volflags.clientAndUx.unlistcr }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlistcw }}
+        {{ $cfg.volflags.clientAndUx.unlistcw }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.no_sb_md }}
+        no_sb_md
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.no_sb_lg }}
+        no_sb_lg
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sb_md }}
+        sb_md
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sb_lg }}
+        sb_lg
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.md_sbf }}
+        md_sbf: {{ $cfg.volflags.clientAndUx.md_sbf }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.lg_sbf }}
+        lg_sbf: {{ $cfg.volflags.clientAndUx.lg_sbf }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.md_sba }}
+        md_sba: {{ $cfg.volflags.clientAndUx.md_sba }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.lg_sba }}
+        lg_sba: {{ $cfg.volflags.clientAndUx.lg_sba }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nohtml }}
+        {{ $cfg.volflags.clientAndUx.nohtml }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og }}
+        og
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_site }}
+        og_site: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_site }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_desc }}
+        og_desc: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_desc }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_th }}
+        og_th: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_th }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_a }}
+        og_title_a: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_a }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_v }}
+        og_title_v: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_v }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_i }}
+        og_title_i: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_i }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title }}
+        og_title: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_s_title }}
+        og_s_title
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_tpl }}
+        og_tpl: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_tpl }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_no_head }}
+        og_no_head
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_ua }}
+        og_ua: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_ua }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.md_hist }}
+        md_hist: {{ $cfg.volflags.textfiles.md_hist }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp }}
+        exp
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp_md }}
+        exp_md: {{ $cfg.volflags.textfiles.exp_md }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp_lg }}
+        exp_lg: {{ $cfg.volflags.textfiles.exp_lg }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.txt_eol }}
+        txt_eol: {{ $cfg.volflags.textfiles.txt_eol }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.notail }}
+        notail
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_fd }}
+        tail_fd: {{ $cfg.volflags.tailing.tail_fd }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_rate }}
+        tail_rate: {{ $cfg.volflags.tailing.tail_rate }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_tmax }}
+        tail_tmax: {{ $cfg.volflags.tailing.tail_tmax }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_who }}
+        tail_who: {{ $cfg.volflags.tailing.tail_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dots }}
+        dots
+      {{- end }}
+      {{- if $cfg.volflags.others.fk }}
+        fk: {{ $cfg.volflags.others.fk }}
+      {{- end }}
+      {{- if $cfg.volflags.others.fka }}
+        {{ $cfg.volflags.others.fka }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dk }}
+        dk: {{ $cfg.volflags.others.dk }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dks }}
+        {{ $cfg.volflags.others.dks }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dky }}
+        {{ $cfg.volflags.others.dky }}
+      {{- end }}
+      {{- if $cfg.volflags.others.rss }}
+        rss
+      {{- end }}
+      {{- if $cfg.volflags.others.rmagic }}
+        rmagic
+      {{- end }}
+      {{- if $cfg.volflags.others.ups_who }}
+        ups_who: {{ $cfg.volflags.others.ups_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zip_who }}
+        zip_who: {{ $cfg.volflags.others.zip_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxn }}
+        zipmaxn: {{ $cfg.volflags.others.zipmaxn }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxs }}
+        zipmaxs: {{ $cfg.volflags.others.zipmaxs }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxt }}
+        zipmaxt: {{ $cfg.volflags.others.zipmaxt }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxu }}
+        zipmaxu
+      {{- end }}
+      {{- if $cfg.volflags.others.nopipe }}
+        nopipe
+      {{- end }}
+      {{- if $cfg.volflags.others.mv_retry }}
+        mv_retry: {{ $cfg.volflags.others.mv_retry }}
+      {{- end }}
+      {{- if $cfg.volflags.others.rm_retry }}
+        rm_retry: {{ $cfg.volflags.others.rm_retry }}
+      {{- end }}
+      {{- if $cfg.volflags.others.davauth }}
+        davauth
+      {{- end }}
+      {{- if $cfg.volflags.others.davrt }}
+        davrt
+      {{- end }}
+    {{- end }}

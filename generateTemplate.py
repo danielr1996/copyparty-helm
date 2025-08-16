@@ -35,6 +35,8 @@ def getConfigKey(line):
 def parseMetavar(line):
     metavar = re.search(r'(?<=metavar=")[^"]*', line)
     if metavar is not None:
+        if 'action="append"' in line:
+            return '  # type: ' + metavar[0] + '\n' + '  # type: ARRAY' + '\n'
         return '  # type: ' + metavar[0] + '\n'
     elif 'store_true' in line:
         return '  # type: BOOLEAN\n'
@@ -84,8 +86,6 @@ def createConfigMap():
                         entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
                         entry += '      {value}: {{{{ .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
                         entry += '    {{- end }}\n'
-                    yamlContent
-                    
                     yamlContent += entry
         yamlContent = """apiVersion: v1
 kind: ConfigMap
@@ -126,6 +126,27 @@ def createValuesYAML():
             t.write(yamlContent)
 
 
+def getVariableInfo(key):
+    with open(COPYPARTY_MAIN) as copyparty:
+        yamlContent = ''
+        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+        for line in copyparty.readlines():
+            if 'add_argument' in line:
+                if  'help sections' in line or '        ap2' in line:
+                    pass
+                elif 'add_argument_group' in line:
+                    yamlContent += '\n' + re.sub('\W', '_', camelCase((line.split('"')[1]))) + ':\n'
+                else:
+                    if key in line:
+                        entry = ''
+                        parsedline = ansi_escape.sub('', line)
+                        entry += parseHelp(parsedline)
+                        entry += parseMetavar(parsedline)
+                        entry += parseDefault(parsedline)
+                        entry += parseRepeatable(parsedline)
+                        return entry
+    return ''
+
 def getVariableType(key):
     with open(COPYPARTY_MAIN) as copyparty:
         yamlContent = ''
@@ -138,19 +159,20 @@ def getVariableType(key):
                     yamlContent += '\n' + re.sub('\W', '_', camelCase((line.split('"')[1]))) + ':\n'
                 else:
                     if key in line:
-                        print('hit')
                         entry = ''
                         parsedline = ansi_escape.sub('', line)
-                        entry += parseHelp(parsedline)
-                        entry += parseMetavar(parsedline)
-                        entry += parseDefault(parsedline)
-                        entry += parseRepeatable(parsedline)
-                        return entry
-    return ''
+                        if 'action="append"' in parsedline:
+                            return 'ARRAY'
+                        elif 'action="store_true"' in parsedline:
+                            return 'BOOLEAN'
+                        else:
+                            return 'ARGUMENT'
+    print('NOTFOUND')
+    return 'NOTFOUND'
 
 def createVolume():
     volflags = """\n\nvolumes:
-  - volumeName1:
+  volumeName1:
     httpURL: /the/url/to/share/this/volume/on/
     mountPath: /the/actual/filesystem/path/
     existingClaim: ""
@@ -178,13 +200,55 @@ def createVolume():
 
                 volflags += '        # Example: ' + l2key[1] + '\n'
                 l2key = l2key[0]
-            
-            volflags += re.sub('\s{2,6}', '        ', getVariableType(l2key))
+            volflags += re.sub(' {2,6}', '        ', getVariableInfo(l2key))
+            if getVariableType(l2key) == 'NOTFOUND':
+                volflags += '        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n        # This is expected behavior with some options that are only available as volflags.\n        # Please input the text that should appear in the copyparty config verbatim as this key\'s value.\n        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n'
             volflags += '        ' + l2key + ':\n'
     with open('example.yaml', 'a') as t:
         t.write(volflags)
+
+def createVolflagConfigMap():
+    with open(COPYPARTY_MAIN) as copyparty:
+        yamlContent = """    {{- range $name, $cfg := .Values.volumes }}
+        [{{ $cfg.httpURL }}]
+        {{ $cfg.mountPath }}
+        accs:
+            {{ $cfg.permissions }}
+        flags:\n"""
+        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
+
+        for key in flagcats.keys():
+            outerGroup = re.sub('\W', '_',camelCase(re.sub('\n.*', '', key)))
+            for l2key in flagcats[key].keys():
+                if '=' in l2key:
+                    l2key = l2key.split('=')[0]
+                variableType = getVariableType(l2key)
+                if variableType == 'NOTFOUND':
+                    print(outerGroup + '.' + l2key)
+                if variableType == 'BOOLEAN':
+                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {value}\n'.format(value=l2key)
+                    entry += '      {{- end }}\n'
+                elif variableType == 'ARRAY':
+                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {{{{- range $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {value}: {{{{ . }}}}\n'.format(value=l2key)
+                    entry += '      {{- end }}\n'
+                elif variableType == 'NOTFOUND':
+                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {{{{ $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '      {{- end }}\n'
+                else:
+                    entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '        {value}: {{{{ $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
+                    entry += '      {{- end }}\n'
+                yamlContent += entry
+        yamlContent += '    {{- end }}\n'
+        with open('configmap.yaml', 'a') as t:
+            t.write(yamlContent)
 
 
 createValuesYAML()
 createConfigMap()
 createVolume()
+createVolflagConfigMap()

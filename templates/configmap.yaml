@@ -2,22 +2,1944 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "chart.fullname" . }}-config
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: primary
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 data:
-  copyparty.conf: |
+  copyparty.cfg: |
     [global]
-    e2dsa  # enable file indexing and filesystem scanning
-    e2ts   # enable multimedia indexing
-    ansi   # enable colors in log messages
-    # p: 3939          # listen on another port
-    # ipa: 10.89.      # only allow connections from 10.89.*
-    # df: 16           # stop accepting uploads if less than 16 GB free disk space
-    # ver              # show copyparty version in the controlpanel
-    # grid             # show thumbnails/grid-view by default
-    # theme: 2         # monokai
-    # name: datasaver  # change the server-name that's displayed in the browser
-    # stats, nos-dup   # enable the prometheus endpoint, but disable the dupes counter (too slow)
-    # no-robots, force-js  # make it harder for search engines to read your server
-    [/]            # create a volume at "/" (the webroot), which will
-      /w           # share /w (the docker data volume)
-        accs:
-        rw: *      # everyone gets read-write access, but
+    {{- if .Values.generalOptions.c }}
+      {{- range .Values.generalOptions.c }}
+      c: {{ . }}
+    {{- end }}
+    {{- if .Values.generalOptions.nc }}
+      nc: {{ .Values.generalOptions.nc }}
+    {{- end }}
+    {{- if .Values.generalOptions.j }}
+      j: {{ .Values.generalOptions.j }}
+    {{- end }}
+    {{- if .Values.generalOptions.a }}
+      {{- range .Values.generalOptions.a }}
+      a: {{ . }}
+    {{- end }}
+    {{- if .Values.generalOptions.v }}
+      {{- range .Values.generalOptions.v }}
+      v: {{ . }}
+    {{- end }}
+    {{- if .Values.generalOptions.grp }}
+      {{- range .Values.generalOptions.grp }}
+      grp: {{ . }}
+    {{- end }}
+    {{- if .Values.generalOptions.usernames }}
+      usernames
+    {{- end }}
+    {{- if .Values.generalOptions.ed }}
+      ed
+    {{- end }}
+    {{- if .Values.generalOptions.urlform }}
+      urlform: {{ .Values.generalOptions.urlform }}
+    {{- end }}
+    {{- if .Values.generalOptions.wintitle }}
+      wintitle: {{ .Values.generalOptions.wintitle }}
+    {{- end }}
+    {{- if .Values.generalOptions.name }}
+      name: {{ .Values.generalOptions.name }}
+    {{- end }}
+    {{- if .Values.generalOptions.mime }}
+      {{- range .Values.generalOptions.mime }}
+      mime: {{ . }}
+    {{- end }}
+    {{- if .Values.generalOptions.mimes }}
+      mimes
+    {{- end }}
+    {{- if .Values.generalOptions.rmagic }}
+      rmagic
+    {{- end }}
+    {{- if .Values.generalOptions.license }}
+      license
+    {{- end }}
+    {{- if .Values.generalOptions.version }}
+      version
+    {{- end }}
+    {{- if .Values.qrOptions.qr }}
+      qr
+    {{- end }}
+    {{- if .Values.qrOptions.qrs }}
+      qrs
+    {{- end }}
+    {{- if .Values.qrOptions.qrl }}
+      qrl: {{ .Values.qrOptions.qrl }}
+    {{- end }}
+    {{- if .Values.qrOptions.qri }}
+      qri: {{ .Values.qrOptions.qri }}
+    {{- end }}
+    {{- if .Values.qrOptions.qrfg }}
+      qrfg: {{ .Values.qrOptions.qrfg }}
+    {{- end }}
+    {{- if .Values.qrOptions.qrbg }}
+      qrbg: {{ .Values.qrOptions.qrbg }}
+    {{- end }}
+    {{- if .Values.qrOptions.qrp }}
+      qrp: {{ .Values.qrOptions.qrp }}
+    {{- end }}
+    {{- if .Values.qrOptions.qrz }}
+      qrz: {{ .Values.qrOptions.qrz }}
+    {{- end }}
+    {{- if .Values.qrOptions.qrpin }}
+      qrpin: {{ .Values.qrOptions.qrpin }}
+    {{- end }}
+    {{- if .Values.filesystemOptions.rmretry }}
+      rmretry: {{ .Values.filesystemOptions.rmretry }}
+    {{- end }}
+    {{- if .Values.filesystemOptions.mvretry }}
+      mvretry: {{ .Values.filesystemOptions.mvretry }}
+    {{- end }}
+    {{- if .Values.filesystemOptions.iobuf }}
+      iobuf: {{ .Values.filesystemOptions.iobuf }}
+    {{- end }}
+    {{- if .Values.filesystemOptions.mtabage }}
+      mtabage: {{ .Values.filesystemOptions.mtabage }}
+    {{- end }}
+    {{- if .Values.shareUrlOptions.shr }}
+      shr: {{ .Values.shareUrlOptions.shr }}
+    {{- end }}
+    {{- if .Values.shareUrlOptions.shrdb }}
+      shrdb: {{ .Values.shareUrlOptions.shrdb }}
+    {{- end }}
+    {{- if .Values.shareUrlOptions.shradm }}
+      shradm: {{ .Values.shareUrlOptions.shradm }}
+    {{- end }}
+    {{- if .Values.shareUrlOptions.shrrt }}
+      shrrt: {{ .Values.shareUrlOptions.shrrt }}
+    {{- end }}
+    {{- if .Values.shareUrlOptions.shrv }}
+      shrv
+    {{- end }}
+    {{- if .Values.uploadOptions.dotpart }}
+      dotpart
+    {{- end }}
+    {{- if .Values.uploadOptions.plainip }}
+      plainip
+    {{- end }}
+    {{- if .Values.uploadOptions.putname }}
+      putname: {{ .Values.uploadOptions.putname }}
+    {{- end }}
+    {{- if .Values.uploadOptions.putck }}
+      putck: {{ .Values.uploadOptions.putck }}
+    {{- end }}
+    {{- if .Values.uploadOptions.bupck }}
+      bupck: {{ .Values.uploadOptions.bupck }}
+    {{- end }}
+    {{- if .Values.uploadOptions.unpost }}
+      unpost: {{ .Values.uploadOptions.unpost }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2abort }}
+      u2abort: {{ .Values.uploadOptions.u2abort }}
+    {{- end }}
+    {{- if .Values.uploadOptions.blankwt }}
+      blankwt: {{ .Values.uploadOptions.blankwt }}
+    {{- end }}
+    {{- if .Values.uploadOptions.regcap }}
+      regcap: {{ .Values.uploadOptions.regcap }}
+    {{- end }}
+    {{- if .Values.uploadOptions.nofpool }}
+      nofpool
+    {{- end }}
+    {{- if .Values.uploadOptions.usefpool }}
+      usefpool
+    {{- end }}
+    {{- if .Values.uploadOptions.chmodf }}
+      chmodf: {{ .Values.uploadOptions.chmodf }}
+    {{- end }}
+    {{- if .Values.uploadOptions.chmodd }}
+      chmodd: {{ .Values.uploadOptions.chmodd }}
+    {{- end }}
+    {{- if .Values.uploadOptions.uid }}
+      uid: {{ .Values.uploadOptions.uid }}
+    {{- end }}
+    {{- if .Values.uploadOptions.gid }}
+      gid: {{ .Values.uploadOptions.gid }}
+    {{- end }}
+    {{- if .Values.uploadOptions.dedup }}
+      dedup
+    {{- end }}
+    {{- if .Values.uploadOptions.safededup }}
+      safededup: {{ .Values.uploadOptions.safededup }}
+    {{- end }}
+    {{- if .Values.uploadOptions.hardlink }}
+      hardlink
+    {{- end }}
+    {{- if .Values.uploadOptions.hardlinkonly }}
+      hardlinkonly
+    {{- end }}
+    {{- if .Values.uploadOptions.reflink }}
+      reflink
+    {{- end }}
+    {{- if .Values.uploadOptions.nodupe }}
+      nodupe
+    {{- end }}
+    {{- if .Values.uploadOptions.noclone }}
+      noclone
+    {{- end }}
+    {{- if .Values.uploadOptions.nosnap }}
+      nosnap
+    {{- end }}
+    {{- if .Values.uploadOptions.snapwri }}
+      snapwri: {{ .Values.uploadOptions.snapwri }}
+    {{- end }}
+    {{- if .Values.uploadOptions.snapdrop }}
+      snapdrop: {{ .Values.uploadOptions.snapdrop }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2ts }}
+      u2ts: {{ .Values.uploadOptions.u2ts }}
+    {{- end }}
+    {{- if .Values.uploadOptions.rand }}
+      rand
+    {{- end }}
+    {{- if .Values.uploadOptions.nrand }}
+      nrand: {{ .Values.uploadOptions.nrand }}
+    {{- end }}
+    {{- if .Values.uploadOptions.magic }}
+      magic
+    {{- end }}
+    {{- if .Values.uploadOptions.df }}
+      df: {{ .Values.uploadOptions.df }}
+    {{- end }}
+    {{- if .Values.uploadOptions.sparse }}
+      sparse: {{ .Values.uploadOptions.sparse }}
+    {{- end }}
+    {{- if .Values.uploadOptions.turbo }}
+      turbo: {{ .Values.uploadOptions.turbo }}
+    {{- end }}
+    {{- if .Values.uploadOptions.nosubtle }}
+      nosubtle: {{ .Values.uploadOptions.nosubtle }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2j }}
+      u2j: {{ .Values.uploadOptions.u2j }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2sz }}
+      u2sz: {{ .Values.uploadOptions.u2sz }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2ow }}
+      u2ow: {{ .Values.uploadOptions.u2ow }}
+    {{- end }}
+    {{- if .Values.uploadOptions.u2sort }}
+      u2sort: {{ .Values.uploadOptions.u2sort }}
+    {{- end }}
+    {{- if .Values.uploadOptions.writeuplog }}
+      writeuplog
+    {{- end }}
+    {{- if .Values.networkOptions.i }}
+      i: {{ .Values.networkOptions.i }}
+    {{- end }}
+    {{- if .Values.networkOptions.p }}
+      p: {{ .Values.networkOptions.p }}
+    {{- end }}
+    {{- if .Values.networkOptions.ll }}
+      ll
+    {{- end }}
+    {{- if .Values.networkOptions.rproxy }}
+      rproxy: {{ .Values.networkOptions.rproxy }}
+    {{- end }}
+    {{- if .Values.networkOptions.xffhdr }}
+      xffhdr: {{ .Values.networkOptions.xffhdr }}
+    {{- end }}
+    {{- if .Values.networkOptions.xffsrc }}
+      xffsrc: {{ .Values.networkOptions.xffsrc }}
+    {{- end }}
+    {{- if .Values.networkOptions.ipa }}
+      ipa: {{ .Values.networkOptions.ipa }}
+    {{- end }}
+    {{- if .Values.networkOptions.rploc }}
+      rploc: {{ .Values.networkOptions.rploc }}
+    {{- end }}
+    {{- if .Values.networkOptions.wrheps }}
+      wrheps: {{ .Values.networkOptions.wrheps }}
+    {{- end }}
+    {{- if .Values.networkOptions.wrhaon }}
+      wrhaon: {{ .Values.networkOptions.wrhaon }}
+    {{- end }}
+    {{- if .Values.networkOptions.sthead }}
+      sthead: {{ .Values.networkOptions.sthead }}
+    {{- end }}
+    {{- if .Values.networkOptions.stbody }}
+      stbody: {{ .Values.networkOptions.stbody }}
+    {{- end }}
+    {{- if .Values.networkOptions.srdsz }}
+      srdsz: {{ .Values.networkOptions.srdsz }}
+    {{- end }}
+    {{- if .Values.networkOptions.swrsz }}
+      swrsz: {{ .Values.networkOptions.swrsz }}
+    {{- end }}
+    {{- if .Values.networkOptions.swrslp }}
+      swrslp: {{ .Values.networkOptions.swrslp }}
+    {{- end }}
+    {{- if .Values.networkOptions.rspslp }}
+      rspslp: {{ .Values.networkOptions.rspslp }}
+    {{- end }}
+    {{- if .Values.networkOptions.rspjtr }}
+      rspjtr: {{ .Values.networkOptions.rspjtr }}
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.httponly }}
+      httponly
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.httpsonly }}
+      httpsonly
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.cert }}
+      cert: {{ .Values.ssl_TlsOptions.cert }}
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.sslver }}
+      sslver: {{ .Values.ssl_TlsOptions.sslver }}
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.ciphers }}
+      ciphers: {{ .Values.ssl_TlsOptions.ciphers }}
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.ssldbg }}
+      ssldbg
+    {{- end }}
+    {{- if .Values.ssl_TlsOptions.ssllog }}
+      ssllog: {{ .Values.ssl_TlsOptions.ssllog }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.nocrt }}
+      nocrt
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtns }}
+      crtns: {{ .Values.tlsCertificateGeneratorOptions.crtns }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtexact }}
+      crtexact
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtnoip }}
+      crtnoip
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtnolo }}
+      crtnolo
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtnohn }}
+      crtnohn
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtdir }}
+      crtdir: {{ .Values.tlsCertificateGeneratorOptions.crtdir }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtcdays }}
+      crtcdays: {{ .Values.tlsCertificateGeneratorOptions.crtcdays }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtsdays }}
+      crtsdays: {{ .Values.tlsCertificateGeneratorOptions.crtsdays }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtcn }}
+      crtcn: {{ .Values.tlsCertificateGeneratorOptions.crtcn }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtcnc }}
+      crtcnc: {{ .Values.tlsCertificateGeneratorOptions.crtcnc }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtcns }}
+      crtcns: {{ .Values.tlsCertificateGeneratorOptions.crtcns }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtback }}
+      crtback: {{ .Values.tlsCertificateGeneratorOptions.crtback }}
+    {{- end }}
+    {{- if .Values.tlsCertificateGeneratorOptions.crtalg }}
+      crtalg: {{ .Values.tlsCertificateGeneratorOptions.crtalg }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idphusr }}
+      idphusr: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idphusr }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idphgrp }}
+      idphgrp: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idphgrp }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idphkey }}
+      idphkey: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idphkey }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idpgsep }}
+      idpgsep: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idpgsep }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idpdb }}
+      idpdb: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idpdb }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idpstore }}
+      idpstore: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idpstore }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idpadm }}
+      idpadm: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idpadm }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.idpcookie }}
+      idpcookie: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.idpcookie }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.nobauth }}
+      nobauth
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.bauthlast }}
+      bauthlast
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.sesdb }}
+      sesdb: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.sesdb }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.seslen }}
+      seslen: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.seslen }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.noses }}
+      noses
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.grpall }}
+      grpall: {{ .Values.idp_IdentityProvider_UserAuthenticationOptions.grpall }}
+    {{- end }}
+    {{- if .Values.idp_IdentityProvider_UserAuthenticationOptions.ipu }}
+      {{- range .Values.idp_IdentityProvider_UserAuthenticationOptions.ipu }}
+      ipu: {{ . }}
+    {{- end }}
+    {{- if .Values.userChangeablePasswordsOptions.chpw }}
+      chpw
+    {{- end }}
+    {{- if .Values.userChangeablePasswordsOptions.chpwno }}
+      {{- range .Values.userChangeablePasswordsOptions.chpwno }}
+      chpwno: {{ . }}
+    {{- end }}
+    {{- if .Values.userChangeablePasswordsOptions.chpwdb }}
+      chpwdb: {{ .Values.userChangeablePasswordsOptions.chpwdb }}
+    {{- end }}
+    {{- if .Values.userChangeablePasswordsOptions.chpwlen }}
+      chpwlen: {{ .Values.userChangeablePasswordsOptions.chpwlen }}
+    {{- end }}
+    {{- if .Values.userChangeablePasswordsOptions.chpwv }}
+      chpwv: {{ .Values.userChangeablePasswordsOptions.chpwv }}
+    {{- end }}
+    {{- if .Values.zeroconfOptions.z }}
+      z
+    {{- end }}
+    {{- if .Values.zeroconfOptions.zon }}
+      zon: {{ .Values.zeroconfOptions.zon }}
+    {{- end }}
+    {{- if .Values.zeroconfOptions.zoff }}
+      zoff: {{ .Values.zeroconfOptions.zoff }}
+    {{- end }}
+    {{- if .Values.zeroconfOptions.zchk }}
+      zchk: {{ .Values.zeroconfOptions.zchk }}
+    {{- end }}
+    {{- if .Values.zeroconfOptions.zv }}
+      zv
+    {{- end }}
+    {{- if .Values.zeroconfOptions.mchop }}
+      mchop: {{ .Values.zeroconfOptions.mchop }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zm }}
+      zm
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmon }}
+      zmon: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmon }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmoff }}
+      zmoff: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmoff }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zm4 }}
+      zm4
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zm6 }}
+      zm6
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmv }}
+      zmv
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmvv }}
+      zmvv
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmnope }}
+      zmnope
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmnwa1 }}
+      zmnwa1
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zms }}
+      zms: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zms }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmld }}
+      zmld: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmld }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmlh }}
+      zmlh: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmlh }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmlf }}
+      zmlf: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmlf }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmls }}
+      zmls: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmls }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmfqdn }}
+      zmfqdn: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmfqdn }}
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmmnic }}
+      zmmnic
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmmsub }}
+      zmmsub
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmnoneg }}
+      zmnoneg
+    {{- end }}
+    {{- if .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmspam }}
+      zmspam: {{ .Values.zeroconfMdnsOptions_AlsoSeeHelpZm.zmspam }}
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zs }}
+      zs
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zson }}
+      zson: {{ .Values.zeroconfSsdpOptions.zson }}
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zsoff }}
+      zsoff: {{ .Values.zeroconfSsdpOptions.zsoff }}
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zsv }}
+      zsv
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zsl }}
+      zsl: {{ .Values.zeroconfSsdpOptions.zsl }}
+    {{- end }}
+    {{- if .Values.zeroconfSsdpOptions.zsid }}
+      zsid: {{ .Values.zeroconfSsdpOptions.zsid }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftp }}
+      ftp: {{ .Values.ftpOptions_TcpOnly_.ftp }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftps }}
+      ftps: {{ .Values.ftpOptions_TcpOnly_.ftps }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftpv }}
+      ftpv
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftp4 }}
+      ftp4
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftpipa }}
+      ftpipa: {{ .Values.ftpOptions_TcpOnly_.ftpipa }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftpnoow }}
+      ftpnoow
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftpwt }}
+      ftpwt: {{ .Values.ftpOptions_TcpOnly_.ftpwt }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftpnat }}
+      ftpnat: {{ .Values.ftpOptions_TcpOnly_.ftpnat }}
+    {{- end }}
+    {{- if .Values.ftpOptions_TcpOnly_.ftppr }}
+      ftppr: {{ .Values.ftpOptions_TcpOnly_.ftppr }}
+    {{- end }}
+    {{- if .Values.webdavOptions.daw }}
+      daw
+    {{- end }}
+    {{- if .Values.webdavOptions.davinf }}
+      davinf
+    {{- end }}
+    {{- if .Values.webdavOptions.davmac }}
+      davmac
+    {{- end }}
+    {{- if .Values.webdavOptions.davrt }}
+      davrt
+    {{- end }}
+    {{- if .Values.webdavOptions.davauth }}
+      davauth
+    {{- end }}
+    {{- if .Values.webdavOptions.davua1 }}
+      davua1: {{ .Values.webdavOptions.davua1 }}
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftp }}
+      tftp: {{ .Values.tftpOptions_UdpOnly_.tftp }}
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftp4 }}
+      tftp4
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftpv }}
+      tftpv
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftpvv }}
+      tftpvv
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftpnofast }}
+      tftpnofast
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftplsf }}
+      tftplsf: {{ .Values.tftpOptions_UdpOnly_.tftplsf }}
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftpnols }}
+      tftpnols
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftpipa }}
+      tftpipa: {{ .Values.tftpOptions_UdpOnly_.tftpipa }}
+    {{- end }}
+    {{- if .Values.tftpOptions_UdpOnly_.tftppr }}
+      tftppr: {{ .Values.tftpOptions_UdpOnly_.tftppr }}
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smb }}
+      smb
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbw }}
+      smbw
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smb1 }}
+      smb1
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbport }}
+      smbport: {{ .Values.smb_CifsOptions.smbport }}
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbnwa1 }}
+      smbnwa1
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbnwa2 }}
+      smbnwa2
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smba }}
+      smba
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbv }}
+      smbv
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbvv }}
+      smbvv
+    {{- end }}
+    {{- if .Values.smb_CifsOptions.smbvvv }}
+      smbvvv
+    {{- end }}
+    {{- if .Values.handlers_SeeHelpHandlers_.on404 }}
+      {{- range .Values.handlers_SeeHelpHandlers_.on404 }}
+      on404: {{ . }}
+    {{- end }}
+    {{- if .Values.handlers_SeeHelpHandlers_.on403 }}
+      {{- range .Values.handlers_SeeHelpHandlers_.on403 }}
+      on403: {{ . }}
+    {{- end }}
+    {{- if .Values.handlers_SeeHelpHandlers_.hothandlers }}
+      hothandlers
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xbu }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xbu }}
+      xbu: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xau }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xau }}
+      xau: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xiu }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xiu }}
+      xiu: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xbc }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xbc }}
+      xbc: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xac }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xac }}
+      xac: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xbr }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xbr }}
+      xbr: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xar }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xar }}
+      xar: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xbd }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xbd }}
+      xbd: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xad }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xad }}
+      xad: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xm }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xm }}
+      xm: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.xban }}
+      {{- range .Values.eventHooks_SeeHelpHooks_.xban }}
+      xban: {{ . }}
+    {{- end }}
+    {{- if .Values.eventHooks_SeeHelpHooks_.hookv }}
+      hookv
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.stats }}
+      stats
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.noshdd }}
+      noshdd
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.nosvol }}
+      nosvol
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.nosvst }}
+      nosvst
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.nosdup }}
+      nosdup
+    {{- end }}
+    {{- if .Values.grafana_PrometheusMetricsEndpoint.nosunf }}
+      nosunf
+    {{- end }}
+    {{- if .Values.yoloOptions.allowcsrf }}
+      allowcsrf
+    {{- end }}
+    {{- if .Values.yoloOptions.cookielax }}
+      cookielax
+    {{- end }}
+    {{- if .Values.yoloOptions.nofnugg }}
+      nofnugg
+    {{- end }}
+    {{- if .Values.yoloOptions.getmod }}
+      getmod
+    {{- end }}
+    {{- if .Values.yoloOptions.woupreadme }}
+      woupreadme
+    {{- end }}
+    {{- if .Values.optOuts.nw }}
+      nw
+    {{- end }}
+    {{- if .Values.optOuts.keepqem }}
+      keepqem
+    {{- end }}
+    {{- if .Values.optOuts.nodav }}
+      nodav
+    {{- end }}
+    {{- if .Values.optOuts.nodel }}
+      nodel
+    {{- end }}
+    {{- if .Values.optOuts.nomv }}
+      nomv
+    {{- end }}
+    {{- if .Values.optOuts.nocp }}
+      nocp
+    {{- end }}
+    {{- if .Values.optOuts.nofsabrt }}
+      nofsabrt
+    {{- end }}
+    {{- if .Values.optOuts.nth }}
+      nth
+    {{- end }}
+    {{- if .Values.optOuts.nih }}
+      nih
+    {{- end }}
+    {{- if .Values.optOuts.nid }}
+      nid
+    {{- end }}
+    {{- if .Values.optOuts.nb }}
+      nb
+    {{- end }}
+    {{- if .Values.optOuts.zipmaxn }}
+      zipmaxn: {{ .Values.optOuts.zipmaxn }}
+    {{- end }}
+    {{- if .Values.optOuts.zipmaxs }}
+      zipmaxs: {{ .Values.optOuts.zipmaxs }}
+    {{- end }}
+    {{- if .Values.optOuts.zipmaxt }}
+      zipmaxt: {{ .Values.optOuts.zipmaxt }}
+    {{- end }}
+    {{- if .Values.optOuts.zipmaxu }}
+      zipmaxu
+    {{- end }}
+    {{- if .Values.optOuts.zipwho }}
+      zipwho: {{ .Values.optOuts.zipwho }}
+    {{- end }}
+    {{- if .Values.optOuts.uanozip }}
+      uanozip: {{ .Values.optOuts.uanozip }}
+    {{- end }}
+    {{- if .Values.optOuts.nozip }}
+      nozip
+    {{- end }}
+    {{- if .Values.optOuts.notarcmp }}
+      notarcmp
+    {{- end }}
+    {{- if .Values.optOuts.nolifetime }}
+      nolifetime
+    {{- end }}
+    {{- if .Values.optOuts.nopipe }}
+      nopipe
+    {{- end }}
+    {{- if .Values.optOuts.notail }}
+      notail
+    {{- end }}
+    {{- if .Values.optOuts.nodbip }}
+      nodbip
+    {{- end }}
+    {{- if .Values.safetyOptions.s }}
+      s: {{ .Values.safetyOptions.s }}
+    {{- end }}
+    {{- if .Values.safetyOptions.ss }}
+      ss
+    {{- end }}
+    {{- if .Values.safetyOptions.sss }}
+      sss
+    {{- end }}
+    {{- if .Values.safetyOptions.ls }}
+      ls: {{ .Values.safetyOptions.ls }}
+    {{- end }}
+    {{- if .Values.safetyOptions.xvol }}
+      xvol
+    {{- end }}
+    {{- if .Values.safetyOptions.xdev }}
+      xdev
+    {{- end }}
+    {{- if .Values.safetyOptions.nodotmv }}
+      nodotmv
+    {{- end }}
+    {{- if .Values.safetyOptions.nodotren }}
+      nodotren
+    {{- end }}
+    {{- if .Values.safetyOptions.nologues }}
+      nologues
+    {{- end }}
+    {{- if .Values.safetyOptions.noreadme }}
+      noreadme
+    {{- end }}
+    {{- if .Values.safetyOptions.vague403 }}
+      vague403
+    {{- end }}
+    {{- if .Values.safetyOptions.forcejs }}
+      forcejs
+    {{- end }}
+    {{- if .Values.safetyOptions.norobots }}
+      norobots
+    {{- end }}
+    {{- if .Values.safetyOptions.logout }}
+      logout: {{ .Values.safetyOptions.logout }}
+    {{- end }}
+    {{- if .Values.safetyOptions.banpw }}
+      banpw: {{ .Values.safetyOptions.banpw }}
+    {{- end }}
+    {{- if .Values.safetyOptions.banpwc }}
+      banpwc: {{ .Values.safetyOptions.banpwc }}
+    {{- end }}
+    {{- if .Values.safetyOptions.ban404 }}
+      ban404: {{ .Values.safetyOptions.ban404 }}
+    {{- end }}
+    {{- if .Values.safetyOptions.ban403 }}
+      ban403: {{ .Values.safetyOptions.ban403 }}
+    {{- end }}
+    {{- if .Values.safetyOptions.ban422 }}
+      ban422: {{ .Values.safetyOptions.ban422 }}
+    {{- end }}
+    {{- if .Values.safetyOptions.banurl }}
+      banurl: {{ .Values.safetyOptions.banurl }}
+    {{- end }}
+    {{- if .Values.safetyOptions.susurls }}
+      susurls: {{ .Values.safetyOptions.susurls }}
+    {{- end }}
+    {{- if .Values.safetyOptions.nonsusurls }}
+      nonsusurls: {{ .Values.safetyOptions.nonsusurls }}
+    {{- end }}
+    {{- if .Values.safetyOptions.earlyban }}
+      earlyban
+    {{- end }}
+    {{- if .Values.safetyOptions.cookienmax }}
+      cookienmax: {{ .Values.safetyOptions.cookienmax }}
+    {{- end }}
+    {{- if .Values.safetyOptions.cookiecmax }}
+      cookiecmax: {{ .Values.safetyOptions.cookiecmax }}
+    {{- end }}
+    {{- if .Values.safetyOptions.aclose }}
+      aclose: {{ .Values.safetyOptions.aclose }}
+    {{- end }}
+    {{- if .Values.safetyOptions.loris }}
+      loris: {{ .Values.safetyOptions.loris }}
+    {{- end }}
+    {{- if .Values.safetyOptions.acao }}
+      acao: {{ .Values.safetyOptions.acao }}
+    {{- end }}
+    {{- if .Values.safetyOptions.acam }}
+      acam: {{ .Values.safetyOptions.acam }}
+    {{- end }}
+    {{- if .Values.saltingOptions.ahalg }}
+      ahalg: {{ .Values.saltingOptions.ahalg }}
+    {{- end }}
+    {{- if .Values.saltingOptions.ahsalt }}
+      ahsalt: {{ .Values.saltingOptions.ahsalt }}
+    {{- end }}
+    {{- if .Values.saltingOptions.ahgen }}
+      ahgen: {{ .Values.saltingOptions.ahgen }}
+    {{- end }}
+    {{- if .Values.saltingOptions.ahcli }}
+      ahcli
+    {{- end }}
+    {{- if .Values.saltingOptions.fksalt }}
+      fksalt: {{ .Values.saltingOptions.fksalt }}
+    {{- end }}
+    {{- if .Values.saltingOptions.dksalt }}
+      dksalt: {{ .Values.saltingOptions.dksalt }}
+    {{- end }}
+    {{- if .Values.saltingOptions.warksalt }}
+      warksalt: {{ .Values.saltingOptions.warksalt }}
+    {{- end }}
+    {{- if .Values.saltingOptions.showahsalt }}
+      showahsalt
+    {{- end }}
+    {{- if .Values.saltingOptions.showfksalt }}
+      showfksalt
+    {{- end }}
+    {{- if .Values.saltingOptions.showdksalt }}
+      showdksalt
+    {{- end }}
+    {{- if .Values.shutdownOptions.ignebind }}
+      ignebind
+    {{- end }}
+    {{- if .Values.shutdownOptions.ignebindall }}
+      ignebindall
+    {{- end }}
+    {{- if .Values.shutdownOptions.exit }}
+      exit: {{ .Values.shutdownOptions.exit }}
+    {{- end }}
+    {{- if .Values.loggingOptions.q }}
+      q
+    {{- end }}
+    {{- if .Values.loggingOptions.lo }}
+      lo: {{ .Values.loggingOptions.lo }}
+    {{- end }}
+    {{- if .Values.loggingOptions.noansi }}
+      noansi
+    {{- end }}
+    {{- if .Values.loggingOptions.ansi }}
+      ansi
+    {{- end }}
+    {{- if .Values.loggingOptions.nologflush }}
+      nologflush
+    {{- end }}
+    {{- if .Values.loggingOptions.novoldump }}
+      novoldump
+    {{- end }}
+    {{- if .Values.loggingOptions.logutc }}
+      logutc
+    {{- end }}
+    {{- if .Values.loggingOptions.logtdec }}
+      logtdec: {{ .Values.loggingOptions.logtdec }}
+    {{- end }}
+    {{- if .Values.loggingOptions.logbadpwd }}
+      logbadpwd: {{ .Values.loggingOptions.logbadpwd }}
+    {{- end }}
+    {{- if .Values.loggingOptions.logconn }}
+      logconn
+    {{- end }}
+    {{- if .Values.loggingOptions.loghtp }}
+      loghtp
+    {{- end }}
+    {{- if .Values.loggingOptions.ihead }}
+      ihead: {{ .Values.loggingOptions.ihead }}
+    {{- end }}
+    {{- if .Values.loggingOptions.ohead }}
+      ohead: {{ .Values.loggingOptions.ohead }}
+    {{- end }}
+    {{- if .Values.loggingOptions.lfurl }}
+      lfurl: {{ .Values.loggingOptions.lfurl }}
+    {{- end }}
+    {{- if .Values.adminPanelOptions.noreload }}
+      noreload
+    {{- end }}
+    {{- if .Values.adminPanelOptions.norescan }}
+      norescan
+    {{- end }}
+    {{- if .Values.adminPanelOptions.nostack }}
+      nostack
+    {{- end }}
+    {{- if .Values.adminPanelOptions.noupspage }}
+      noupspage
+    {{- end }}
+    {{- if .Values.adminPanelOptions.nouplist }}
+      nouplist
+    {{- end }}
+    {{- if .Values.adminPanelOptions.dllist }}
+      dllist: {{ .Values.adminPanelOptions.dllist }}
+    {{- end }}
+    {{- if .Values.adminPanelOptions.upswho }}
+      upswho: {{ .Values.adminPanelOptions.upswho }}
+    {{- end }}
+    {{- if .Values.adminPanelOptions.upswhen }}
+      upswhen
+    {{- end }}
+    {{- if .Values.thumbnailOptions.nothumb }}
+      nothumb
+    {{- end }}
+    {{- if .Values.thumbnailOptions.novthumb }}
+      novthumb
+    {{- end }}
+    {{- if .Values.thumbnailOptions.noathumb }}
+      noathumb
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thsize }}
+      thsize: {{ .Values.thumbnailOptions.thsize }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thmt }}
+      thmt: {{ .Values.thumbnailOptions.thmt }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thconvt }}
+      thconvt: {{ .Values.thumbnailOptions.thconvt }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.acconvt }}
+      acconvt: {{ .Values.thumbnailOptions.acconvt }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrammax }}
+      thrammax: {{ .Values.thumbnailOptions.thrammax }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thcrop }}
+      thcrop: {{ .Values.thumbnailOptions.thcrop }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thx3 }}
+      thx3: {{ .Values.thumbnailOptions.thx3 }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thdec }}
+      thdec: {{ .Values.thumbnailOptions.thdec }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thnojpg }}
+      thnojpg
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thnowebp }}
+      thnowebp
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thffjpg }}
+      thffjpg
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thffswr }}
+      thffswr
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thpoke }}
+      thpoke: {{ .Values.thumbnailOptions.thpoke }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thclean }}
+      thclean: {{ .Values.thumbnailOptions.thclean }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thmaxage }}
+      thmaxage: {{ .Values.thumbnailOptions.thmaxage }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thcovers }}
+      thcovers: {{ .Values.thumbnailOptions.thcovers }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrpil }}
+      thrpil: {{ .Values.thumbnailOptions.thrpil }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrvips }}
+      thrvips: {{ .Values.thumbnailOptions.thrvips }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrraw }}
+      thrraw: {{ .Values.thumbnailOptions.thrraw }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrffi }}
+      thrffi: {{ .Values.thumbnailOptions.thrffi }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrffv }}
+      thrffv: {{ .Values.thumbnailOptions.thrffv }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thrffa }}
+      thrffa: {{ .Values.thumbnailOptions.thrffa }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.thspeccnv }}
+      thspeccnv: {{ .Values.thumbnailOptions.thspeccnv }}
+    {{- end }}
+    {{- if .Values.thumbnailOptions.auunpk }}
+      auunpk: {{ .Values.thumbnailOptions.auunpk }}
+    {{- end }}
+    {{- if .Values.transcodingOptions.qopus }}
+      qopus: {{ .Values.transcodingOptions.qopus }}
+    {{- end }}
+    {{- if .Values.transcodingOptions.qmp3 }}
+      qmp3: {{ .Values.transcodingOptions.qmp3 }}
+    {{- end }}
+    {{- if .Values.transcodingOptions.allowwav }}
+      allowwav
+    {{- end }}
+    {{- if .Values.transcodingOptions.allowflac }}
+      allowflac
+    {{- end }}
+    {{- if .Values.transcodingOptions.nocaf }}
+      nocaf
+    {{- end }}
+    {{- if .Values.transcodingOptions.noowa }}
+      noowa
+    {{- end }}
+    {{- if .Values.transcodingOptions.noacode }}
+      noacode
+    {{- end }}
+    {{- if .Values.transcodingOptions.nobacode }}
+      nobacode
+    {{- end }}
+    {{- if .Values.transcodingOptions.acmaxage }}
+      acmaxage: {{ .Values.transcodingOptions.acmaxage }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailwho }}
+      tailwho: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailwho }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailcmax }}
+      tailcmax: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailcmax }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailtmax }}
+      tailtmax: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailtmax }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailrate }}
+      tailrate: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailrate }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailka }}
+      tailka: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailka }}
+    {{- end }}
+    {{- if .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailfd }}
+      tailfd: {{ .Values.tailingOptions_RealtimeStreamingOfAGrowingFile_.tailfd }}
+    {{- end }}
+    {{- if .Values.rssOptions.rss }}
+      rss
+    {{- end }}
+    {{- if .Values.rssOptions.rssnf }}
+      rssnf: {{ .Values.rssOptions.rssnf }}
+    {{- end }}
+    {{- if .Values.rssOptions.rssfext }}
+      rssfext: {{ .Values.rssOptions.rssfext }}
+    {{- end }}
+    {{- if .Values.rssOptions.rsssort }}
+      rsssort: {{ .Values.rssOptions.rsssort }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2d }}
+      e2d
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2ds }}
+      e2ds
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2dsa }}
+      e2dsa
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2v }}
+      e2v
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2vu }}
+      e2vu
+    {{- end }}
+    {{- if .Values.generalDbOptions.e2vp }}
+      e2vp
+    {{- end }}
+    {{- if .Values.generalDbOptions.hist }}
+      hist: {{ .Values.generalDbOptions.hist }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.dbpath }}
+      dbpath: {{ .Values.generalDbOptions.dbpath }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.nohash }}
+      nohash: {{ .Values.generalDbOptions.nohash }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.noidx }}
+      noidx: {{ .Values.generalDbOptions.noidx }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.nodirsz }}
+      nodirsz
+    {{- end }}
+    {{- if .Values.generalDbOptions.redirsz }}
+      redirsz
+    {{- end }}
+    {{- if .Values.generalDbOptions.nodhash }}
+      nodhash
+    {{- end }}
+    {{- if .Values.generalDbOptions.redhash }}
+      redhash
+    {{- end }}
+    {{- if .Values.generalDbOptions.noforget }}
+      noforget
+    {{- end }}
+    {{- if .Values.generalDbOptions.forgetip }}
+      forgetip: {{ .Values.generalDbOptions.forgetip }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.dbd }}
+      dbd: {{ .Values.generalDbOptions.dbd }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.xlink }}
+      xlink
+    {{- end }}
+    {{- if .Values.generalDbOptions.hashmt }}
+      hashmt: {{ .Values.generalDbOptions.hashmt }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.remaxage }}
+      remaxage: {{ .Values.generalDbOptions.remaxage }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.dbact }}
+      dbact: {{ .Values.generalDbOptions.dbact }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.srchtime }}
+      srchtime: {{ .Values.generalDbOptions.srchtime }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.srchhits }}
+      srchhits: {{ .Values.generalDbOptions.srchhits }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.srchexcl }}
+      srchexcl: {{ .Values.generalDbOptions.srchexcl }}
+    {{- end }}
+    {{- if .Values.generalDbOptions.dotsrch }}
+      dotsrch
+    {{- end }}
+    {{- if .Values.metadataDbOptions.e2t }}
+      e2t
+    {{- end }}
+    {{- if .Values.metadataDbOptions.e2ts }}
+      e2ts
+    {{- end }}
+    {{- if .Values.metadataDbOptions.e2tsr }}
+      e2tsr
+    {{- end }}
+    {{- if .Values.metadataDbOptions.nomutagen }}
+      nomutagen
+    {{- end }}
+    {{- if .Values.metadataDbOptions.nomtagff }}
+      nomtagff
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtagto }}
+      mtagto: {{ .Values.metadataDbOptions.mtagto }}
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtagmt }}
+      mtagmt: {{ .Values.metadataDbOptions.mtagmt }}
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtagv }}
+      mtagv
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtagvv }}
+      mtagvv
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtm }}
+      {{- range .Values.metadataDbOptions.mtm }}
+      mtm: {{ . }}
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mte }}
+      mte: {{ .Values.metadataDbOptions.mte }}
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mth }}
+      mth: {{ .Values.metadataDbOptions.mth }}
+    {{- end }}
+    {{- if .Values.metadataDbOptions.mtp }}
+      {{- range .Values.metadataDbOptions.mtp }}
+      mtp: {{ . }}
+    {{- end }}
+    {{- if .Values.textfileOptions.mdhist }}
+      mdhist: {{ .Values.textfileOptions.mdhist }}
+    {{- end }}
+    {{- if .Values.textfileOptions.txteol }}
+      txteol: {{ .Values.textfileOptions.txteol }}
+    {{- end }}
+    {{- if .Values.textfileOptions.mcr }}
+      mcr: {{ .Values.textfileOptions.mcr }}
+    {{- end }}
+    {{- if .Values.textfileOptions.emp }}
+      emp
+    {{- end }}
+    {{- if .Values.textfileOptions.exp }}
+      exp
+    {{- end }}
+    {{- if .Values.textfileOptions.expmd }}
+      expmd: {{ .Values.textfileOptions.expmd }}
+    {{- end }}
+    {{- if .Values.textfileOptions.explg }}
+      explg: {{ .Values.textfileOptions.explg }}
+    {{- end }}
+    {{- if .Values.textfileOptions.uanodoc }}
+      uanodoc: {{ .Values.textfileOptions.uanodoc }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.og }}
+      og
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogua }}
+      ogua: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogua }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogtpl }}
+      ogtpl: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogtpl }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ognohead }}
+      ognohead
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogth }}
+      ogth: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogth }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogtitle }}
+      ogtitle: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogtitle }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlea }}
+      ogtitlea: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlea }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlev }}
+      ogtitlev: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlev }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlei }}
+      ogtitlei: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogtitlei }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogstitle }}
+      ogstitle
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogdesc }}
+      ogdesc: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogdesc }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.ogsite }}
+      ogsite: {{ .Values.og_OpenGraph_DiscordEmbedOptions.ogsite }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.tcolor }}
+      tcolor: {{ .Values.og_OpenGraph_DiscordEmbedOptions.tcolor }}
+    {{- end }}
+    {{- if .Values.og_OpenGraph_DiscordEmbedOptions.uqe }}
+      uqe
+    {{- end }}
+    {{- if .Values.uiOptions.grid }}
+      grid
+    {{- end }}
+    {{- if .Values.uiOptions.gsel }}
+      gsel
+    {{- end }}
+    {{- if .Values.uiOptions.localtime }}
+      localtime
+    {{- end }}
+    {{- if .Values.uiOptions.lang }}
+      lang: {{ .Values.uiOptions.lang }}
+    {{- end }}
+    {{- if .Values.uiOptions.theme }}
+      theme: {{ .Values.uiOptions.theme }}
+    {{- end }}
+    {{- if .Values.uiOptions.themes }}
+      themes: {{ .Values.uiOptions.themes }}
+    {{- end }}
+    {{- if .Values.uiOptions.auvol }}
+      auvol: {{ .Values.uiOptions.auvol }}
+    {{- end }}
+    {{- if .Values.uiOptions.sort }}
+      sort: {{ .Values.uiOptions.sort }}
+    {{- end }}
+    {{- if .Values.uiOptions.nsort }}
+      nsort
+    {{- end }}
+    {{- if .Values.uiOptions.hsortn }}
+      hsortn: {{ .Values.uiOptions.hsortn }}
+    {{- end }}
+    {{- if .Values.uiOptions.seedots }}
+      seedots
+    {{- end }}
+    {{- if .Values.uiOptions.qdel }}
+      qdel: {{ .Values.uiOptions.qdel }}
+    {{- end }}
+    {{- if .Values.uiOptions.unlist }}
+      unlist: {{ .Values.uiOptions.unlist }}
+    {{- end }}
+    {{- if .Values.uiOptions.favico }}
+      favico: {{ .Values.uiOptions.favico }}
+    {{- end }}
+    {{- if .Values.uiOptions.extth }}
+      {{- range .Values.uiOptions.extth }}
+      extth: {{ . }}
+    {{- end }}
+    {{- if .Values.uiOptions.mpmc }}
+      mpmc: {{ .Values.uiOptions.mpmc }}
+    {{- end }}
+    {{- if .Values.uiOptions.spinner }}
+      spinner: {{ .Values.uiOptions.spinner }}
+    {{- end }}
+    {{- if .Values.uiOptions.cssbrowser }}
+      cssbrowser: {{ .Values.uiOptions.cssbrowser }}
+    {{- end }}
+    {{- if .Values.uiOptions.jsbrowser }}
+      jsbrowser: {{ .Values.uiOptions.jsbrowser }}
+    {{- end }}
+    {{- if .Values.uiOptions.jsother }}
+      jsother: {{ .Values.uiOptions.jsother }}
+    {{- end }}
+    {{- if .Values.uiOptions.htmlhead }}
+      htmlhead: {{ .Values.uiOptions.htmlhead }}
+    {{- end }}
+    {{- if .Values.uiOptions.ih }}
+      ih
+    {{- end }}
+    {{- if .Values.uiOptions.textfiles }}
+      textfiles: {{ .Values.uiOptions.textfiles }}
+    {{- end }}
+    {{- if .Values.uiOptions.txtmax }}
+      txtmax: {{ .Values.uiOptions.txtmax }}
+    {{- end }}
+    {{- if .Values.uiOptions.doctitle }}
+      doctitle: {{ .Values.uiOptions.doctitle }}
+    {{- end }}
+    {{- if .Values.uiOptions.bname }}
+      bname: {{ .Values.uiOptions.bname }}
+    {{- end }}
+    {{- if .Values.uiOptions.pburl }}
+      pburl: {{ .Values.uiOptions.pburl }}
+    {{- end }}
+    {{- if .Values.uiOptions.ver }}
+      ver
+    {{- end }}
+    {{- if .Values.uiOptions.k304 }}
+      k304: {{ .Values.uiOptions.k304 }}
+    {{- end }}
+    {{- if .Values.uiOptions.no304 }}
+      no304: {{ .Values.uiOptions.no304 }}
+    {{- end }}
+    {{- if .Values.uiOptions.ctlre }}
+      ctlre: {{ .Values.uiOptions.ctlre }}
+    {{- end }}
+    {{- if .Values.uiOptions.mdsbf }}
+      mdsbf: {{ .Values.uiOptions.mdsbf }}
+    {{- end }}
+    {{- if .Values.uiOptions.lgsbf }}
+      lgsbf: {{ .Values.uiOptions.lgsbf }}
+    {{- end }}
+    {{- if .Values.uiOptions.mdsba }}
+      mdsba: {{ .Values.uiOptions.mdsba }}
+    {{- end }}
+    {{- if .Values.uiOptions.lgsba }}
+      lgsba: {{ .Values.uiOptions.lgsba }}
+    {{- end }}
+    {{- if .Values.uiOptions.nosbmd }}
+      nosbmd
+    {{- end }}
+    {{- if .Values.uiOptions.nosblg }}
+      nosblg
+    {{- end }}
+    {{- if .Values.uiOptions.haveunlistc }}
+      haveunlistc
+    {{- end }}
+    {{- if .Values.debugOptions.vc }}
+      vc
+    {{- end }}
+    {{- if .Values.debugOptions.cgen }}
+      cgen
+    {{- end }}
+    {{- if .Values.debugOptions.deps }}
+      deps
+    {{- end }}
+    {{- if .Values.debugOptions.nosendfile }}
+      nosendfile
+    {{- end }}
+    {{- if .Values.debugOptions.noscandir }}
+      noscandir
+    {{- end }}
+    {{- if .Values.debugOptions.nofastboot }}
+      nofastboot
+    {{- end }}
+    {{- if .Values.debugOptions.nohtp }}
+      nohtp
+    {{- end }}
+    {{- if .Values.debugOptions.rmsck }}
+      rmsck
+    {{- end }}
+    {{- if .Values.debugOptions.srchdbg }}
+      srchdbg
+    {{- end }}
+    {{- if .Values.debugOptions.rclonemdns }}
+      rclonemdns
+    {{- end }}
+    {{- if .Values.debugOptions.stackmon }}
+      stackmon: {{ .Values.debugOptions.stackmon }}
+    {{- end }}
+    {{- if .Values.debugOptions.logthrs }}
+      logthrs: {{ .Values.debugOptions.logthrs }}
+    {{- end }}
+    {{- if .Values.debugOptions.logfk }}
+      logfk: {{ .Values.debugOptions.logfk }}
+    {{- end }}
+    {{- if .Values.debugOptions.bakflips }}
+      bakflips
+    {{- end }}
+    {{- if .Values.debugOptions.bfnc }}
+      bfnc: {{ .Values.debugOptions.bfnc }}
+    {{- end }}
+    {{- if .Values.debugOptions.bfdir }}
+      bfdir: {{ .Values.debugOptions.bfdir }}
+    {{- end }}
+    {{- if .Values.debugOptions.bflog }}
+      bflog: {{ .Values.debugOptions.bflog }}
+    {{- end }}
+    {{- if .Values.debugOptions.nocfgcmtwarn }}
+      nocfgcmtwarn
+    {{- end }}
+    {{- range $name, $cfg := .Values.volumes }}
+    [{{ $cfg.httpURL }}]
+      {{ $cfg.mountPath }}
+      accs:
+        {{ $cfg.permissions }}
+      flags:
+      {{- if $cfg.volflags.uploads_General.dedup }}
+        dedup
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.hardlink }}
+        hardlink
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.hardlinkonly }}
+        hardlinkonly
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.reflink }}
+        reflink
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.safededup }}
+        safededup: {{ $cfg.volflags.uploads_General.safededup }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.noclone }}
+        noclone
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nodupe }}
+        nodupe
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.chmod_d }}
+        chmod_d: {{ $cfg.volflags.uploads_General.chmod_d }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.chmod_f }}
+        chmod_f: {{ $cfg.volflags.uploads_General.chmod_f }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.uid }}
+        uid: {{ $cfg.volflags.uploads_General.uid }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.gid }}
+        gid: {{ $cfg.volflags.uploads_General.gid }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.sparse }}
+        sparse: {{ $cfg.volflags.uploads_General.sparse }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nosparse }}
+        {{ $cfg.volflags.uploads_General.nosparse }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.daw }}
+        daw
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.nosub }}
+        nosub: {{ $cfg.volflags.uploads_General.nosub }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.magic }}
+        magic
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.put_name }}
+        put_name: {{ $cfg.volflags.uploads_General.put_name }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.put_ck }}
+        put_ck: {{ $cfg.volflags.uploads_General.put_ck }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.bup_ck }}
+        bup_ck: {{ $cfg.volflags.uploads_General.bup_ck }}
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.gz }}
+        gz
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.xz }}
+        xz
+      {{- end }}
+      {{- if $cfg.volflags.uploads_General.pk }}
+        pk: {{ $cfg.volflags.uploads_General.pk }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.maxn }}
+        maxn
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.maxb }}
+        maxb
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.vmaxb }}
+        vmaxb
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.vmaxn }}
+        vmaxn
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.medialinks }}
+        {{ $cfg.volflags.uploadRules.medialinks }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.wo_up_readme }}
+        wo_up_readme
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.rand }}
+        rand
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.nrand }}
+        nrand
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2ow }}
+        u2ow: {{ $cfg.volflags.uploadRules.u2ow }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2ts }}
+        u2ts: {{ $cfg.volflags.uploadRules.u2ts }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.u2abort }}
+        u2abort: {{ $cfg.volflags.uploadRules.u2abort }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.sz }}
+        sz: {{ $cfg.volflags.uploadRules.sz }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRules.df }}
+        df: {{ $cfg.volflags.uploadRules.df }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.rotn }}
+        {{ $cfg.volflags.uploadRotation.rotn }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.rotf }}
+        {{ $cfg.volflags.uploadRotation.rotf }}
+      {{- end }}
+      {{- if $cfg.volflags.uploadRotation.lifetime }}
+        lifetime: {{ $cfg.volflags.uploadRotation.lifetime }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2d }}
+        e2d: {{ $cfg.volflags.database_General.e2d }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2ds }}
+        e2ds
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2dsa }}
+        e2dsa
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2t }}
+        e2t
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2ts }}
+        e2ts
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2tsr }}
+        e2tsr
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2ts }}
+        {{ $cfg.volflags.database_General.d2ts }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2v }}
+        e2v
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2vu }}
+        e2vu
+      {{- end }}
+      {{- if $cfg.volflags.database_General.e2vp }}
+        e2vp
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2ds }}
+        {{ $cfg.volflags.database_General.d2ds }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2t }}
+        {{ $cfg.volflags.database_General.d2t }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2v }}
+        {{ $cfg.volflags.database_General.d2v }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.d2d }}
+        {{ $cfg.volflags.database_General.d2d }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.hist }}
+        hist
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dbpath }}
+        dbpath: {{ $cfg.volflags.database_General.dbpath }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.landmark }}
+        {{ $cfg.volflags.database_General.landmark }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.scan }}
+        scan
+      {{- end }}
+      {{- if $cfg.volflags.database_General.nohash }}
+        nohash: {{ $cfg.volflags.database_General.nohash }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.noidx }}
+        noidx: {{ $cfg.volflags.database_General.noidx }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.noforget }}
+        noforget
+      {{- end }}
+      {{- if $cfg.volflags.database_General.forget_ip }}
+        forget_ip: {{ $cfg.volflags.database_General.forget_ip }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.no_db_ip }}
+        no_db_ip
+      {{- end }}
+      {{- if $cfg.volflags.database_General.fat32 }}
+        {{ $cfg.volflags.database_General.fat32 }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dbd }}
+        dbd: {{ $cfg.volflags.database_General.dbd }}
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xlink }}
+        xlink
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xdev }}
+        xdev
+      {{- end }}
+      {{- if $cfg.volflags.database_General.xvol }}
+        xvol
+      {{- end }}
+      {{- if $cfg.volflags.database_General.dotsrch }}
+        dotsrch
+      {{- end }}
+      {{- if $cfg.volflags.database_General.nodotsrch }}
+        nodotsrch
+      {{- end }}
+      {{- if $cfg.volflags.database_General.srch_excl }}
+        srch_excl: {{ $cfg.volflags.database_General.srch_excl }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mte }}
+        mte: {{ $cfg.volflags.database_AudioTags.mte }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mth }}
+        mth: {{ $cfg.volflags.database_AudioTags.mth }}
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mtp }}
+        mtp
+      {{- end }}
+      {{- if $cfg.volflags.database_AudioTags.mtp }}
+        mtp
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dthumb }}
+        dthumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dvthumb }}
+        dvthumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dathumb }}
+        dathumb
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.dithumb }}
+        {{ $cfg.volflags.thumbnails.dithumb }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.pngquant }}
+        {{ $cfg.volflags.thumbnails.pngquant }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.thsize }}
+        thsize: {{ $cfg.volflags.thumbnails.thsize }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.crop }}
+        crop: {{ $cfg.volflags.thumbnails.crop }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.th3x }}
+        th3x: {{ $cfg.volflags.thumbnails.th3x }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.convt }}
+        convt: {{ $cfg.volflags.thumbnails.convt }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.aconvt }}
+        aconvt: {{ $cfg.volflags.thumbnails.aconvt }}
+      {{- end }}
+      {{- if $cfg.volflags.thumbnails.ext_th }}
+        {{- range $cfg.volflags.thumbnails.ext_th }}
+        ext_th: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.handlers.on404 }}
+        {{- range $cfg.volflags.handlers.on404 }}
+        on404: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.handlers.on403 }}
+        {{- range $cfg.volflags.handlers.on403 }}
+        on403: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbu }}
+        {{- range $cfg.volflags.eventHooks.xbu }}
+        xbu: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xau }}
+        {{- range $cfg.volflags.eventHooks.xau }}
+        xau: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xiu }}
+        {{- range $cfg.volflags.eventHooks.xiu }}
+        xiu: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbc }}
+        {{- range $cfg.volflags.eventHooks.xbc }}
+        xbc: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xac }}
+        xac
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbr }}
+        {{- range $cfg.volflags.eventHooks.xbr }}
+        xbr: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xar }}
+        {{- range $cfg.volflags.eventHooks.xar }}
+        xar: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xbd }}
+        {{- range $cfg.volflags.eventHooks.xbd }}
+        xbd: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xad }}
+        {{- range $cfg.volflags.eventHooks.xad }}
+        xad: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xm }}
+        xm: {{ $cfg.volflags.eventHooks.xm }}
+      {{- end }}
+      {{- if $cfg.volflags.eventHooks.xban }}
+        {{- range $cfg.volflags.eventHooks.xban }}
+        xban: {{ . }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.grid }}
+        grid
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.gsel }}
+        gsel
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sort }}
+        sort: {{ $cfg.volflags.clientAndUx.sort }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nsort }}
+        nsort
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.hsortn }}
+        hsortn: {{ $cfg.volflags.clientAndUx.hsortn }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlist }}
+        unlist: {{ $cfg.volflags.clientAndUx.unlist }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.html_head }}
+        html_head: {{ $cfg.volflags.clientAndUx.html_head }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.tcolor }}
+        tcolor: {{ $cfg.volflags.clientAndUx.tcolor }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nodirsz }}
+        nodirsz
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.robots }}
+        robots: {{ $cfg.volflags.clientAndUx.robots }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.norobots }}
+        norobots
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlistcr }}
+        {{ $cfg.volflags.clientAndUx.unlistcr }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.unlistcw }}
+        {{ $cfg.volflags.clientAndUx.unlistcw }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.no_sb_md }}
+        no_sb_md
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.no_sb_lg }}
+        no_sb_lg
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sb_md }}
+        sb_md
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.sb_lg }}
+        sb_lg
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.md_sbf }}
+        md_sbf: {{ $cfg.volflags.clientAndUx.md_sbf }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.lg_sbf }}
+        lg_sbf: {{ $cfg.volflags.clientAndUx.lg_sbf }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.md_sba }}
+        md_sba: {{ $cfg.volflags.clientAndUx.md_sba }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.lg_sba }}
+        lg_sba: {{ $cfg.volflags.clientAndUx.lg_sba }}
+      {{- end }}
+      {{- if $cfg.volflags.clientAndUx.nohtml }}
+        {{ $cfg.volflags.clientAndUx.nohtml }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og }}
+        og
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_site }}
+        og_site: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_site }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_desc }}
+        og_desc: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_desc }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_th }}
+        og_th: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_th }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_a }}
+        og_title_a: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_a }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_v }}
+        og_title_v: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_v }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title_i }}
+        og_title_i: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title_i }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_title }}
+        og_title: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_title }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_s_title }}
+        og_s_title
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_tpl }}
+        og_tpl: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_tpl }}
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_no_head }}
+        og_no_head
+      {{- end }}
+      {{- if $cfg.volflags.opengraph_DiscordEmbeds_.og_ua }}
+        og_ua: {{ $cfg.volflags.opengraph_DiscordEmbeds_.og_ua }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.md_hist }}
+        md_hist: {{ $cfg.volflags.textfiles.md_hist }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp }}
+        exp
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp_md }}
+        exp_md: {{ $cfg.volflags.textfiles.exp_md }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.exp_lg }}
+        exp_lg: {{ $cfg.volflags.textfiles.exp_lg }}
+      {{- end }}
+      {{- if $cfg.volflags.textfiles.txt_eol }}
+        txt_eol: {{ $cfg.volflags.textfiles.txt_eol }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.notail }}
+        notail
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_fd }}
+        tail_fd: {{ $cfg.volflags.tailing.tail_fd }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_rate }}
+        tail_rate: {{ $cfg.volflags.tailing.tail_rate }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_tmax }}
+        tail_tmax: {{ $cfg.volflags.tailing.tail_tmax }}
+      {{- end }}
+      {{- if $cfg.volflags.tailing.tail_who }}
+        tail_who: {{ $cfg.volflags.tailing.tail_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dots }}
+        dots
+      {{- end }}
+      {{- if $cfg.volflags.others.fk }}
+        fk: {{ $cfg.volflags.others.fk }}
+      {{- end }}
+      {{- if $cfg.volflags.others.fka }}
+        {{ $cfg.volflags.others.fka }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dk }}
+        dk: {{ $cfg.volflags.others.dk }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dks }}
+        {{ $cfg.volflags.others.dks }}
+      {{- end }}
+      {{- if $cfg.volflags.others.dky }}
+        {{ $cfg.volflags.others.dky }}
+      {{- end }}
+      {{- if $cfg.volflags.others.rss }}
+        rss
+      {{- end }}
+      {{- if $cfg.volflags.others.rmagic }}
+        rmagic
+      {{- end }}
+      {{- if $cfg.volflags.others.ups_who }}
+        ups_who: {{ $cfg.volflags.others.ups_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zip_who }}
+        zip_who: {{ $cfg.volflags.others.zip_who }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxn }}
+        zipmaxn: {{ $cfg.volflags.others.zipmaxn }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxs }}
+        zipmaxs: {{ $cfg.volflags.others.zipmaxs }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxt }}
+        zipmaxt: {{ $cfg.volflags.others.zipmaxt }}
+      {{- end }}
+      {{- if $cfg.volflags.others.zipmaxu }}
+        zipmaxu
+      {{- end }}
+      {{- if $cfg.volflags.others.nopipe }}
+        nopipe
+      {{- end }}
+      {{- if $cfg.volflags.others.mv_retry }}
+        mv_retry: {{ $cfg.volflags.others.mv_retry }}
+      {{- end }}
+      {{- if $cfg.volflags.others.rm_retry }}
+        rm_retry: {{ $cfg.volflags.others.rm_retry }}
+      {{- end }}
+      {{- if $cfg.volflags.others.davauth }}
+        davauth
+      {{- end }}
+      {{- if $cfg.volflags.others.davrt }}
+        davrt
+      {{- end }}
+    {{- end }}

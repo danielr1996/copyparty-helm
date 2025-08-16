@@ -1,5 +1,0 @@
-storage:
-  storageClass: ""
-  size: ""
-  accessModes:
-    - ReadWriteOnce

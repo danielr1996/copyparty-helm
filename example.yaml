@@ -2032,7 +2032,6 @@ volumes:
         # Example: ahash,vhash
         # verbose tag scanning; print errors from mtp subprocesses and such
         # type: BOOLEAN
-        mtp:
 
       thumbnails:
         # disables all thumbnails

@@ -90,7 +90,7 @@ def createConfigMap():
         yamlContent = """apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: copyparty-configmap
+  name: {{ include "chart.fullname" . }}-config
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -99,7 +99,7 @@ metadata:
 data:
   copyparty.cfg: |
 """ + yamlContent
-        with open('configmap.yaml', 'w') as t:
+        with open('templates/configmap.yaml', 'w') as t:
             t.write(yamlContent)
 
 def createValuesYAML():
@@ -167,7 +167,6 @@ def getVariableType(key):
                             return 'BOOLEAN'
                         else:
                             return 'ARGUMENT'
-    print('NOTFOUND')
     return 'NOTFOUND'
 
 def createVolume():
@@ -188,10 +187,16 @@ def createVolume():
       - ReadWriteOnce
     volflags:"""
     ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
-
+    prevkey = ''
+    currentkey = ''
     for key in flagcats.keys():
         volflags += "\n      " + re.sub('\W', '_',camelCase(re.sub('\n.*', '', key))) + ':\n'
         for l2key in flagcats[key].keys():
+            prevkey = currentkey
+            if '=' in l2key:
+                currentkey = l2key.split('=')[0]
+            else:
+                currentkey = l2key
             content = ansi_escape.sub('', flagcats[key][l2key])
             content = re.sub('\n', '', content)
             volflags += '        # ' + content + '\n'
@@ -203,7 +208,8 @@ def createVolume():
             volflags += re.sub(' {2,6}', '        ', getVariableInfo(l2key))
             if getVariableType(l2key) == 'NOTFOUND':
                 volflags += '        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n        # This is expected behavior with some options that are only available as volflags.\n        # Please input the text that should appear in the copyparty config verbatim as this key\'s value.\n        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n'
-            volflags += '        ' + l2key + ':\n'
+            if prevkey != currentkey:
+                volflags += '        ' + l2key + ':\n'
     with open('example.yaml', 'a') as t:
         t.write(volflags)
 
@@ -215,7 +221,6 @@ def createVolflagConfigMap():
         accs:
             {{ $cfg.permissions }}
         flags:\n"""
-        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
 
         for key in flagcats.keys():
             outerGroup = re.sub('\W', '_',camelCase(re.sub('\n.*', '', key)))
@@ -223,8 +228,6 @@ def createVolflagConfigMap():
                 if '=' in l2key:
                     l2key = l2key.split('=')[0]
                 variableType = getVariableType(l2key)
-                if variableType == 'NOTFOUND':
-                    print(outerGroup + '.' + l2key)
                 if variableType == 'BOOLEAN':
                     entry = '      {{{{- if $cfg.volflags.{group}.{value} }}}}\n'.format(group=outerGroup, value=l2key)
                     entry += '        {value}\n'.format(value=l2key)
@@ -244,7 +247,7 @@ def createVolflagConfigMap():
                     entry += '      {{- end }}\n'
                 yamlContent += entry
         yamlContent += '    {{- end }}\n'
-        with open('configmap.yaml', 'a') as t:
+        with open('templates/configmap.yaml', 'a') as t:
             t.write(yamlContent)
 
 

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "chart.fullname" . }}-copyparty-pod
+spec:
+  containers:
+  - name: copyparty
+    image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+    resizePolicy:
+    - resourceName: cpu
+      restartPolicy: NotRequired # Default, but explicit here
+    - resourceName: memory
+      restartPolicy: RestartContainer
+    resources:
+      limits:
+        memory: "600Mi"
+        cpu: {{ .Values.generalOptions.j }}
+      requests:
+        memory: "4Gi"
+        cpu: {{ .Values.generalOptions.j }}

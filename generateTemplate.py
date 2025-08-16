@@ -211,7 +211,7 @@ affinity: {}
                     entry += parseConfig(parsedline)
                     
                     yamlContent += entry
-        with open('example.yaml', 'w') as t:
+        with open('values.yaml', 'w') as t:
             t.write(yamlContent)
 
 
@@ -299,7 +299,7 @@ def createVolume():
                 volflags += '        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n        # This is expected behavior with some options that are only available as volflags.\n        # Please input the text that should appear in the copyparty config verbatim as this key\'s value.\n        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!\n'
             if prevkey != currentkey:
                 volflags += '        ' + l2key + ':\n'
-    with open('example.yaml', 'a') as t:
+    with open('values.yaml', 'a') as t:
         t.write(volflags)
 
 def createVolflagConfigMap():

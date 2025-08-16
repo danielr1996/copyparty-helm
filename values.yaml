@@ -64,6 +64,7 @@ readinessProbe:
 autoscaling:
   enabled: false
   minReplicas: 1
+  # increase ONLY if Copyparty will NOT write to the volumes. Also, accessMode needs to be RWX, not RWO
   maxReplicas: 1
   targetCPUUtilizationPercentage: 100
   # targetMemoryUtilizationPercentage: 80

@@ -1,0 +1,2583 @@
+replicaCount: 1
+image:
+  repository: copyparty/ac
+  pullPolicy: IfNotPresent
+  tag: "1.19.1"
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: copyparty.local
+      paths:
+        - path: /
+  tls: []
+  #  - secretName: copyparty-tls
+  #    hosts:
+  #      - copyparty.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 100
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes:
+  - name: foo
+    secret:
+      secretName: mysecret1
+      optional: false
+  - name: bar
+    secret:
+      secretName: mysecret2
+      optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+generalOptions:
+  # REPEATABLE: add config file
+  # type: PATH
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  c:
+  # max num clients
+  # type: NUM
+  nc:
+  # max num cpu cores, 0=all
+  # type: CORES
+  j:
+  # REPEATABLE: add account, USER:PASS; example [ed:wark]
+  # type: ACCT
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  a:
+  # REPEATABLE: add volume, SRC:DST:FLAG; examples [.::r], [/mnt/nas/music:/music:r:aed], see --help-accounts
+  # type: VOL
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  v:
+  # REPEATABLE: add group, NAME:USER1,USER2,...; example [admins:ed,foo,bar]
+  # type: G:N,N
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  grp:
+  # require username and password for login; default is just password
+  # type: BOOLEAN
+  usernames:
+  # enable the ?dots url parameter / client option which allows clients to see dotfiles / hidden files (volflag=dots)
+  # type: BOOLEAN
+  ed:
+  # how to handle url-form POSTs; see --help-urlform
+  # type: MODE
+  # default: print,xm
+  urlform:
+  # server terminal title, for example [$ip-10.1.2.] or [$ip-]
+  # type: TXT
+  # default: cpp @ $pub
+  wintitle:
+  # server name (displayed topleft in browser and in mDNS)
+  # type: TXT
+  name:
+  # REPEATABLE: map file EXTension to MIMEtype, for example [jpg=image/jpeg]
+  # type: EXT=MIME
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  mime:
+  # list default mimetype mapping and exit
+  # type: BOOLEAN
+  mimes:
+  # do expensive analysis to improve accuracy of returned mimetypes; will make file-downloads, rss, and webdav slower (volflag=rmagic)
+  # type: BOOLEAN
+  rmagic:
+  # show licenses and exit
+  # type: BOOLEAN
+  license:
+  # show versions and exit
+  # type: BOOLEAN
+  version:
+
+qrOptions:
+  # show QR-code on startup
+  # type: BOOLEAN
+  qr:
+  # change the QR-code URL to https://
+  # type: BOOLEAN
+  qrs:
+  # location to include in the url, for example [priv/?pw=hunter2]
+  # type: PATH
+  # default: [empty string] 
+  qrl:
+  # select IP which starts with PREFIX; [.] to force default IP when mDNS URL would have been used instead
+  # type: PREFIX
+  # default: [empty string] 
+  qri:
+  # foreground; try [0] or [-1] if the qr-code is unreadable
+  # type: COLOR
+  qrfg:
+  # background (white=255)
+  # type: COLOR
+  qrbg:
+  # padding (spec says 4 or more, but 1 is usually fine)
+  # type: CELLS
+  qrp:
+  # [1]=1x, [2]=2x, [0]=auto (try [2] on broken fonts)
+  # type: N
+  qrz:
+  # sticky/pin the qr-code to always stay on-screen; [0]=disabled, [1]=with-url, [2]=just-qr
+  # type: N
+  qrpin:
+
+filesystemOptions:
+  # if a file cannot be deleted because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=rm_retry)
+  # type: T/R
+  rmretry:
+  # if a file cannot be renamed because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=mv_retry)
+  # type: T/R
+  mvretry:
+  # file I/O buffer-size; if your volumes are on a network drive, try increasing to 524288 or even 4194304 (and let me know if that improves your performance)
+  # type: BYTES
+  iobuf:
+  # rebuild mountpoint cache every SEC to keep track of sparse-files support; keep low on servers with removable media
+  # type: SEC
+  mtabage:
+
+shareUrlOptions:
+  # toplevel virtual folder for shared files/folders, for example [/share]
+  # type: DIR
+  # default: [empty string] 
+  shr:
+  # database to store shares in
+  # type: FILE
+  shrdb:
+  # comma-separated list of users allowed to view/delete any share
+  # type: U,U
+  # default: [empty string] 
+  shradm:
+  # shares can be revived by their owner if they expired less than MIN minutes ago; [60]=hour, [1440]=day, [10080]=week
+  # type: MIN
+  shrrt:
+  # debug
+  # type: BOOLEAN
+  shrv:
+
+uploadOptions:
+  # dotfile incomplete uploads, hiding them from clients unless -ed
+  # type: BOOLEAN
+  dotpart:
+  # when avoiding filename collisions by appending the uploader's ip to the filename: append the plaintext ip instead of salting and hashing the ip
+  # type: BOOLEAN
+  plainip:
+  # filename for nameless uploads (when uploader doesn't provide a name); default is [put-UNIXTIME-IP.bin] (the .6f means six decimal places) (volflag=put_name)
+  # type: TXT
+  # default: put-{now.6f}-{cip}.bin
+  putname:
+  # default checksum-hasher for PUT/WebDAV uploads: no / md5 / sha1 / sha256 / sha512 / b2 / blake2 / b2s / blake2s (volflag=put_ck)
+  # type: ALG
+  # default: sha512
+  putck:
+  # default checksum-hasher for bup/basic-uploader: no / md5 / sha1 / sha256 / sha512 / b2 / blake2 / b2s / blake2s (volflag=bup_ck)
+  # type: ALG
+  # default: sha512
+  bupck:
+  # grace period where uploads can be deleted by the uploader, even without delete permissions; 0=disabled, default=12h
+  # type: SEC
+  unpost:
+  # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
+  # type: NUM
+  u2abort:
+  # file write grace period (any client can write to a blank file last-modified more recently than SEC seconds ago)
+  # type: SEC
+  blankwt:
+  # max number of uploads to keep in memory when running without -e2d; roughly 1 MiB RAM per 600
+  # type: N
+  regcap:
+  # disable file-handle pooling -- instead, repeatedly close and reopen files during upload (bad idea to enable this on windows and/or cow filesystems)
+  # type: BOOLEAN
+  nofpool:
+  # force file-handle pooling, even when it might be dangerous (multiprocessing, filesystems lacking sparse-files support, ...)
+  # type: BOOLEAN
+  usefpool:
+  # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [644] = owner-RW + all-R, [755] = owner-RWX + all-RX, [777] = full-yolo (volflag=chmod_f)
+  # type: UGO
+  # default: [empty string] 
+  chmodf:
+  # unix file permissions to use when creating directories; see --help-chmod. Examples: [755] = owner-RW + all-R, [777] = full-yolo (volflag=chmod_d)
+  # type: UGO
+  # default: 755
+  chmodd:
+  # unix user-id to chown new files/folders to; default = -1 = do-not-change (volflag=uid)
+  # type: N
+  uid:
+  # unix group-id to chown new files/folders to; default = -1 = do-not-change (volflag=gid)
+  # type: N
+  gid:
+  # enable symlink-based upload deduplication (volflag=dedup)
+  # type: BOOLEAN
+  dedup:
+  # how careful to be when deduplicating files; [1] = just verify the filesize, [50] = verify file contents have not been altered (volflag=safededup)
+  # type: N
+  safededup:
+  # enable hardlink-based dedup; will fallback on symlinks when that is impossible (across filesystems) (volflag=hardlink)
+  # type: BOOLEAN
+  hardlink:
+  # do not fallback to symlinks when a hardlink cannot be made (volflag=hardlinkonly)
+  # type: BOOLEAN
+  hardlinkonly:
+  # enable reflink-based dedup; will fallback on full copies when that is impossible (non-CoW filesystem) (volflag=reflink)
+  # type: BOOLEAN
+  reflink:
+  # reject duplicate files during upload; only matches within the same volume (volflag=nodupe)
+  # type: BOOLEAN
+  nodupe:
+  # do not use existing data on disk to satisfy dupe uploads; reduces server HDD reads in exchange for much more network load (volflag=noclone)
+  # type: BOOLEAN
+  noclone:
+  # disable snapshots -- forget unfinished uploads on shutdown; don't create .hist/up2k.snap files -- abandoned/interrupted uploads must be cleaned up manually
+  # type: BOOLEAN
+  nosnap:
+  # write upload state to ./hist/up2k.snap every SEC seconds; allows resuming incomplete uploads after a server crash
+  # type: SEC
+  snapwri:
+  # forget unfinished uploads after MIN minutes; impossible to resume them after that (360=6h, 1440=24h)
+  # type: MIN
+  snapdrop:
+  # how to timestamp uploaded files; [c]=client-last-modified, [u]=upload-time, [fc]=force-c, [fu]=force-u (volflag=u2ts)
+  # type: TXT
+  # default: c
+  u2ts:
+  # force randomized filenames, --nrand chars long (volflag=rand)
+  # type: BOOLEAN
+  rand:
+  # randomized filenames length (volflag=nrand)
+  # type: NUM
+  nrand:
+  # enable filetype detection on nameless uploads (volflag=magic)
+  # type: BOOLEAN
+  magic:
+  # ensure GiB free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [256m], [4], [2T] (volflag=df)
+  # type: GiB
+  # default: 0
+  df:
+  # windows-only: minimum size of incoming uploads through up2k before they are made into sparse files
+  # type: MiB
+  sparse:
+  # configure turbo-mode in up2k client; [-1] = forbidden/always-off, [0] = default-off and warn if enabled, [1] = default-off, [2] = on, [3] = on and disable datecheck
+  # type: LVL
+  turbo:
+  # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [0] = only when necessary (non-https), [1] = always (all browsers), [2] = always on chrome/firefox, [3] = always on chrome, [N] = chrome-version N and newer (recommendation: 137)
+  # type: N
+  nosubtle:
+  # web-client: number of file chunks to upload in parallel; 1 or 2 is good when latency is low (same-country), 2~4 for android-clients, 2~6 for cross-atlantic. Max is 6 in most browsers. Big values increase network-speed but may reduce HDD-speed
+  # type: JOBS
+  u2j:
+  # web-client: default upload chunksize (MiB); sets min,default,max in the settings gui. Each HTTP POST will aim for default, and never exceed max. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [1,1,1]
+  # type: N,N,N
+  # default: 1,64,96
+  u2sz:
+  # web-client: default setting for when to replace/overwrite existing files; [0]=never, [1]=if-client-newer, [2]=always (volflag=u2ow)
+  # type: NUM
+  u2ow:
+  # upload order; [s]=smallest-first, [n]=alphabetical, [fs]=force-s, [fn]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
+  # type: TXT
+  # default: s
+  u2sort:
+  # write POST reports to textfiles in working-directory
+  # type: BOOLEAN
+  writeuplog:
+
+networkOptions:
+  # IPs and/or unix-sockets to listen on (comma-separated list; see --help-bind). Default: all IPv4 and IPv6
+  # type: IP
+  # default: ::
+  i:
+  # ports to listen on (comma/range); ignored for unix-sockets
+  # type: PORT
+  # default: 3923
+  p:
+  # include link-local IPv4/IPv6 in mDNS replies, even if the NIC has routable IPs (breaks some mDNS clients)
+  # type: BOOLEAN
+  ll:
+  # which ip to associate clients with; [0]=tcp, [1]=origin (first x-fwd, unsafe), [-1]=closest-proxy, [-2]=second-hop, [-3]=third-hop
+  # type: DEPTH
+  rproxy:
+  # if reverse-proxied, which http header to read the client's real ip from
+  # type: NAME
+  # default: x-forwarded-for
+  xffhdr:
+  # list of trusted reverse-proxy CIDRs (comma-separated); only accept the real-ip header (--xff-hdr) and IdP headers if the incoming connection is from an IP within either of these subnets. Specify [lan] to allow all LAN / private / non-internet IPs. Can be disabled with [any] if you are behind cloudflare (or similar) and are using --xff-hdr=cf-connecting-ip (or similar)
+  # type: CIDR
+  # default: 127.0.0.0/8, ::1/128
+  xffsrc:
+  # only accept connections from IP-addresses inside CIDR (comma-separated); examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
+  # type: CIDR
+  # default: [empty string] 
+  ipa:
+  # if reverse-proxying on a location instead of a dedicated domain/subdomain, provide the base location here; example: [/foo/bar]
+  # type: PATH
+  # default: [empty string] 
+  rploc:
+  # write list of listening-on ip:port to textfile at PATH when http-servers have started
+  # type: PATH
+  # default: [empty string] 
+  wrheps:
+  # write list of accessible-on ip:port to textfile at PATH when http-servers have started
+  # type: PATH
+  # default: [empty string] 
+  wrhaon:
+  # socket timeout (read request header)
+  # type: SEC
+  sthead:
+  # socket timeout (read/write request/response bodies). Use 60 on fast servers (default is extremely safe). Disable with 0 if reverse-proxied for a 2%% speed boost
+  # type: SEC
+  stbody:
+  # socket read size in bytes (indirectly affects filesystem writes; recommendation: keep equal-to or lower-than --iobuf)
+  # type: B
+  srdsz:
+  # socket write size in bytes
+  # type: B
+  swrsz:
+  # debug: socket write delay in seconds
+  # type: SEC
+  swrslp:
+  # debug: response delay in seconds
+  # type: SEC
+  rspslp:
+  # debug: response delay, random duration 0..SEC
+  # type: SEC
+  rspjtr:
+
+ssl_TlsOptions:
+  # disable ssl/tls -- force plaintext
+  # type: BOOLEAN
+  httponly:
+  # disable plaintext -- force tls
+  # type: BOOLEAN
+  httpsonly:
+  # path to file containing a concatenation of TLS key and certificate chain
+  # type: PATH
+  cert:
+  # set allowed ssl/tls versions; [help] shows available versions; default is what your python version considers safe
+  # type: LIST
+  # default: [empty string] 
+  sslver:
+  # set allowed ssl/tls ciphers; [help] shows available ciphers
+  # type: LIST
+  # default: [empty string] 
+  ciphers:
+  # dump some tls info
+  # type: BOOLEAN
+  ssldbg:
+  # log master secrets for later decryption in wireshark
+  # type: PATH
+  # default: [empty string] 
+  ssllog:
+
+tlsCertificateGeneratorOptions:
+  # disable automatic certificate creation
+  # type: BOOLEAN
+  nocrt:
+  # comma-separated list of FQDNs (domains) to add into the certificate
+  # type: N,N
+  # default: [empty string] 
+  crtns:
+  # do not add wildcard entries for each --crt-ns
+  # type: BOOLEAN
+  crtexact:
+  # do not add autodetected IP addresses into cert
+  # type: BOOLEAN
+  crtnoip:
+  # do not add 127.0.0.1 / localhost into cert
+  # type: BOOLEAN
+  crtnolo:
+  # do not add mDNS names / hostname into cert
+  # type: BOOLEAN
+  crtnohn:
+  # where to save the CA cert
+  # type: PATH
+  crtdir:
+  # ca-certificate expiration time in days
+  # type: D
+  crtcdays:
+  # server-cert expiration time in days
+  # type: D
+  crtsdays:
+  # CA/server-cert common-name
+  # type: TXT
+  # default: partyco
+  crtcn:
+  # override CA name
+  # type: TXT
+  # default: --crt-cn
+  crtcnc:
+  # override server-cert name
+  # type: TXT
+  # default: --crt-cn cpp
+  crtcns:
+  # backdate in hours
+  # type: HRS
+  crtback:
+  # algorithm and keysize; one of these: ecdsa-256 rsa-4096 rsa-2048
+  # type: S-N
+  # default: ecdsa-256
+  crtalg:
+
+idp_IdentityProvider_UserAuthenticationOptions:
+  # bypass the copyparty authentication checks if the request-header HN contains a username to associate the request with (for use with authentik/oauth/...)\nWARNING: if you enable this, make sure clients are unable to specify this header themselves; must be washed away and replaced by a reverse-proxy
+  # type: HN
+  # default: [empty string] 
+  idphusr:
+  # assume the request-header HN contains the groupname of the requesting user; can be referenced in config files for group-based access control
+  # type: HN
+  # default: [empty string] 
+  idphgrp:
+  # optional but recommended safeguard; your reverse-proxy will insert a secret header named HN into all requests, and the other IdP headers will be ignored if this header is not present
+  # type: HN
+  # default: [empty string] 
+  idphkey:
+  # if there are multiple groups in --idp-h-grp, they are separated by one of the characters in RE
+  # type: RE
+  # default: |:;+,
+  idpgsep:
+  # where to store the known IdP users/groups (if you run multiple copyparty instances, make sure they use different DBs)
+  # type: PATH
+  idpdb:
+  # how to use --idp-db; [0] = entirely disable, [1] = write-only (effectively disabled), [2] = remember users, [3] = remember users and groups.\nNOTE: Will remember and restore the IdP-volumes of all users for all eternity if set to 2 or 3, even when user is deleted from your IdP
+  # type: N
+  idpstore:
+  # comma-separated list of users allowed to use /?idp (the cache management UI)
+  # type: U,U
+  # default: [empty string] 
+  idpadm:
+  # generate a session-token for IdP users which is written to cookie cppws (or cppwd if plaintext), to reduce the load on the IdP server, lifetime S seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with --ses-db wiped)
+  # type: S
+  idpcookie:
+  # disable basic-authentication support; do not accept passwords from the 'Authenticate' header at all. NOTE: This breaks support for the android app
+  # type: BOOLEAN
+  nobauth:
+  # keeps basic-authentication enabled, but only as a last-resort; if a cookie is also provided then the cookie wins
+  # type: BOOLEAN
+  bauthlast:
+  # where to store the sessions database (if you run multiple copyparty instances, make sure they use different DBs)
+  # type: PATH
+  sesdb:
+  # session key length; default is 120 bits ((20//4)*4*6)
+  # type: CHARS
+  seslen:
+  # disable sessions; use plaintext passwords in cookies
+  # type: BOOLEAN
+  noses:
+  # the name of the auto-generated group which contains every username which is known
+  # type: NAME
+  # default: acct
+  grpall:
+  # REPEATABLE: users with IP matching CIDR are auto-authenticated as username USR; example: [172.16.24.0/24=dave]
+  # type: CIDR=USR
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  ipu:
+
+userChangeablePasswordsOptions:
+  # allow users to change their own passwords
+  # type: BOOLEAN
+  chpw:
+  # REPEATABLE: do not allow password-changes for this comma-separated list of usernames
+  # type: U,U,U
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  chpwno:
+  # where to store the passwords database (if you run multiple copyparty instances, make sure they use different DBs)
+  # type: PATH
+  chpwdb:
+  # minimum password length
+  # type: N
+  chpwlen:
+  # verbosity of summary on config load [0] = nothing at all, [1] = number of users, [2] = list users with default-pw, [3] = list all users
+  # type: LVL
+  chpwv:
+
+zeroconfOptions:
+  # enable all zeroconf backends (mdns, ssdp)
+  # type: BOOLEAN
+  z:
+  # enable zeroconf ONLY on the comma-separated list of subnets and/or interface names/indexes\n └─example: eth0, wlo1, virhost0, 192.168.123.0/24, fd00:fda::/96
+  # type: NETS
+  # default: [empty string] 
+  zon:
+  # disable zeroconf on the comma-separated list of subnets and/or interface names/indexes
+  # type: NETS
+  # default: [empty string] 
+  zoff:
+  # check for network changes every SEC seconds (0=disable)
+  # type: SEC
+  zchk:
+  # verbose all zeroconf backends
+  # type: BOOLEAN
+  zv:
+  # rejoin multicast groups every SEC seconds (workaround for some switches/routers which cause mDNS to suddenly stop working after some time); try [300] or [180]\n └─note: can be due to firewalls; make sure UDP port 5353 is open in both directions (on clients too)
+  # type: SEC
+  mchop:
+
+zeroconfMdnsOptions_AlsoSeeHelpZm:
+  # announce the enabled protocols over mDNS (multicast DNS-SD) -- compatible with KDE, gnome, macOS, ...
+  # type: BOOLEAN
+  zm:
+  # enable mDNS ONLY on the comma-separated list of subnets and/or interface names/indexes
+  # type: NETS
+  # default: [empty string] 
+  zmon:
+  # disable mDNS on the comma-separated list of subnets and/or interface names/indexes
+  # type: NETS
+  # default: [empty string] 
+  zmoff:
+  # IPv4 only -- try this if some clients can't connect
+  # type: BOOLEAN
+  zm4:
+  # IPv6 only
+  # type: BOOLEAN
+  zm6:
+  # verbose mdns
+  # type: BOOLEAN
+  zmv:
+  # verboser mdns
+  # type: BOOLEAN
+  zmvv:
+  # mute parser errors (invalid incoming MDNS packets)
+  # type: BOOLEAN
+  zmnope:
+  # disable workaround for avahi-bug #379 (corruption in Avahi's mDNS reflection feature)
+  # type: BOOLEAN
+  zmnwa1:
+  # list of services to announce -- d=webdav h=http f=ftp s=smb -- lowercase=plaintext uppercase=TLS -- default: all enabled services except http/https (Ddfs if --ftp and --smb is set, Dd otherwise)
+  # type: dhf
+  # default: [empty string] 
+  zms:
+  # link a specific folder for webdav shares
+  # type: PATH
+  # default: [empty string] 
+  zmld:
+  # link a specific folder for http shares
+  # type: PATH
+  # default: [empty string] 
+  zmlh:
+  # link a specific folder for ftp shares
+  # type: PATH
+  # default: [empty string] 
+  zmlf:
+  # link a specific folder for smb shares
+  # type: PATH
+  # default: [empty string] 
+  zmls:
+  # the domain to announce; NOTE: using anything other than .local is nonstandard and could cause problems
+  # type: FQDN
+  # default: --name.local
+  zmfqdn:
+  # merge NICs which share subnets; assume that same subnet means same network
+  # type: BOOLEAN
+  zmmnic:
+  # merge subnets on each NIC -- always enabled for ipv6 -- reduces network load, but gnome-gvfs clients may stop working, and clients cannot be in subnets that the server is not
+  # type: BOOLEAN
+  zmmsub:
+  # disable NSEC replies -- try this if some clients don't see copyparty
+  # type: BOOLEAN
+  zmnoneg:
+  # send unsolicited announce every SEC; useful if clients have IPs in a subnet which doesn't overlap with the server, or to avoid some firewall issues
+  # type: SEC
+  zmspam:
+
+zeroconfSsdpOptions:
+  # announce the enabled protocols over SSDP -- compatible with Windows
+  # type: BOOLEAN
+  zs:
+  # enable SSDP ONLY on the comma-separated list of subnets and/or interface names/indexes
+  # type: NETS
+  # default: [empty string] 
+  zson:
+  # disable SSDP on the comma-separated list of subnets and/or interface names/indexes
+  # type: NETS
+  # default: [empty string] 
+  zsoff:
+  # verbose SSDP
+  # type: BOOLEAN
+  zsv:
+  # location to include in the url (or a complete external URL), for example [priv/?pw=hunter2] (goes directly to /priv/ with password hunter2) or [?hc=priv&pw=hunter2] (shows mounting options for /priv/ with password)
+  # type: PATH
+  # default: /?hc
+  zsl:
+  # USN (device identifier) to announce
+  # type: UUID
+  zsid:
+
+ftpOptions_TcpOnly_:
+  # enable FTP server on PORT, for example 3921
+  # type: PORT
+  ftp:
+  # enable FTPS server on PORT, for example 3990
+  # type: PORT
+  ftps:
+  # verbose
+  # type: BOOLEAN
+  ftpv:
+  # only listen on IPv4
+  # type: BOOLEAN
+  ftp4:
+  # only accept connections from IP-addresses inside CIDR (comma-separated); specify [any] to disable inheriting --ipa. Examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
+  # type: CIDR
+  # default: [empty string] 
+  ftpipa:
+  # if target file exists, reject upload instead of overwrite
+  # type: BOOLEAN
+  ftpnoow:
+  # grace period for resuming interrupted uploads (any client can write to any file last-modified more recently than SEC seconds ago)
+  # type: SEC
+  ftpwt:
+  # the NAT address to use for passive connections
+  # type: ADDR
+  # default: [empty string] 
+  ftpnat:
+  # the range of TCP ports to use for passive connections, for example 12000-13000
+  # type: P-P
+  # default: [empty string] 
+  ftppr:
+
+webdavOptions:
+  # enable full write support, even if client may not be webdav. WARNING: This has side-effects -- PUT-operations will now OVERWRITE existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
+  # type: BOOLEAN
+  daw:
+  # allow depth:infinite requests (recursive file listing); extremely server-heavy but required for spec compliance -- luckily few clients rely on this
+  # type: BOOLEAN
+  davinf:
+  # disable apple-garbage filter -- allow macos to create junk files (._* and .DS_Store, .Spotlight-*, .fseventsd, .Trashes, .AppleDouble, __MACOS)
+  # type: BOOLEAN
+  davmac:
+  # show symlink-destination's lastmodified instead of the link itself; always enabled for recursive listings (volflag=davrt)
+  # type: BOOLEAN
+  davrt:
+  # force auth for all folders (required by davfs2 when only some folders are world-readable) (volflag=davauth)
+  # type: BOOLEAN
+  davauth:
+  # regex of tricky user-agents which expect 401 from GET requests; disable with [no] or blank
+  # type: PTN
+  davua1:
+
+tftpOptions_UdpOnly_:
+  # enable TFTP server on PORT, for example 69 or 3969
+  # type: PORT
+  tftp:
+  # only listen on IPv4
+  # type: BOOLEAN
+  tftp4:
+  # verbose
+  # type: BOOLEAN
+  tftpv:
+  # verboser
+  # type: BOOLEAN
+  tftpvv:
+  # debug: disable optimizations
+  # type: BOOLEAN
+  tftpnofast:
+  # return a directory listing if a file with this name is requested and it does not exist; defaults matches .ls, dir, .dir.txt, ls.txt, ...
+  # type: PTN
+  # default: \\.?(dir|ls)(\\.txt)?
+  tftplsf:
+  # if someone tries to download a directory, return an error instead of showing its directory listing
+  # type: BOOLEAN
+  tftpnols:
+  # only accept connections from IP-addresses inside CIDR (comma-separated); specify [any] to disable inheriting --ipa. Examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
+  # type: CIDR
+  # default: [empty string] 
+  tftpipa:
+  # the range of UDP ports to use for data transfer, for example 12000-13000
+  # type: P-P
+  # default: [empty string] 
+  tftppr:
+
+smb_CifsOptions:
+  # enable smb (read-only) -- this requires running copyparty as root on linux and macos unless --smb-port is set above 1024 and your OS does port-forwarding from 445 to that.\nWARNING: this protocol is DANGEROUS and buggy! Never expose to the internet!
+  # type: BOOLEAN
+  smb:
+  # enable write support (please dont)
+  # type: BOOLEAN
+  smbw:
+  # disable SMBv2, only enable SMBv1 (CIFS)
+  # type: BOOLEAN
+  smb1:
+  # port to listen on -- if you change this value, you must NAT from TCP:445 to this port using iptables or similar
+  # type: PORT
+  smbport:
+  # truncate directory listings to 64kB (~400 files); avoids impacket-0.11 bug, fixes impacket-0.12 performance
+  # type: BOOLEAN
+  smbnwa1:
+  # disable impacket workaround for filecopy globs
+  # type: BOOLEAN
+  smbnwa2:
+  # small performance boost: disable per-account permissions, enables account coalescing instead (if one user has write/delete-access, then everyone does)
+  # type: BOOLEAN
+  smba:
+  # verbose
+  # type: BOOLEAN
+  smbv:
+  # verboser
+  # type: BOOLEAN
+  smbvv:
+  # verbosest
+  # type: BOOLEAN
+  smbvvv:
+
+handlers_SeeHelpHandlers_:
+  # REPEATABLE: handle 404s by executing PY file
+  # type: PY
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  on404:
+  # REPEATABLE: handle 403s by executing PY file
+  # type: PY
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  on403:
+  # recompile handlers on each request -- expensive but convenient when hacking on stuff
+  # type: BOOLEAN
+  hothandlers:
+
+eventHooks_SeeHelpHooks_:
+  # REPEATABLE: execute CMD before a file upload starts
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xbu:
+  # REPEATABLE: execute CMD after  a file upload finishes
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xau:
+  # REPEATABLE: execute CMD after  all uploads finish and volume is idle
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xiu:
+  # REPEATABLE: execute CMD before a file copy
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xbc:
+  # REPEATABLE: execute CMD after  a file copy
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xac:
+  # REPEATABLE: execute CMD before a file move/rename
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xbr:
+  # REPEATABLE: execute CMD after  a file move/rename
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xar:
+  # REPEATABLE: execute CMD before a file delete
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xbd:
+  # REPEATABLE: execute CMD after  a file delete
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xad:
+  # REPEATABLE: execute CMD on message
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xm:
+  # REPEATABLE: execute CMD if someone gets banned (pw/404/403/url)
+  # type: CMD
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  xban:
+  # verbose hooks
+  # type: BOOLEAN
+  hookv:
+
+grafana_PrometheusMetricsEndpoint:
+  # enable openmetrics at /.cpr/metrics for admin accounts
+  # type: BOOLEAN
+  stats:
+  # disable disk-space metrics (used/free space)
+  # type: BOOLEAN
+  noshdd:
+  # disable volume size metrics (num files, total bytes, vmaxb/vmaxn)
+  # type: BOOLEAN
+  nosvol:
+  # disable volume state metrics (indexing, analyzing, activity)
+  # type: BOOLEAN
+  nosvst:
+  # disable dupe-files metrics (good idea; very slow)
+  # type: BOOLEAN
+  nosdup:
+  # disable unfinished-uploads metrics
+  # type: BOOLEAN
+  nosunf:
+
+yoloOptions:
+  # disable csrf protections; let other domains/sites impersonate you through cross-site requests
+  # type: BOOLEAN
+  allowcsrf:
+  # allow cookies from other domains (if you follow a link from another website into your server, you will arrive logged-in); this reduces protection against CSRF
+  # type: BOOLEAN
+  cookielax:
+  # disable the smoketest for caching-related issues in the web-UI
+  # type: BOOLEAN
+  nofnugg:
+  # permit ?move=[...] and ?delete as GET
+  # type: BOOLEAN
+  getmod:
+  # allow users with write-only access to upload logues and readmes without adding the _wo_ filename prefix (volflag=wo_up_readme)
+  # type: BOOLEAN
+  woupreadme:
+
+optOuts:
+  # never write anything to disk (debug/benchmark)
+  # type: BOOLEAN
+  nw:
+  # do not disable quick-edit-mode on windows (it is disabled to avoid accidental text selection in the terminal window, as this would pause execution)
+  # type: BOOLEAN
+  keepqem:
+  # disable webdav support
+  # type: BOOLEAN
+  nodav:
+  # disable delete operations
+  # type: BOOLEAN
+  nodel:
+  # disable move/rename operations
+  # type: BOOLEAN
+  nomv:
+  # disable copy operations
+  # type: BOOLEAN
+  nocp:
+  # disable ability to abort ongoing copy/move
+  # type: BOOLEAN
+  nofsabrt:
+  # no title hostname; don't show --name in <title>
+  # type: BOOLEAN
+  nth:
+  # no info hostname -- don't show in UI
+  # type: BOOLEAN
+  nih:
+  # no info disk-usage -- don't show in UI
+  # type: BOOLEAN
+  nid:
+  # no powered-by-copyparty branding in UI
+  # type: BOOLEAN
+  nb:
+  # reject download-as-zip if more than N files in total; optionally takes a unit suffix: [256], [9K], [4G] (volflag=zipmaxn)
+  # type: N
+  # default: 0
+  zipmaxn:
+  # reject download-as-zip if total download size exceeds SZ bytes; optionally takes a unit suffix: [256M], [4G], [2T] (volflag=zipmaxs)
+  # type: SZ
+  # default: 0
+  zipmaxs:
+  # custom errormessage when download size exceeds max (volflag=zipmaxt)
+  # type: TXT
+  # default: [empty string] 
+  zipmaxt:
+  # authenticated users bypass the zip size limit (volflag=zipmaxu)
+  # type: BOOLEAN
+  zipmaxu:
+  # who can download as zip/tar? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=zip_who)\nWARNING: if a nested volume has a more restrictive value than a parent volume, then this will be ignored if the download is initiated from the parent, more lenient volume
+  # type: LVL
+  zipwho:
+  # regex of user-agents to reject from download-as-zip/tar; disable with [no] or blank
+  # type: PTN
+  uanozip:
+  # disable download as zip/tar; same as --zip-who=0
+  # type: BOOLEAN
+  nozip:
+  # disable download as compressed tar (?tar=gz, ?tar=bz2, ?tar=xz, ?tar=gz:9, ...)
+  # type: BOOLEAN
+  notarcmp:
+  # do not allow clients (or server config) to schedule an upload to be deleted after a given time
+  # type: BOOLEAN
+  nolifetime:
+  # disable race-the-beam (lockstep download of files which are currently being uploaded) (volflag=nopipe)
+  # type: BOOLEAN
+  nopipe:
+  # disable streaming a growing files with ?tail (volflag=notail)
+  # type: BOOLEAN
+  notail:
+  # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead (volflag=no_db_ip)
+  # type: BOOLEAN
+  nodbip:
+
+safetyOptions:
+  # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
+  s:
+  # further increase safety: Prevent js-injection, accidental move/delete, broken symlinks, webdav, 404 on 403, ban on excessive 404s.\n └─Alias of -s --unpost=0 --no-del --no-mv --hardlink --vague-403 -nih
+  # type: BOOLEAN
+  ss:
+  # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
+  # type: BOOLEAN
+  sss:
+  # do a sanity/safety check of all volumes on startup; arguments USER,VOL,FLAGS (see --help-ls); example [**,*,ln,p,r]
+  # type: U[,V[,F]]
+  # default: [empty string] 
+  ls:
+  # never follow symlinks leaving the volume root, unless the link is into another volume where the user has similar access (volflag=xvol)
+  # type: BOOLEAN
+  xvol:
+  # stay within the filesystem of the volume root; do not descend into other devices (symlink or bind-mount to another HDD, ...) (volflag=xdev)
+  # type: BOOLEAN
+  xdev:
+  # disallow moving dotfiles; makes it impossible to move folders containing dotfiles
+  # type: BOOLEAN
+  nodotmv:
+  # disallow renaming dotfiles; makes it impossible to turn something into a dotfile
+  # type: BOOLEAN
+  nodotren:
+  # disable rendering .prologue/.epilogue.html into directory listings
+  # type: BOOLEAN
+  nologues:
+  # disable rendering readme/preadme.md into directory listings
+  # type: BOOLEAN
+  noreadme:
+  # send 404 instead of 403 (security through ambiguity, very enterprise)
+  # type: BOOLEAN
+  vague403:
+  # don't send folder listings as HTML, force clients to use the embedded json instead -- slight protection against misbehaving search engines which ignore --no-robots
+  # type: BOOLEAN
+  forcejs:
+  # adds http and html headers asking search engines to not index anything (volflag=norobots)
+  # type: BOOLEAN
+  norobots:
+  # logout clients after H hours of inactivity; [0.0028]=10sec, [0.1]=6min, [24]=day, [168]=week, [720]=month, [8760]=year)
+  # type: H
+  logout:
+  # more than N wrong passwords in W minutes = ban for B minutes; disable with [no]
+  # type: N,W,B
+  # default: 9,60,1440
+  banpw:
+  # more than N password-changes in W minutes = ban for B minutes; disable with [no]
+  # type: N,W,B
+  # default: 5,60,1440
+  banpwc:
+  # hitting more than N 404's in W minutes = ban for B minutes; only affects users who cannot see directory listings because their access is either g/G/h
+  # type: N,W,B
+  # default: 50,60,1440
+  ban404:
+  # hitting more than N 403's in W minutes = ban for B minutes; [1440]=day, [10080]=week, [43200]=month
+  # type: N,W,B
+  # default: 9,2,1440
+  ban403:
+  # hitting more than N 422's in W minutes = ban for B minutes (invalid requests, attempted exploits ++)
+  # type: N,W,B
+  # default: 9,2,1440
+  ban422:
+  # hitting more than N sus URL's in W minutes = ban for B minutes; applies only to permissions g/G/h (decent replacement for --ban-404 if that can't be used)
+  # type: N,W,B
+  # default: 9,2,1440
+  banurl:
+  # URLs which are considered sus / eligible for banning; disable with blank or [no]
+  # type: R
+  susurls:
+  # harmless URLs ignored from 404-bans; disable with blank or [no]
+  # type: R
+  nonsusurls:
+  # if a client is banned, reject its connection as soon as possible; not a good idea to enable when proxied behind cloudflare since it could ban your reverse-proxy
+  # type: BOOLEAN
+  earlyban:
+  # reject HTTP-request from client if they send more than N cookies
+  # type: N
+  cookienmax:
+  # reject HTTP-request from client if more than N characters in Cookie header
+  # type: N
+  cookiecmax:
+  # if a client maxes out the server connection limit, downgrade it from connection:keep-alive to connection:close for MIN minutes (and also kill its active connections) -- disable with 0
+  # type: MIN
+  aclose:
+  # if a client maxes out the server connection limit without sending headers, ban it for B minutes; disable with [0]
+  # type: B
+  loris:
+  # Access-Control-Allow-Origin; list of origins (domains/IPs without port) to accept requests from; [https://1.2.3.4]. Default [*] allows requests from all sites but removes cookies and http-auth; only ?pw=hunter2 survives
+  # type: V[,V]
+  # default: *
+  acao:
+  # Access-Control-Allow-Methods; list of methods to accept from offsite ('*' behaves like --acao's description)
+  # type: V[,V]
+  # default: GET,HEAD
+  acam:
+
+saltingOptions:
+  # account-pw hashing algorithm; one of these, best to worst: argon2 scrypt sha2 none (each optionally followed by alg-specific comma-sep. config)
+  # type: ALG
+  # default: none
+  ahalg:
+  # account-pw salt; ignored if --ah-alg is none (default)
+  # type: SALT
+  ahsalt:
+  # generate hashed password for PW, or read passwords from STDIN if PW is [-]
+  # type: PW
+  # default: [empty string] 
+  ahgen:
+  # launch an interactive shell which hashes passwords without ever storing or displaying the original passwords
+  # type: BOOLEAN
+  ahcli:
+  # per-file accesskey salt; used to generate unpredictable URLs for hidden files
+  # type: SALT
+  fksalt:
+  # per-directory accesskey salt; used to generate unpredictable URLs to share folders with users who only have the 'get' permission
+  # type: SALT
+  dksalt:
+  # up2k file-hash salt; serves no purpose, no reason to change this (but delete all databases if you do)
+  # type: SALT
+  # default: hunter2
+  warksalt:
+  # on startup, print the effective value of --ah-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # type: BOOLEAN
+  showahsalt:
+  # on startup, print the effective value of --fk-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # type: BOOLEAN
+  showfksalt:
+  # on startup, print the effective value of --dk-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # type: BOOLEAN
+  showdksalt:
+
+shutdownOptions:
+  # continue running even if it's impossible to listen on some of the requested endpoints
+  # type: BOOLEAN
+  ignebind:
+  # continue running even if it's impossible to receive connections at all
+  # type: BOOLEAN
+  ignebindall:
+  # shutdown after WHEN has finished; [cfg] config parsing, [idx] volscan + multimedia indexing
+  # type: WHEN
+  # default: [empty string] 
+  exit:
+
+loggingOptions:
+  # quiet; disable most STDOUT messages
+  # type: BOOLEAN
+  q:
+  # logfile; use .txt for plaintext or .xz for compressed. Example: cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz (NB: some errors may appear on STDOUT only)
+  # type: PATH
+  # default: [empty string] 
+  lo:
+  # disable colors; same as environment-variable NO_COLOR
+  # type: BOOLEAN
+  noansi:
+  # force colors; overrides environment-variable NO_COLOR
+  # type: BOOLEAN
+  ansi:
+  # don't flush the logfile after each write; tiny bit faster
+  # type: BOOLEAN
+  nologflush:
+  # do not list volumes and permissions on startup
+  # type: BOOLEAN
+  novoldump:
+  # do not use local timezone; assume the TZ env-var is UTC (tiny bit faster)
+  # type: BOOLEAN
+  logutc:
+  # timestamp resolution / number of timestamp decimals
+  # type: N
+  logtdec:
+  # log failed login attempt passwords: 0=terse, 1=plaintext, 2=hashed
+  # type: N
+  logbadpwd:
+  # debug: print tcp-server msgs
+  # type: BOOLEAN
+  logconn:
+  # debug: print http-server threadpool scaling
+  # type: BOOLEAN
+  loghtp:
+  # print request HEADER; [*]=all
+  # type: HEADER
+  ihead:
+  # print response HEADER; [*]=all
+  # type: HEADER
+  ohead:
+  # dont log URLs matching regex RE
+  # type: RE
+  lfurl:
+
+adminPanelOptions:
+  # disable ?reload=cfg (reload users/volumes/volflags from config file)
+  # type: BOOLEAN
+  noreload:
+  # disable ?scan (volume reindexing)
+  # type: BOOLEAN
+  norescan:
+  # disable ?stack (list all stacks)
+  # type: BOOLEAN
+  nostack:
+  # disable ?ru (list of recent uploads)
+  # type: BOOLEAN
+  noupspage:
+  # don't show list of incoming files in controlpanel
+  # type: BOOLEAN
+  nouplist:
+  # who can see active downloads in the controlpanel? [0]=nobody, [1]=admins, [2]=everyone
+  # type: LVL
+  dllist:
+  # who can see recent uploads on the ?ru page? [0]=nobody, [1]=admins, [2]=everyone (volflag=ups_who)
+  # type: LVL
+  upswho:
+  # let everyone see upload timestamps on the ?ru page, not just admins
+  # type: BOOLEAN
+  upswhen:
+
+thumbnailOptions:
+  # disable all thumbnails (volflag=dthumb)
+  # type: BOOLEAN
+  nothumb:
+  # disable video thumbnails (volflag=dvthumb)
+  # type: BOOLEAN
+  novthumb:
+  # disable audio thumbnails (spectrograms) (volflag=dathumb)
+  # type: BOOLEAN
+  noathumb:
+  # thumbnail res (volflag=thsize)
+  # type: WxH
+  # default: 320x256
+  thsize:
+  # num cpu cores to use for generating thumbnails
+  # type: CORES
+  thmt:
+  # convert-to-image timeout in seconds (volflag=convt)
+  # type: SEC
+  thconvt:
+  # convert-to-audio timeout in seconds (volflag=aconvt)
+  # type: SEC
+  acconvt:
+  # max memory usage (GiB) permitted by thumbnailer; not very accurate
+  # type: GB
+  thrammax:
+  # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [y]=crop, [n]=nocrop, [fy]=force-y, [fn]=force-n (volflag=crop)
+  # type: TXT
+  # default: y
+  thcrop:
+  # show thumbs at 3x resolution; client can override in UI unless force. [y]=yes, [n]=no, [fy]=force-yes, [fn]=force-no (volflag=th3x)
+  # type: TXT
+  # default: n
+  thx3:
+  # image decoders, in order of preference
+  # type: LIBS
+  # default: vips,pil,raw,ff
+  thdec:
+  # disable jpg output
+  # type: BOOLEAN
+  thnojpg:
+  # disable webp output
+  # type: BOOLEAN
+  thnowebp:
+  # force jpg output for video thumbs (avoids issues on some FFmpeg builds)
+  # type: BOOLEAN
+  thffjpg:
+  # use swresample instead of soxr for audio thumbs (faster, lower accuracy, avoids issues on some FFmpeg builds)
+  # type: BOOLEAN
+  thffswr:
+  # activity labeling cooldown -- avoids doing keepalive pokes (updating the mtime) on thumbnail folders more often than SEC seconds
+  # type: SEC
+  thpoke:
+  # cleanup interval; 0=disabled
+  # type: SEC
+  thclean:
+  # max folder age -- folders which haven't been poked for longer than --th-poke seconds will get deleted every --th-clean seconds
+  # type: SEC
+  thmaxage:
+  # folder thumbnails to stat/look for; enabling -e2d will make these case-insensitive, and try them as dotfiles (.folder.jpg), and also automatically select thumbnails for all folders that contain pics, even if none match this pattern
+  # type: N,N
+  # default: folder.png,folder.jpg,cover.png,cover.jpg
+  thcovers:
+  # image formats to decode using pillow
+  # type: T,T
+  # default: avif,avifs,blp,bmp,cbz,dcx,dds,dib,emf,eps,epub,fits,flc,fli,fpx,gif,heic,heics,heif,heifs,icns,ico,im,j2p,j2k,jp2,jpeg,jpg,jpx,pbm,pcx,pgm,png,pnm,ppm,psd,qoi,sgi,spi,tga,tif,tiff,webp,wmf,xbm,xpm
+  thrpil:
+  # image formats to decode using pyvips
+  # type: T,T
+  # default: avif,exr,fit,fits,fts,gif,hdr,heic,jp2,jpeg,jpg,jpx,jxl,nii,pfm,pgm,png,ppm,svg,tif,tiff,webp
+  thrvips:
+  # image formats to decode using rawpy
+  # type: T,T
+  # default: arw,cr2,cr3,crw,dcr,dng,erf,k25,kdc,mrw,nef,orf,pef,raf,raw,sr2,srf,x3f
+  thrraw:
+  # image formats to decode using ffmpeg
+  # type: T,T
+  # default: apng,avif,avifs,bmp,cbz,dds,dib,epub,fit,fits,fts,gif,hdr,heic,heics,heif,heifs,icns,ico,jp2,jpeg,jpg,jpx,jxl,pbm,pcx,pfm,pgm,png,pnm,ppm,psd,qoi,sgi,tga,tif,tiff,webp,xbm,xpm
+  thrffi:
+  # video formats to decode using ffmpeg
+  # type: T,T
+  # default: 3gp,asf,av1,avc,avi,flv,h264,h265,hevc,m4v,mjpeg,mjpg,mkv,mov,mp4,mpeg,mpeg2,mpegts,mpg,mpg2,mts,nut,ogm,ogv,rm,ts,vob,webm,wmv
+  thrffv:
+  # audio formats to decode using ffmpeg
+  # type: T,T
+  # default: aac,ac3,aif,aiff,alac,alaw,amr,apac,ape,au,bonk,dfpwm,dts,flac,gsm,ilbc,it,itgz,itxz,itz,m4a,mdgz,mdxz,mdz,mo3,mod,mp2,mp3,mpc,mptm,mt2,mulaw,oga,ogg,okt,opus,ra,s3m,s3gz,s3xz,s3z,tak,tta,ulaw,wav,wma,wv,xm,xmgz,xmxz,xmz,xpk
+  thrffa:
+  # audio formats which provoke https://trac.ffmpeg.org/ticket/10797 (huge ram usage for s3xmodit spectrograms)
+  # type: T
+  # default: it,itgz,itxz,itz,mdgz,mdxz,mdz,mo3,mod,s3m,s3gz,s3xz,s3z,xm,xmgz,xmxz,xmz,xpk
+  thspeccnv:
+  # audio/image formats to decompress before passing to ffmpeg
+  # type: E=F.C
+  # default: mdz=mod.zip, mdgz=mod.gz, mdxz=mod.xz, s3z=s3m.zip, s3gz=s3m.gz, s3xz=s3m.xz, xmz=xm.zip, xmgz=xm.gz, xmxz=xm.xz, itz=it.zip, itgz=it.gz, itxz=it.xz, cbz=jpg.cbz, epub=jpg.epub
+  auunpk:
+
+transcodingOptions:
+  # target bitrate for transcoding to opus; set 0 to disable
+  # type: KBPS
+  qopus:
+  # target quality for transcoding to mp3, for example [192k] (CBR) or [q0] (CQ/CRF, q0=maxquality, q9=smallest); set 0 to disable
+  # type: QUALITY
+  # default: q2
+  qmp3:
+  # allow transcoding to wav (lossless, uncompressed)
+  # type: BOOLEAN
+  allowwav:
+  # allow transcoding to flac (lossless, compressed)
+  # type: BOOLEAN
+  allowflac:
+  # disable transcoding to caf-opus (affects iOS v12~v17), will use mp3 instead
+  # type: BOOLEAN
+  nocaf:
+  # disable transcoding to webm-opus (iOS v18 and later), will use mp3 instead
+  # type: BOOLEAN
+  noowa:
+  # disable audio transcoding
+  # type: BOOLEAN
+  noacode:
+  # disable batch audio transcoding by folder download (zip/tar)
+  # type: BOOLEAN
+  nobacode:
+  # delete cached transcode output after SEC seconds
+  # type: SEC
+  acmaxage:
+
+tailingOptions_RealtimeStreamingOfAGrowingFile_:
+  # who can tail? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=tail_who)
+  # type: LVL
+  tailwho:
+  # do not allow starting a new tail if more than N active downloads
+  # type: N
+  tailcmax:
+  # terminate connection after SEC seconds; [0]=never (volflag=tail_tmax)
+  # type: SEC
+  tailtmax:
+  # check for new data every SEC seconds (volflag=tail_rate)
+  # type: SEC
+  tailrate:
+  # send a zerobyte if connection is idle for SEC seconds to prevent disconnect
+  # type: SEC
+  tailka:
+  # check if file was replaced (new fd) if idle for SEC seconds (volflag=tail_fd)
+  # type: SEC
+  tailfd:
+
+rssOptions:
+  # enable RSS output (experimental) (volflag=rss)
+  # type: BOOLEAN
+  rss:
+  # default number of files to return (url-param 'nf')
+  # type: HITS
+  rssnf:
+  # default list of file extensions to include (url-param 'fext'); blank=all
+  # type: E,E
+  # default: [empty string] 
+  rssfext:
+  # default sort order (url-param 'sort'); [m]=last-modified [u]=upload-time [n]=filename [s]=filesize; Uppercase=oldest-first. Note that upload-time is 0 for non-uploaded files
+  # type: ORD
+  # default: m
+  rsssort:
+
+generalDbOptions:
+  # enable up2k database; this enables file search, upload-undo, improves deduplication
+  # type: BOOLEAN
+  e2d:
+  # scan writable folders for new files on startup; sets -e2d
+  # type: BOOLEAN
+  e2ds:
+  # scans all folders on startup; sets -e2ds
+  # type: BOOLEAN
+  e2dsa:
+  # verify file integrity; rehash all files and compare with db
+  # type: BOOLEAN
+  e2v:
+  # on hash mismatch: update the database with the new hash
+  # type: BOOLEAN
+  e2vu:
+  # on hash mismatch: panic and quit copyparty
+  # type: BOOLEAN
+  e2vp:
+  # where to store volume data (db, thumbs); default is a folder named \
+  # type: PATH
+  # default: [empty string] 
+  hist:
+  # override where the volume databases are to be placed; default is the same as --hist (volflag=dbpath)
+  # type: PATH
+  # default: [empty string] 
+  dbpath:
+  # regex: disable hashing of matching absolute-filesystem-paths during e2ds folder scans (must be specified as one big regex, not multiple times) (volflag=nohash)
+  # type: PTN
+  # default: [empty string] 
+  nohash:
+  # regex: disable indexing of matching absolute-filesystem-paths during e2ds folder scan (must be specified as one big regex, not multiple times) (volflag=noidx)
+  # type: PTN
+  noidx:
+  # do not show total recursive size of folders in listings, show inode size instead; slightly faster (volflag=nodirsz)
+  # type: BOOLEAN
+  nodirsz:
+  # if the directory-sizes in the UI are bonkers, use this along with -e2dsa to rebuild the index from scratch
+  # type: BOOLEAN
+  redirsz:
+  # disable rescan acceleration; do full database integrity check -- makes the db ~5%% smaller and bootup/rescans 3~10x slower
+  # type: BOOLEAN
+  nodhash:
+  # force a cache rebuild on startup; enable this once if it gets out of sync (should never be necessary)
+  # type: BOOLEAN
+  redhash:
+  # never forget indexed files, even when deleted from disk -- makes it impossible to ever upload the same file twice -- only useful for offloading uploads to a cloud service or something (volflag=noforget)
+  # type: BOOLEAN
+  noforget:
+  # remove uploader-IP from database (and make unpost impossible) MIN minutes after upload, for GDPR reasons. Default [0] is never-forget. [1440]=day, [10080]=week, [43200]=month. (volflag=forget_ip)
+  # type: MIN
+  forgetip:
+  # database durability profile; sets the tradeoff between robustness and speed, see --help-dbd (volflag=dbd)
+  # type: PROFILE
+  # default: wal
+  dbd:
+  # on upload: check all volumes for dupes, not just the target volume (probably buggy, not recommended) (volflag=xlink)
+  # type: BOOLEAN
+  xlink:
+  # num cpu cores to use for file hashing; set 0 or 1 for single-core hashing
+  # type: CORES
+  hashmt:
+  # rescan filesystem for changes every SEC seconds; 0=off (volflag=scan)
+  # type: SEC
+  remaxage:
+  # defer any scheduled volume reindexing until SEC seconds after last db write (uploads, renames, ...)
+  # type: SEC
+  dbact:
+  # search deadline -- terminate searches running for more than SEC seconds
+  # type: SEC
+  srchtime:
+  # max search results to allow clients to fetch; 125 results will be shown initially
+  # type: N
+  srchhits:
+  # regex: exclude files from search results if the file-URL matches PTN (case-sensitive). Example: [password|logs/[0-9]] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
+  # type: PTN
+  # default: [empty string] 
+  srchexcl:
+  # show dotfiles in search results (volflags: dotsrch | nodotsrch)
+  # type: BOOLEAN
+  dotsrch:
+
+metadataDbOptions:
+  # enable metadata indexing; makes it possible to search for artist/title/codec/resolution/...
+  # type: BOOLEAN
+  e2t:
+  # scan newly discovered files for metadata on startup; sets -e2t
+  # type: BOOLEAN
+  e2ts:
+  # delete all metadata from DB and do a full rescan; sets -e2ts
+  # type: BOOLEAN
+  e2tsr:
+  # use FFprobe for tags instead; will detect more tags
+  # type: BOOLEAN
+  nomutagen:
+  # never use FFprobe as tag reader; is probably safer
+  # type: BOOLEAN
+  nomtagff:
+  # timeout for FFprobe tag-scan
+  # type: SEC
+  mtagto:
+  # num cpu cores to use for tag scanning
+  # type: CORES
+  mtagmt:
+  # verbose tag scanning; print errors from mtp subprocesses and such
+  # type: BOOLEAN
+  mtagv:
+  # debug mtp settings and mutagen/FFprobe parsers
+  # type: BOOLEAN
+  mtagvv:
+  # REPEATABLE: add/replace metadata mapping
+  # type: M=t,t,t
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  mtm:
+  # tags to index/display (comma-sep.); either an entire replacement list, or add/remove stuff on the default-list with +foo or /bar
+  # type: M,M,M
+  mte:
+  # tags to hide by default (comma-sep.); assign/add/remove same as -mte
+  # type: M,M,M
+  mth:
+  # REPEATABLE: read tag M using program BIN to parse the file
+  # type: M=[f,]BIN
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  mtp:
+
+textfileOptions:
+  # where to store old version of markdown files; [s]=subfolder, [v]=volume-histpath, [n]=nope/disabled (volflag=md_hist)
+  # type: TXT
+  # default: s
+  mdhist:
+  # enable EOL conversion when writing documents; supported: CRLF, LF (volflag=txt_eol)
+  # type: TYPE
+  # default: [empty string] 
+  txteol:
+  # the textfile editor will check for serverside changes every SEC seconds
+  # type: SEC
+  mcr:
+  # enable markdown plugins -- neat but dangerous, big XSS risk
+  # type: BOOLEAN
+  emp:
+  # enable textfile expansion -- replace {{self.ip}} and such; see --help-exp (volflag=exp)
+  # type: BOOLEAN
+  exp:
+  # comma/space-separated list of placeholders to expand in markdown files; add/remove stuff on the default list with +hdr_foo or /vf.scan (volflag=exp_md)
+  # type: V,V,V
+  expmd:
+  # comma/space-separated list of placeholders to expand in prologue/epilogue files (volflag=exp_lg)
+  # type: V,V,V
+  explg:
+  # regex of user-agents to reject from viewing documents through ?doc=[...]; disable with [no] or blank
+  # type: PTN
+  uanodoc:
+
+og_OpenGraph_DiscordEmbedOptions:
+  # disable hotlinking and return an html document instead; this is required by open-graph, but can also be useful on its own (volflag=og)
+  # type: BOOLEAN
+  og:
+  # only disable hotlinking / engage OG behavior if the useragent matches regex RE (volflag=og_ua)
+  # type: RE
+  # default: [empty string] 
+  ogua:
+  # do not return the regular copyparty html, but instead load the jinja2 template at PATH (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
+  # type: PATH
+  # default: [empty string] 
+  ogtpl:
+  # do not automatically add OG entries into <head> (useful if you're doing this yourself in a template or such) (volflag=og_no_head)
+  # type: BOOLEAN
+  ognohead:
+  # thumbnail format; j=jpeg, jf=jpeg-uncropped, jf3=jpeg-uncropped-large, w=webm, ... (volflag=og_th)
+  # type: FMT
+  # default: jf3
+  ogth:
+  # fallback title if there is nothing in the -e2t database (volflag=og_title)
+  # type: TXT
+  # default: [empty string] 
+  ogtitle:
+  # audio title format; takes any metadata key (volflag=og_title_a)
+  # type: T
+  # default: 🎵 {{ artist }} - {{ title }}
+  ogtitlea:
+  # video title format; takes any metadata key (volflag=og_title_v)
+  # type: T
+  # default: {{ title }}
+  ogtitlev:
+  # image title format; takes any metadata key (volflag=og_title_i)
+  # type: T
+  # default: {{ title }}
+  ogtitlei:
+  # force default title; do not read from tags (volflag=og_s_title)
+  # type: BOOLEAN
+  ogstitle:
+  # description text; same for all files, disable with [-] (volflag=og_desc)
+  # type: TXT
+  # default: [empty string] 
+  ogdesc:
+  # sitename; defaults to --name, disable with [-] (volflag=og_site)
+  # type: TXT
+  # default: [empty string] 
+  ogsite:
+  # accent color (3 or 6 hex digits); may also affect safari and/or android-chrome (volflag=tcolor)
+  # type: RGB
+  # default: 333
+  tcolor:
+  # query-string parceling; translate a request for /foo/.uqe/BASE64 into /foo?TEXT, or /foo/?TEXT if the first character in TEXT is a slash. Automatically enabled for --og
+  # type: BOOLEAN
+  uqe:
+
+uiOptions:
+  # show grid/thumbnails by default (volflag=grid)
+  # type: BOOLEAN
+  grid:
+  # select files in grid by ctrl-click (volflag=gsel)
+  # type: BOOLEAN
+  gsel:
+  # default to local timezone instead of UTC
+  # type: BOOLEAN
+  localtime:
+  # language, for example eng / nor / ...
+  # type: LANG
+  # default: eng
+  lang:
+  # default theme to use (0..7)
+  # type: NUM
+  theme:
+  # number of themes installed
+  # type: NUM
+  themes:
+  # default audio/video volume percent
+  # type: 0-100
+  auvol:
+  # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: href -href ext sz ts tags/Album tags/.tn (volflag=sort)
+  # type: C,C,C
+  # default: href
+  sort:
+  # default-enable natural sort of filenames with leading numbers (volflag=nsort)
+  # type: BOOLEAN
+  nsort:
+  # number of sorting rules to include in media URLs by default (volflag=hsortn)
+  # type: N
+  hsortn:
+  # default-enable seeing dotfiles; only takes effect if user has the necessary permissions
+  # type: BOOLEAN
+  seedots:
+  # number of confirmations to show when deleting files (2/1/0)
+  # type: LVL
+  qdel:
+  # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\\.(js|css)$] (volflag=unlist)
+  # type: REGEX
+  # default: [empty string] 
+  unlist:
+  # favicon-text [ foreground [ background ] ], set blank to disable
+  # type: TXT
+  # default: c 000 none
+  favico:
+  # REPEATABLE: use thumbnail-image VP for file-extension E, example: [exe=/.res/exe.png] (volflag=ext_th)
+  # type: E=VP
+  # type: ARRAY
+  # REPEATABLE: YES (use YAML array) 
+  extth:
+  # default: [empty string] 
+  mpmc:
+  # emoji or emoji,css Example: [🥖,padding:0]
+  # type: TXT
+  # default: 🌲
+  spinner:
+  # URL to additional CSS to include in the filebrowser html
+  # type: L
+  # default: [empty string] 
+  cssbrowser:
+  # URL to additional JS to include in the filebrowser html
+  # type: L
+  # default: [empty string] 
+  jsbrowser:
+  # URL to additional JS to include in all other pages
+  # type: L
+  # default: [empty string] 
+  jsother:
+  # text to append to the <head> of all HTML pages (except for basic-browser); can be @PATH to send the contents of a file at PATH, and/or begin with %% to render as jinja2 template (volflag=html_head)
+  # type: TXT
+  # default: [empty string] 
+  htmlhead:
+  # if a folder contains index.html, show that instead of the directory listing by default (can be changed in the client settings UI, or add ?v to URL for override)
+  # type: BOOLEAN
+  ih:
+  # file extensions to present as plaintext
+  # type: CSV
+  # default: txt,nfo,diz,cue,readme
+  textfiles:
+  # max size of embedded textfiles on ?doc= (anything bigger will be lazy-loaded by JS)
+  # type: KiB
+  txtmax:
+  # title / service-name to show in html documents
+  # type: TXT
+  # default: copyparty @ --name
+  doctitle:
+  # server name (displayed in filebrowser document title)
+  # type: TXT
+  # default: --name
+  bname:
+  # powered-by link; disable with -nb
+  # type: URL
+  pburl:
+  # show version on the control panel (incompatible with -nb)
+  # type: BOOLEAN
+  ver:
+  # configure the option to enable/disable k304 on the controlpanel (workaround for buggy reverse-proxies); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
+  # type: NUM
+  k304:
+  # configure the option to enable/disable no304 on the controlpanel (workaround for buggy caching in browsers); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
+  # type: NUM
+  no304:
+  # the controlpanel Refresh-button will autorefresh every SEC; [0] = just once
+  # type: SEC
+  ctlre:
+  # list of capabilities to allow in the iframe 'sandbox' attribute for README.md docs (volflag=md_sbf); see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox
+  # type: FLAGS
+  # default: downloads forms popups scripts top-navigation-by-user-activation
+  mdsbf:
+  # list of capabilities to allow in the iframe 'sandbox' attribute for prologue/epilogue docs (volflag=lg_sbf)
+  # type: FLAGS
+  # default: downloads forms popups scripts top-navigation-by-user-activation
+  lgsbf:
+  # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen] (volflag=md_sba)
+  # type: TXT
+  # default: [empty string] 
+  mdsba:
+  # the value of the iframe 'allow' attribute for prologue/epilogue docs (volflag=lg_sba); see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy#iframes
+  # type: TXT
+  # default: [empty string] 
+  lgsba:
+  # don't sandbox README/PREADME.md documents (volflags: no_sb_md | sb_md)
+  # type: BOOLEAN
+  nosbmd:
+  # don't sandbox prologue/epilogue docs (volflags: no_sb_lg | sb_lg); enables non-js support
+  # type: BOOLEAN
+  nosblg:
+  # type: BOOLEAN
+  haveunlistc:
+
+debugOptions:
+  # verbose config file parser (explain config)
+  # type: BOOLEAN
+  vc:
+  # generate config file from current config (best-effort; probably buggy)
+  # type: BOOLEAN
+  cgen:
+  # list information about detected optional dependencies
+  # type: BOOLEAN
+  deps:
+  # kernel-bug workaround: disable sendfile; do a safe and slow read-send-loop instead
+  # type: BOOLEAN
+  nosendfile:
+  # kernel-bug workaround: disable scandir; do a listdir + stat on each file instead
+  # type: BOOLEAN
+  noscandir:
+  # wait for initial filesystem indexing before accepting client requests
+  # type: BOOLEAN
+  nofastboot:
+  # disable httpserver threadpool, create threads as-needed instead
+  # type: BOOLEAN
+  nohtp:
+  # when listening on unix-sockets, do a basic delete+bind instead of the default atomic bind
+  # type: BOOLEAN
+  rmsck:
+  # explain search processing, and do some extra expensive sanity checks
+  # type: BOOLEAN
+  srchdbg:
+  # use mdns-domain instead of server-ip on /?hc
+  # type: BOOLEAN
+  rclonemdns:
+  # write stacktrace to Path every S second, for example --stackmon=./st/%%Y-%%m/%%d/%%H%%M.xz,60
+  # type: P,S
+  # default: [empty string] 
+  stackmon:
+  # list active threads every SEC
+  # type: SEC
+  logthrs:
+  # log filekey params for files where path matches REGEX; [.] (a single dot) = all files
+  # type: REGEX
+  # default: [empty string] 
+  logfk:
+  # [up2k] if a client uploads a bitflipped/corrupted chunk, store a copy according to --bf-nc and --bf-dir
+  # type: BOOLEAN
+  bakflips:
+  # bak-flips: stop if there's more than NUM files at --kf-dir already; default: 6.3 GiB max (200*32M)
+  # type: NUM
+  bfnc:
+  # bak-flips: store corrupted chunks at PATH; default: folder named 'bf' wherever copyparty was started
+  # type: PATH
+  # default: bf
+  bfdir:
+  # bak-flips: log corruption info to a textfile at PATH
+  # type: PATH
+  # default: [empty string] 
+  bflog:
+  # type: BOOLEAN
+  nocfgcmtwarn:
+
+
+volumes:
+  name: volumeName1
+    httpURL: /the/url/to/share/this/volume/on/
+    mountPath: /the/actual/filesystem/path/
+    existingClaim: ""
+    storageClass: "longhorn-nvme"
+    resources:
+      requests:
+        storage: 2Gi
+      limits:
+        # @TODO: Sync with vmaxb
+        storage: 3Gi
+    # @TODO: Move to config since copyparty can't do RWX anyway (or should not at least)
+    accessModes:
+      - ReadWriteOnce
+    volflags:
+      uploads_General:
+        # enable symlink-based file deduplication
+        # enable symlink-based upload deduplication (volflag=dedup)
+        # type: BOOLEAN
+        dedup:
+        # enable hardlink-based file deduplication,with fallback on symlinks when that is impossible
+        # enable hardlink-based dedup; will fallback on symlinks when that is impossible (across filesystems) (volflag=hardlink)
+        # type: BOOLEAN
+        hardlink:
+        # dedup with hardlink only, never symlink;make a full copy if hardlink is impossible
+        # do not fallback to symlinks when a hardlink cannot be made (volflag=hardlinkonly)
+        # type: BOOLEAN
+        hardlinkonly:
+        # enable reflink-based file deduplication,with fallback on full copy when that is impossible
+        # enable reflink-based dedup; will fallback on full copies when that is impossible (non-CoW filesystem) (volflag=reflink)
+        # type: BOOLEAN
+        reflink:
+        # verify on-disk data before using it for dedup
+        # how careful to be when deduplicating files; [1] = just verify the filesize, [50] = verify file contents have not been altered (volflag=safededup)
+        # type: N
+        safededup:
+        # take dupe data from clients, even if available on HDD
+        # do not use existing data on disk to satisfy dupe uploads; reduces server HDD reads in exchange for much more network load (volflag=noclone)
+        # type: BOOLEAN
+        noclone:
+        # rejects existing files (instead of linking/cloning them)
+        # reject duplicate files during upload; only matches within the same volume (volflag=nodupe)
+        # type: BOOLEAN
+        nodupe:
+        # unix-permission for new dirs/folders
+        # Example: 755
+        # unix file permissions to use when creating directories; see --help-chmod. Examples: [755] = owner-RW + all-R, [777] = full-yolo (volflag=chmod_d)
+        # type: UGO
+        # default: 755
+        chmod_d:
+        # unix-permission for new files
+        # Example: 644
+        # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [644] = owner-RW + all-R, [755] = owner-RWX + all-RX, [777] = full-yolo (volflag=chmod_f)
+        # type: UGO
+        # default: [empty string] 
+        chmod_f:
+        # change owner of new files/folders to unix-user 573
+        # Example: 573
+        # unix user-id to chown new files/folders to; default = -1 = do-not-change (volflag=uid)
+        # type: N
+        uid:
+        # change owner of new files/folders to unix-group 999
+        # Example: 999
+        # unix group-id to chown new files/folders to; default = -1 = do-not-change (volflag=gid)
+        # type: N
+        gid:
+        # force use of sparse files, mainly for s3-backed storage
+        # rebuild mountpoint cache every SEC to keep track of sparse-files support; keep low on servers with removable media
+        # type: SEC
+        sparse:
+        # deny use of sparse files, mainly for slow storage
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        nosparse:
+        # enable full WebDAV write support (dangerous);PUT-operations will now [1;31mOVERWRITE[0;35m existing files
+        # enable full write support, even if client may not be webdav. WARNING: This has side-effects -- PUT-operations will now OVERWRITE existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
+        # type: BOOLEAN
+        daw:
+        # forces all uploads into the top folder of the vfs
+        # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [0] = only when necessary (non-https), [1] = always (all browsers), [2] = always on chrome/firefox, [3] = always on chrome, [N] = chrome-version N and newer (recommendation: 137)
+        # type: N
+        nosub:
+        # enables filetype detection for nameless uploads
+        # do expensive analysis to improve accuracy of returned mimetypes; will make file-downloads, rss, and webdav slower (volflag=rmagic)
+        # type: BOOLEAN
+        magic:
+        # fallback filename for nameless uploads
+        # filename for nameless uploads (when uploader doesn't provide a name); default is [put-UNIXTIME-IP.bin] (the .6f means six decimal places) (volflag=put_name)
+        # type: TXT
+        # default: put-{now.6f}-{cip}.bin
+        put_name:
+        # default checksum-hasher for PUT/WebDAV uploads
+        # default checksum-hasher for PUT/WebDAV uploads: no / md5 / sha1 / sha256 / sha512 / b2 / blake2 / b2s / blake2s (volflag=put_ck)
+        # type: ALG
+        # default: sha512
+        put_ck:
+        # default checksum-hasher for bup/basic uploads
+        # default checksum-hasher for bup/basic-uploader: no / md5 / sha1 / sha256 / sha512 / b2 / blake2 / b2s / blake2s (volflag=bup_ck)
+        # type: ALG
+        # default: sha512
+        bup_ck:
+        # allows server-side gzip compression of uploads with ?gz
+        # disable download as compressed tar (?tar=gz, ?tar=bz2, ?tar=xz, ?tar=gz:9, ...)
+        # type: BOOLEAN
+        gz:
+        # allows server-side lzma compression of uploads with ?xz
+        # disable download as compressed tar (?tar=gz, ?tar=bz2, ?tar=xz, ?tar=gz:9, ...)
+        # type: BOOLEAN
+        xz:
+        # forces server-side compression, optional arg: xz,9
+        # audio formats to decode using ffmpeg
+        # type: T,T
+        # default: aac,ac3,aif,aiff,alac,alaw,amr,apac,ape,au,bonk,dfpwm,dts,flac,gsm,ilbc,it,itgz,itxz,itz,m4a,mdgz,mdxz,mdz,mo3,mod,mp2,mp3,mpc,mptm,mt2,mulaw,oga,ogg,okt,opus,ra,s3m,s3gz,s3xz,s3z,tak,tta,ulaw,wav,wma,wv,xm,xmgz,xmxz,xmz,xpk
+        pk:
+
+      uploadRules:
+        # max 250 uploads over 15min
+        # Example: 250,600
+        # disable volume size metrics (num files, total bytes, vmaxb/vmaxn)
+        # type: BOOLEAN
+        maxn:
+        # max 1 GiB over 5min (suffixes: b, k, m, g, t)
+        # Example: 1g,300
+        # disable volume size metrics (num files, total bytes, vmaxb/vmaxn)
+        # type: BOOLEAN
+        maxb:
+        # total volume size max 1 GiB (suffixes: b, k, m, g, t)
+        # Example: 1g
+        # disable volume size metrics (num files, total bytes, vmaxb/vmaxn)
+        # type: BOOLEAN
+        vmaxb:
+        # max 4096 files in volume (suffixes: b, k, m, g, t)
+        # Example: 4k
+        # disable volume size metrics (num files, total bytes, vmaxb/vmaxn)
+        # type: BOOLEAN
+        vmaxn:
+        # return medialinks for non-up2k uploads (not hotlinks)
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        medialinks:
+        # write-only users can upload logues without getting renamed
+        # allow users with write-only access to upload logues and readmes without adding the _wo_ filename prefix (volflag=wo_up_readme)
+        # type: BOOLEAN
+        wo_up_readme:
+        # force randomized filenames, 9 chars long by default
+        # force randomized filenames, --nrand chars long (volflag=rand)
+        # type: BOOLEAN
+        rand:
+        # randomized filenames are N chars long
+        # Example: N
+        # force randomized filenames, --nrand chars long (volflag=rand)
+        # type: BOOLEAN
+        nrand:
+        # overwrite existing files? 0=no 1=if-older 2=always
+        # Example: N
+        # web-client: default setting for when to replace/overwrite existing files; [0]=never, [1]=if-client-newer, [2]=always (volflag=u2ow)
+        # type: NUM
+        u2ow:
+        # [f]orce [c]lient-last-modified or [u]pload-time
+        # Example: fc
+        # how to timestamp uploaded files; [c]=client-last-modified, [u]=upload-time, [fc]=force-c, [fu]=force-u (volflag=u2ts)
+        # type: TXT
+        # default: c
+        u2ts:
+        # allow aborting unfinished uploads? 0=no 1=strict 2=ip-chk 3=acct-chk
+        # Example: 1
+        # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
+        # type: NUM
+        u2abort:
+        # allow filesizes between 1 KiB and 3MiB
+        # Example: 1k-3m
+        # web-client: default upload chunksize (MiB); sets min,default,max in the settings gui. Each HTTP POST will aim for default, and never exceed max. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [1,1,1]
+        # type: N,N,N
+        # default: 1,64,96
+        sz:
+        # ensure 1 GiB free disk space
+        # Example: 1g
+        # ensure GiB free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [256m], [4], [2T] (volflag=df)
+        # type: GiB
+        # default: 0
+        df:
+
+      uploadRotation:
+        # 3 levels of subfolders with 100 entries in each
+        # Example: 100,3
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        rotn:
+        # date-formatted organizing
+        # Example: %Y-%m/%d-%H
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        rotf:
+        # uploads are deleted after 1 hour
+        # Example: 3600
+        # generate a session-token for IdP users which is written to cookie cppws (or cppwd if plaintext), to reduce the load on the IdP server, lifetime S seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with --ses-db wiped)
+        # type: S
+        lifetime:
+
+      database_General:
+        # enable database; makes files searchable + enables upload-undo
+        # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
+        # type: NUM
+        e2d:
+        # scan writable folders for new files on startup; also sets -e2d
+        # scan writable folders for new files on startup; sets -e2d
+        # type: BOOLEAN
+        e2ds:
+        # scans all folders for new files on startup; also sets -e2d
+        # scans all folders on startup; sets -e2ds
+        # type: BOOLEAN
+        e2dsa:
+        # enable multimedia indexing; makes it possible to search for tags
+        # enable metadata indexing; makes it possible to search for artist/title/codec/resolution/...
+        # type: BOOLEAN
+        e2t:
+        # scan existing files for tags on startup; also sets -e2t
+        # scan newly discovered files for metadata on startup; sets -e2t
+        # type: BOOLEAN
+        e2ts:
+        # delete all metadata from DB (full rescan); also sets -e2ts
+        # delete all metadata from DB and do a full rescan; sets -e2ts
+        # type: BOOLEAN
+        e2tsr:
+        # disables metadata collection for existing files
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        d2ts:
+        # verify integrity on startup by hashing files and comparing to db
+        # verify file integrity; rehash all files and compare with db
+        # type: BOOLEAN
+        e2v:
+        # when e2v fails, update the db (assume on-disk files are good)
+        # on hash mismatch: update the database with the new hash
+        # type: BOOLEAN
+        e2vu:
+        # when e2v fails, panic and quit copyparty
+        # on hash mismatch: panic and quit copyparty
+        # type: BOOLEAN
+        e2vp:
+        # disables onboot indexing, overrides -e2ds*
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        d2ds:
+        # disables metadata collection, overrides -e2t*
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        d2t:
+        # disables file verification, overrides -e2v*
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        d2v:
+        # disables all database stuff, overrides -e2*
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        d2d:
+        # puts thumbnails and indexes at that location
+        # Example: /tmp/cdb
+        # disable snapshots -- forget unfinished uploads on shutdown; don't create .hist/up2k.snap files -- abandoned/interrupted uploads must be cleaned up manually
+        # type: BOOLEAN
+        hist:
+        # puts indexes at that location
+        # Example: /tmp/cdb
+        # override where the volume databases are to be placed; default is the same as --hist (volflag=dbpath)
+        # type: PATH
+        # default: [empty string] 
+        dbpath:
+        # disable db if file foo doesn't exist
+        # Example: foo
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        landmark:
+        # scan for new files every 60sec, same as --re-maxage
+        # Example: 60
+        # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
+        # type: BOOLEAN
+        scan:
+        # skips hashing file contents if path matches *.iso
+        # Example: \.iso$
+        # regex: disable hashing of matching absolute-filesystem-paths during e2ds folder scans (must be specified as one big regex, not multiple times) (volflag=nohash)
+        # type: PTN
+        # default: [empty string] 
+        nohash:
+        # fully ignores the contents at paths matching *.iso
+        # Example: \.iso$
+        # regex: disable indexing of matching absolute-filesystem-paths during e2ds folder scan (must be specified as one big regex, not multiple times) (volflag=noidx)
+        # type: PTN
+        noidx:
+        # don't forget files when deleted from disk
+        # never forget indexed files, even when deleted from disk -- makes it impossible to ever upload the same file twice -- only useful for offloading uploads to a cloud service or something (volflag=noforget)
+        # type: BOOLEAN
+        noforget:
+        # forget uploader-IP after 30 days (GDPR)
+        # Example: 43200
+        # remove uploader-IP from database (and make unpost impossible) MIN minutes after upload, for GDPR reasons. Default [0] is never-forget. [1440]=day, [10080]=week, [43200]=month. (volflag=forget_ip)
+        # type: MIN
+        forget_ip:
+        # never store uploader-IP in the db; disables unpost
+        # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead (volflag=no_db_ip)
+        # type: BOOLEAN
+        no_db_ip:
+        # avoid excessive reindexing on android sdcardfs
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        fat32:
+        # database speed-durability tradeoff
+        # Example: [acid|swal|wal|yolo]
+        # database durability profile; sets the tradeoff between robustness and speed, see --help-dbd (volflag=dbd)
+        # type: PROFILE
+        # default: wal
+        dbd:
+        # cross-volume dupe detection / linking (dangerous)
+        # on upload: check all volumes for dupes, not just the target volume (probably buggy, not recommended) (volflag=xlink)
+        # type: BOOLEAN
+        xlink:
+        # do not descend into other filesystems
+        # stay within the filesystem of the volume root; do not descend into other devices (symlink or bind-mount to another HDD, ...) (volflag=xdev)
+        # type: BOOLEAN
+        xdev:
+        # do not follow symlinks leaving the volume root
+        # never follow symlinks leaving the volume root, unless the link is into another volume where the user has similar access (volflag=xvol)
+        # type: BOOLEAN
+        xvol:
+        # show dotfiles in search results
+        # show dotfiles in search results (volflags: dotsrch | nodotsrch)
+        # type: BOOLEAN
+        dotsrch:
+        # hide dotfiles in search results (default)
+        # show dotfiles in search results (volflags: dotsrch | nodotsrch)
+        # type: BOOLEAN
+        nodotsrch:
+        # exclude search results with URL matching this regex
+        # regex: exclude files from search results if the file-URL matches PTN (case-sensitive). Example: [password|logs/[0-9]] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
+        # type: PTN
+        # default: [empty string] 
+        srch_excl:
+
+      database_AudioTags:
+        # media-tags to index/display
+        # Example: artist,title
+        # tags to index/display (comma-sep.); either an entire replacement list, or add/remove stuff on the default-list with +foo or /bar
+        # type: M,M,M
+        mte:
+        # media-tags to hide by default
+        # Example: fmt,res,ac
+        # tags to hide by default (comma-sep.); assign/add/remove same as -mte
+        # type: M,M,M
+        mth:
+        # uses the "audio-bpm.py" program togenerate ".bpm" tags from uploads (f = overwrite tags)
+        # Example: .bpm
+        # verbose tag scanning; print errors from mtp subprocesses and such
+        # type: BOOLEAN
+        mtp:
+        # collects two tags at once
+        # Example: ahash,vhash
+        # verbose tag scanning; print errors from mtp subprocesses and such
+        # type: BOOLEAN
+
+      thumbnails:
+        # disables all thumbnails
+        # disable all thumbnails (volflag=dthumb)
+        # type: BOOLEAN
+        dthumb:
+        # disables video thumbnails
+        # disable video thumbnails (volflag=dvthumb)
+        # type: BOOLEAN
+        dvthumb:
+        # disables audio thumbnails (spectrograms)
+        # disable audio thumbnails (spectrograms) (volflag=dathumb)
+        # type: BOOLEAN
+        dathumb:
+        # disables image thumbnails
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        dithumb:
+        # compress audio waveforms 33% better
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        pngquant:
+        # thumbnail res; WxH
+        # thumbnail res (volflag=thsize)
+        # type: WxH
+        # default: 320x256
+        thsize:
+        # center-cropping (y/n/fy/fn)
+        # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [y]=crop, [n]=nocrop, [fy]=force-y, [fn]=force-n (volflag=crop)
+        # type: TXT
+        # default: y
+        crop:
+        # 3x resolution (y/n/fy/fn)
+        # show thumbs at 3x resolution; client can override in UI unless force. [y]=yes, [n]=no, [fy]=force-yes, [fn]=force-no (volflag=th3x)
+        # type: TXT
+        # default: n
+        th3x:
+        # convert-to-image timeout in seconds
+        # convert-to-image timeout in seconds (volflag=convt)
+        # type: SEC
+        convt:
+        # convert-to-audio timeout in seconds
+        # convert-to-audio timeout in seconds (volflag=aconvt)
+        # type: SEC
+        aconvt:
+        # use /b.png as thumbnail for file-extension s
+        # Example: s
+        # REPEATABLE: use thumbnail-image VP for file-extension E, example: [exe=/.res/exe.png] (volflag=ext_th)
+        # type: E=VP
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        ext_th:
+
+      handlers:
+        # handle 404s by executing PY file
+        # Example: PY
+        # REPEATABLE: handle 404s by executing PY file
+        # type: PY
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        on404:
+        # handle 403s by executing PY file
+        # Example: PY
+        # REPEATABLE: handle 403s by executing PY file
+        # type: PY
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        on403:
+
+      eventHooks:
+        # execute CMD before a file upload starts
+        # Example: CMD
+        # REPEATABLE: execute CMD before a file upload starts
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xbu:
+        # execute CMD after  a file upload finishes
+        # Example: CMD
+        # REPEATABLE: execute CMD after        a file upload finishes
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xau:
+        # execute CMD after  all uploads finish and volume is idle
+        # Example: CMD
+        # REPEATABLE: execute CMD after        all uploads finish and volume is idle
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xiu:
+        # execute CMD before a file copy
+        # Example: CMD
+        # REPEATABLE: execute CMD before a file copy
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xbc:
+        # execute CMD after  a file copy
+        # Example: CMD
+        # do not add wildcard entries for each --crt-ns
+        # type: BOOLEAN
+        xac:
+        # execute CMD before a file rename/move
+        # Example: CMD
+        # REPEATABLE: execute CMD before a file move/rename
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xbr:
+        # execute CMD after  a file rename/move
+        # Example: CMD
+        # REPEATABLE: execute CMD after        a file move/rename
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xar:
+        # execute CMD before a file delete
+        # Example: CMD
+        # REPEATABLE: execute CMD before a file delete
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xbd:
+        # execute CMD after  a file delete
+        # Example: CMD
+        # REPEATABLE: execute CMD after        a file delete
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xad:
+        # execute CMD on message
+        # Example: CMD
+        # how to handle url-form POSTs; see --help-urlform
+        # type: MODE
+        # default: print,xm
+        xm:
+        # execute CMD if someone gets banned
+        # Example: CMD
+        # REPEATABLE: execute CMD if someone gets banned (pw/404/403/url)
+        # type: CMD
+        # type: ARRAY
+        # REPEATABLE: YES (use YAML array) 
+        xban:
+
+      clientAndUx:
+        # show grid/thumbnails by default
+        # show grid/thumbnails by default (volflag=grid)
+        # type: BOOLEAN
+        grid:
+        # select files in grid by ctrl-click
+        # select files in grid by ctrl-click (volflag=gsel)
+        # type: BOOLEAN
+        gsel:
+        # default sort order
+        # upload order; [s]=smallest-first, [n]=alphabetical, [fs]=force-s, [fn]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
+        # type: TXT
+        # default: s
+        sort:
+        # natural-sort of leading digits in filenames
+        # default-enable natural sort of filenames with leading numbers (volflag=nsort)
+        # type: BOOLEAN
+        nsort:
+        # number of sort-rules to add to media URLs
+        # number of sorting rules to include in media URLs by default (volflag=hsortn)
+        # type: N
+        hsortn:
+        # dont list files matching REGEX
+        # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\\.(js|css)$] (volflag=unlist)
+        # type: REGEX
+        # default: [empty string] 
+        unlist:
+        # includes TXT in the <head>, or @PATH for file at PATH
+        # Example: TXT
+        # text to append to the <head> of all HTML pages (except for basic-browser); can be @PATH to send the contents of a file at PATH, and/or begin with %% to render as jinja2 template (volflag=html_head)
+        # type: TXT
+        # default: [empty string] 
+        html_head:
+        # theme color (a hint for webbrowsers, discord, etc.)
+        # Example: #fc0
+        # accent color (3 or 6 hex digits); may also affect safari and/or android-chrome (volflag=tcolor)
+        # type: RGB
+        # default: 333
+        tcolor:
+        # don't show total folder size
+        # do not show total recursive size of folders in listings, show inode size instead; slightly faster (volflag=nodirsz)
+        # type: BOOLEAN
+        nodirsz:
+        # allows indexing by search engines (default)
+        # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
+        robots:
+        # kindly asks search engines to leave
+        # adds http and html headers asking search engines to not index anything (volflag=norobots)
+        # type: BOOLEAN
+        norobots:
+        # don't list read-access in controlpanel
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        unlistcr:
+        # don't list write-access in controlpanel
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        unlistcw:
+        # disable js sandbox for markdown files
+        # don't sandbox README/PREADME.md documents (volflags: no_sb_md | sb_md)
+        # type: BOOLEAN
+        no_sb_md:
+        # disable js sandbox for prologue/epilogue
+        # don't sandbox prologue/epilogue docs (volflags: no_sb_lg | sb_lg); enables non-js support
+        # type: BOOLEAN
+        no_sb_lg:
+        # enable js sandbox for markdown files (default)
+        # don't sandbox README/PREADME.md documents (volflags: no_sb_md | sb_md)
+        # type: BOOLEAN
+        sb_md:
+        # enable js sandbox for prologue/epilogue (default)
+        # don't sandbox prologue/epilogue docs (volflags: no_sb_lg | sb_lg); enables non-js support
+        # type: BOOLEAN
+        sb_lg:
+        # list of markdown-sandbox safeguards to disable
+        # list of capabilities to allow in the iframe 'sandbox' attribute for README.md docs (volflag=md_sbf); see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox
+        # type: FLAGS
+        # default: downloads forms popups scripts top-navigation-by-user-activation
+        md_sbf:
+        # list of *logue-sandbox safeguards to disable
+        # list of capabilities to allow in the iframe 'sandbox' attribute for prologue/epilogue docs (volflag=lg_sbf)
+        # type: FLAGS
+        # default: downloads forms popups scripts top-navigation-by-user-activation
+        lg_sbf:
+        # value of iframe allow-prop for markdown-sandbox
+        # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen] (volflag=md_sba)
+        # type: TXT
+        # default: [empty string] 
+        md_sba:
+        # value of iframe allow-prop for *logue-sandbox
+        # the value of the iframe 'allow' attribute for prologue/epilogue docs (volflag=lg_sba); see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy#iframes
+        # type: TXT
+        # default: [empty string] 
+        lg_sba:
+        # return html and markdown as text/html
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        nohtml:
+
+      opengraph_DiscordEmbeds_:
+        # enable OG (disables hotlinking)
+        # require username and password for login; default is just password
+        # type: BOOLEAN
+        og:
+        # sitename; defaults to --name, disable with '-'
+        # sitename; defaults to --name, disable with [-] (volflag=og_site)
+        # type: TXT
+        # default: [empty string] 
+        og_site:
+        # description text for all files; disable with '-'
+        # description text; same for all files, disable with [-] (volflag=og_desc)
+        # type: TXT
+        # default: [empty string] 
+        og_desc:
+        # thumbnail format; j / jf / jf3 / w / w3 / ...
+        # Example: jf
+        # thumbnail format; j=jpeg, jf=jpeg-uncropped, jf3=jpeg-uncropped-large, w=webm, ... (volflag=og_th)
+        # type: FMT
+        # default: jf3
+        og_th:
+        # audio title format; default: {{ artist }} - {{ title }}
+        # audio title format; takes any metadata key (volflag=og_title_a)
+        # type: T
+        # default: 🎵 {{ artist }} - {{ title }}
+        og_title_a:
+        # video title format; default: {{ title }}
+        # video title format; takes any metadata key (volflag=og_title_v)
+        # type: T
+        # default: {{ title }}
+        og_title_v:
+        # image title format; default: {{ title }}
+        # image title format; takes any metadata key (volflag=og_title_i)
+        # type: T
+        # default: {{ title }}
+        og_title_i:
+        # fallback title if there's nothing in the db
+        # Example: foo
+        # fallback title if there is nothing in the -e2t database (volflag=og_title)
+        # type: TXT
+        # default: [empty string] 
+        og_title:
+        # force default title; do not read from tags
+        # force default title; do not read from tags (volflag=og_s_title)
+        # type: BOOLEAN
+        og_s_title:
+        # custom html; see --og-tpl in --help
+        # do not return the regular copyparty html, but instead load the jinja2 template at PATH (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
+        # type: PATH
+        # default: [empty string] 
+        og_tpl:
+        # you want to add tags manually with og_tpl
+        # do not automatically add OG entries into <head> (useful if you're doing this yourself in a template or such) (volflag=og_no_head)
+        # type: BOOLEAN
+        og_no_head:
+        # if defined: only send OG html if useragent matches this regex
+        # only disable hotlinking / engage OG behavior if the useragent matches regex RE (volflag=og_ua)
+        # type: RE
+        # default: [empty string] 
+        og_ua:
+
+      textfiles:
+        # where to put markdown backups; s=subfolder, v=volHist, n=nope
+        # where to store old version of markdown files; [s]=subfolder, [v]=volume-histpath, [n]=nope/disabled (volflag=md_hist)
+        # type: TXT
+        # default: s
+        md_hist:
+        # enable textfile expansion; see --help-exp
+        # do expensive analysis to improve accuracy of returned mimetypes; will make file-downloads, rss, and webdav slower (volflag=rmagic)
+        # type: BOOLEAN
+        exp:
+        # placeholders to expand in markdown files; see --help
+        # comma/space-separated list of placeholders to expand in markdown files; add/remove stuff on the default list with +hdr_foo or /vf.scan (volflag=exp_md)
+        # type: V,V,V
+        exp_md:
+        # placeholders to expand in prologue/epilogue; see --help
+        # comma/space-separated list of placeholders to expand in prologue/epilogue files (volflag=exp_lg)
+        # type: V,V,V
+        exp_lg:
+        # enable EOL conversion when writing docs (LF or CRLF)
+        # Example: lf
+        # enable EOL conversion when writing documents; supported: CRLF, LF (volflag=txt_eol)
+        # type: TYPE
+        # default: [empty string] 
+        txt_eol:
+
+      tailing:
+        # disable ?tail (download a growing file continuously)
+        # disable streaming a growing files with ?tail (volflag=notail)
+        # type: BOOLEAN
+        notail:
+        # check if file was replaced (new fd) every 1 sec
+        # Example: 1
+        # check if file was replaced (new fd) if idle for SEC seconds (volflag=tail_fd)
+        # type: SEC
+        tail_fd:
+        # check for new data every 0.2 sec
+        # Example: 0.2
+        # check for new data every SEC seconds (volflag=tail_rate)
+        # type: SEC
+        tail_rate:
+        # kill connection after 30 sec
+        # Example: 30
+        # terminate connection after SEC seconds; [0]=never (volflag=tail_tmax)
+        # type: SEC
+        tail_tmax:
+        # restrict ?tail access (1=admins,2=authed,3=everyone)
+        # Example: 2
+        # who can tail? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=tail_who)
+        # type: LVL
+        tail_who:
+
+      others:
+        # allow all users with read-access toenable the option to show dotfiles in listings
+        # enable the ?dots url parameter / client option which allows clients to see dotfiles / hidden files (volflag=dots)
+        # type: BOOLEAN
+        dots:
+        # generates per-file accesskeys,which are then required at the "g" permission;keys are invalidated if filesize or inode changes
+        # Example: 8
+        # per-file accesskey salt; used to generate unpredictable URLs for hidden files
+        # type: SALT
+        fk:
+        # generates slightly weaker per-file accesskeys,which are then required at the "g" permission;not affected by filesize or inode numbers
+        # Example: 8
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        fka:
+        # generates per-directory accesskeys,which are then required at the "g" permission;keys are invalidated if filesize or inode changes
+        # Example: 8
+        # per-directory accesskey salt; used to generate unpredictable URLs to share folders with users who only have the 'get' permission
+        # type: SALT
+        dk:
+        # per-directory accesskeys allow browsing into subdirs
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        dks:
+        # allow seeing files (not folders) inside a specific folderwith "g" perm, and does not require a valid dirkey to do so
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        # This is expected behavior with some options that are only available as volflags.
+        # Please input the text that should appear in the copyparty config verbatim as this key's value.
+        # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
+        dky:
+        # allow '?rss' URL suffix (experimental)
+        # do expensive analysis to improve accuracy of returned mimetypes; will make file-downloads, rss, and webdav slower (volflag=rmagic)
+        # type: BOOLEAN
+        rss:
+        # expensive analysis for mimetype accuracy
+        # do expensive analysis to improve accuracy of returned mimetypes; will make file-downloads, rss, and webdav slower (volflag=rmagic)
+        # type: BOOLEAN
+        rmagic:
+        # restrict viewing the list of recent uploads
+        # Example: 2
+        # who can see recent uploads on the ?ru page? [0]=nobody, [1]=admins, [2]=everyone (volflag=ups_who)
+        # type: LVL
+        ups_who:
+        # restrict access to download-as-zip/tar
+        # Example: 2
+        # who can download as zip/tar? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=zip_who)\nWARNING: if a nested volume has a more restrictive value than a parent volume, then this will be ignored if the download is initiated from the parent, more lenient volume
+        # type: LVL
+        zip_who:
+        # reject download-as-zip if more than 9000 files
+        # Example: 9k
+        # reject download-as-zip if more than N files in total; optionally takes a unit suffix: [256], [9K], [4G] (volflag=zipmaxn)
+        # type: N
+        # default: 0
+        zipmaxn:
+        # reject download-as-zip if size over 2 GiB
+        # Example: 2g
+        # reject download-as-zip if total download size exceeds SZ bytes; optionally takes a unit suffix: [256M], [4G], [2T] (volflag=zipmaxs)
+        # type: SZ
+        # default: 0
+        zipmaxs:
+        # reply with 'no' if download-as-zip exceeds max
+        # Example: no
+        # custom errormessage when download size exceeds max (volflag=zipmaxt)
+        # type: TXT
+        # default: [empty string] 
+        zipmaxt:
+        # zip-size-limit does not apply to authenticated users
+        # authenticated users bypass the zip size limit (volflag=zipmaxu)
+        # type: BOOLEAN
+        zipmaxu:
+        # disable race-the-beam (download unfinished uploads)
+        # disable race-the-beam (lockstep download of files which are currently being uploaded) (volflag=nopipe)
+        # type: BOOLEAN
+        nopipe:
+        # ms-windows: timeout for renaming busy files
+        # if a file cannot be renamed because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=mv_retry)
+        # type: T/R
+        mv_retry:
+        # ms-windows: timeout for deleting busy files
+        # if a file cannot be deleted because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=rm_retry)
+        # type: T/R
+        rm_retry:
+        # ask webdav clients to login for all folders
+        # force auth for all folders (required by davfs2 when only some folders are world-readable) (volflag=davauth)
+        # type: BOOLEAN
+        davauth:
+        # show lastmod time of symlink destination, not the link itself(note: this option is always enabled for recursive listings)
+        # show symlink-destination's lastmodified instead of the link itself; always enabled for recursive listings (volflag=davrt)
+        # type: BOOLEAN
+        davrt:

@@ -80,7 +80,7 @@ tolerations: []
 affinity: {}
 
 generalOptions:
-  # \033[34mREPEATABLE:\033[0m add config file
+  # REPEATABLE: add config file
   # type: PATH
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -91,17 +91,17 @@ generalOptions:
   # max num cpu cores, 0=all
   # type: CORES
   j:
-  # \033[34mREPEATABLE:\033[0m add account, \033[33mUSER\033[0m:\033[33mPASS\033[0m; example [\033[32med:wark\033[0m]
+  # REPEATABLE: add account, USER:PASS; example [ed:wark]
   # type: ACCT
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   a:
-  # \033[34mREPEATABLE:\033[0m add volume, \033[33mSRC\033[0m:\033[33mDST\033[0m:\033[33mFLAG\033[0m; examples [\033[32m.::r\033[0m], [\033[32m/mnt/nas/music:/music:r:aed\033[0m], see --help-accounts
+  # REPEATABLE: add volume, SRC:DST:FLAG; examples [.::r], [/mnt/nas/music:/music:r:aed], see --help-accounts
   # type: VOL
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   v:
-  # \033[34mREPEATABLE:\033[0m add group, \033[33mNAME\033[0m:\033[33mUSER1\033[0m,\033[33mUSER2\033[0m,\033[33m...\033[0m; example [\033[32madmins:ed,foo,bar\033[0m]
+  # REPEATABLE: add group, NAME:USER1,USER2,...; example [admins:ed,foo,bar]
   # type: G:N,N
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -112,18 +112,18 @@ generalOptions:
   # enable the ?dots url parameter / client option which allows clients to see dotfiles / hidden files (volflag=dots)
   # type: BOOLEAN
   ed:
-  # how to handle url-form POSTs; see \033[33m--help-urlform\033[0m
+  # how to handle url-form POSTs; see --help-urlform
   # type: MODE
   # default: print,xm
   urlform:
-  # server terminal title, for example [\033[32m$ip-10.1.2.\033[0m] or [\033[32m$ip-]
+  # server terminal title, for example [$ip-10.1.2.] or [$ip-]
   # type: TXT
   # default: cpp @ $pub
   wintitle:
   # server name (displayed topleft in browser and in mDNS)
   # type: TXT
   name:
-  # \033[34mREPEATABLE:\033[0m map file \033[33mEXT\033[0mension to \033[33mMIME\033[0mtype, for example [\033[32mjpg=image/jpeg\033[0m]
+  # REPEATABLE: map file EXTension to MIMEtype, for example [jpg=image/jpeg]
   # type: EXT=MIME
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -148,15 +148,15 @@ qrOptions:
   # change the QR-code URL to https://
   # type: BOOLEAN
   qrs:
-  # location to include in the url, for example [\033[32mpriv/?pw=hunter2\033[0m]
+  # location to include in the url, for example [priv/?pw=hunter2]
   # type: PATH
   # default: [empty string] 
   qrl:
-  # select IP which starts with \033[33mPREFIX\033[0m; [\033[32m.\033[0m] to force default IP when mDNS URL would have been used instead
+  # select IP which starts with PREFIX; [.] to force default IP when mDNS URL would have been used instead
   # type: PREFIX
   # default: [empty string] 
   qri:
-  # foreground; try [\033[32m0\033[0m] or [\033[32m-1\033[0m] if the qr-code is unreadable
+  # foreground; try [0] or [-1] if the qr-code is unreadable
   # type: COLOR
   qrfg:
   # background (white=255)
@@ -165,29 +165,29 @@ qrOptions:
   # padding (spec says 4 or more, but 1 is usually fine)
   # type: CELLS
   qrp:
-  # [\033[32m1\033[0m]=1x, [\033[32m2\033[0m]=2x, [\033[32m0\033[0m]=auto (try [\033[32m2\033[0m] on broken fonts)
+  # [1]=1x, [2]=2x, [0]=auto (try [2] on broken fonts)
   # type: N
   qrz:
-  # sticky/pin the qr-code to always stay on-screen; [\033[32m0\033[0m]=disabled, [\033[32m1\033[0m]=with-url, [\033[32m2\033[0m]=just-qr
+  # sticky/pin the qr-code to always stay on-screen; [0]=disabled, [1]=with-url, [2]=just-qr
   # type: N
   qrpin:
 
 filesystemOptions:
-  # if a file cannot be deleted because it is busy, continue trying for \033[33mT\033[0m seconds, retry every \033[33mR\033[0m seconds; disable with 0/0 (volflag=rm_retry)
+  # if a file cannot be deleted because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=rm_retry)
   # type: T/R
   rmretry:
-  # if a file cannot be renamed because it is busy, continue trying for \033[33mT\033[0m seconds, retry every \033[33mR\033[0m seconds; disable with 0/0 (volflag=mv_retry)
+  # if a file cannot be renamed because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=mv_retry)
   # type: T/R
   mvretry:
-  # file I/O buffer-size; if your volumes are on a network drive, try increasing to \033[32m524288\033[0m or even \033[32m4194304\033[0m (and let me know if that improves your performance)
+  # file I/O buffer-size; if your volumes are on a network drive, try increasing to 524288 or even 4194304 (and let me know if that improves your performance)
   # type: BYTES
   iobuf:
-  # rebuild mountpoint cache every \033[33mSEC\033[0m to keep track of sparse-files support; keep low on servers with removable media
+  # rebuild mountpoint cache every SEC to keep track of sparse-files support; keep low on servers with removable media
   # type: SEC
   mtabage:
 
 shareUrlOptions:
-  # toplevel virtual folder for shared files/folders, for example [\033[32m/share\033[0m]
+  # toplevel virtual folder for shared files/folders, for example [/share]
   # type: DIR
   # default: [empty string] 
   shr:
@@ -198,7 +198,7 @@ shareUrlOptions:
   # type: U,U
   # default: [empty string] 
   shradm:
-  # shares can be revived by their owner if they expired less than MIN minutes ago; [\033[32m60\033[0m]=hour, [\033[32m1440\033[0m]=day, [\033[32m10080\033[0m]=week
+  # shares can be revived by their owner if they expired less than MIN minutes ago; [60]=hour, [1440]=day, [10080]=week
   # type: MIN
   shrrt:
   # debug
@@ -206,13 +206,13 @@ shareUrlOptions:
   shrv:
 
 uploadOptions:
-  # dotfile incomplete uploads, hiding them from clients unless \033[33m-ed\033[0m
+  # dotfile incomplete uploads, hiding them from clients unless -ed
   # type: BOOLEAN
   dotpart:
   # when avoiding filename collisions by appending the uploader's ip to the filename: append the plaintext ip instead of salting and hashing the ip
   # type: BOOLEAN
   plainip:
-  # filename for nameless uploads (when uploader doesn't provide a name); default is [\033[32mput-UNIXTIME-IP.bin\033[0m] (the \033[32m.6f\033[0m means six decimal places) (volflag=put_name)
+  # filename for nameless uploads (when uploader doesn't provide a name); default is [put-UNIXTIME-IP.bin] (the .6f means six decimal places) (volflag=put_name)
   # type: TXT
   # default: put-{now.6f}-{cip}.bin
   putname:
@@ -227,13 +227,13 @@ uploadOptions:
   # grace period where uploads can be deleted by the uploader, even without delete permissions; 0=disabled, default=12h
   # type: SEC
   unpost:
-  # clients can abort incomplete uploads by using the unpost tab (requires \033[33m-e2d\033[0m). [\033[32m0\033[0m] = never allowed (disable feature), [\033[32m1\033[0m] = allow if client has the same IP as the upload AND is using the same account, [\033[32m2\033[0m] = just check the IP, [\033[32m3\033[0m] = just check account-name (volflag=u2abort)
+  # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
   # type: NUM
   u2abort:
-  # file write grace period (any client can write to a blank file last-modified more recently than \033[33mSEC\033[0m seconds ago)
+  # file write grace period (any client can write to a blank file last-modified more recently than SEC seconds ago)
   # type: SEC
   blankwt:
-  # max number of uploads to keep in memory when running without \033[33m-e2d\033[0m; roughly 1 MiB RAM per 600
+  # max number of uploads to keep in memory when running without -e2d; roughly 1 MiB RAM per 600
   # type: N
   regcap:
   # disable file-handle pooling -- instead, repeatedly close and reopen files during upload (bad idea to enable this on windows and/or cow filesystems)
@@ -242,11 +242,11 @@ uploadOptions:
   # force file-handle pooling, even when it might be dangerous (multiprocessing, filesystems lacking sparse-files support, ...)
   # type: BOOLEAN
   usefpool:
-  # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [\033[32m644\033[0m] = owner-RW + all-R, [\033[32m755\033[0m] = owner-RWX + all-RX, [\033[32m777\033[0m] = full-yolo (volflag=chmod_f)
+  # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [644] = owner-RW + all-R, [755] = owner-RWX + all-RX, [777] = full-yolo (volflag=chmod_f)
   # type: UGO
   # default: [empty string] 
   chmodf:
-  # unix file permissions to use when creating directories; see --help-chmod. Examples: [\033[32m755\033[0m] = owner-RW + all-R, [\033[32m777\033[0m] = full-yolo (volflag=chmod_d)
+  # unix file permissions to use when creating directories; see --help-chmod. Examples: [755] = owner-RW + all-R, [777] = full-yolo (volflag=chmod_d)
   # type: UGO
   # default: 755
   chmodd:
@@ -259,7 +259,7 @@ uploadOptions:
   # enable symlink-based upload deduplication (volflag=dedup)
   # type: BOOLEAN
   dedup:
-  # how careful to be when deduplicating files; [\033[32m1\033[0m] = just verify the filesize, [\033[32m50\033[0m] = verify file contents have not been altered (volflag=safededup)
+  # how careful to be when deduplicating files; [1] = just verify the filesize, [50] = verify file contents have not been altered (volflag=safededup)
   # type: N
   safededup:
   # enable hardlink-based dedup; will fallback on symlinks when that is impossible (across filesystems) (volflag=hardlink)
@@ -280,17 +280,17 @@ uploadOptions:
   # disable snapshots -- forget unfinished uploads on shutdown; don't create .hist/up2k.snap files -- abandoned/interrupted uploads must be cleaned up manually
   # type: BOOLEAN
   nosnap:
-  # write upload state to ./hist/up2k.snap every \033[33mSEC\033[0m seconds; allows resuming incomplete uploads after a server crash
+  # write upload state to ./hist/up2k.snap every SEC seconds; allows resuming incomplete uploads after a server crash
   # type: SEC
   snapwri:
-  # forget unfinished uploads after \033[33mMIN\033[0m minutes; impossible to resume them after that (360=6h, 1440=24h)
+  # forget unfinished uploads after MIN minutes; impossible to resume them after that (360=6h, 1440=24h)
   # type: MIN
   snapdrop:
-  # how to timestamp uploaded files; [\033[32mc\033[0m]=client-last-modified, [\033[32mu\033[0m]=upload-time, [\033[32mfc\033[0m]=force-c, [\033[32mfu\033[0m]=force-u (volflag=u2ts)
+  # how to timestamp uploaded files; [c]=client-last-modified, [u]=upload-time, [fc]=force-c, [fu]=force-u (volflag=u2ts)
   # type: TXT
   # default: c
   u2ts:
-  # force randomized filenames, \033[33m--nrand\033[0m chars long (volflag=rand)
+  # force randomized filenames, --nrand chars long (volflag=rand)
   # type: BOOLEAN
   rand:
   # randomized filenames length (volflag=nrand)
@@ -299,30 +299,30 @@ uploadOptions:
   # enable filetype detection on nameless uploads (volflag=magic)
   # type: BOOLEAN
   magic:
-  # ensure \033[33mGiB\033[0m free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [\033[32m256m\033[0m], [\033[32m4\033[0m], [\033[32m2T\033[0m] (volflag=df)
+  # ensure GiB free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [256m], [4], [2T] (volflag=df)
   # type: GiB
   # default: 0
   df:
   # windows-only: minimum size of incoming uploads through up2k before they are made into sparse files
   # type: MiB
   sparse:
-  # configure turbo-mode in up2k client; [\033[32m-1\033[0m] = forbidden/always-off, [\033[32m0\033[0m] = default-off and warn if enabled, [\033[32m1\033[0m] = default-off, [\033[32m2\033[0m] = on, [\033[32m3\033[0m] = on and disable datecheck
+  # configure turbo-mode in up2k client; [-1] = forbidden/always-off, [0] = default-off and warn if enabled, [1] = default-off, [2] = on, [3] = on and disable datecheck
   # type: LVL
   turbo:
-  # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [\033[32m0\033[0m] = only when necessary (non-https), [\033[32m1\033[0m] = always (all browsers), [\033[32m2\033[0m] = always on chrome/firefox, [\033[32m3\033[0m] = always on chrome, [\033[32mN\033[0m] = chrome-version N and newer (recommendation: 137)
+  # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [0] = only when necessary (non-https), [1] = always (all browsers), [2] = always on chrome/firefox, [3] = always on chrome, [N] = chrome-version N and newer (recommendation: 137)
   # type: N
   nosubtle:
   # web-client: number of file chunks to upload in parallel; 1 or 2 is good when latency is low (same-country), 2~4 for android-clients, 2~6 for cross-atlantic. Max is 6 in most browsers. Big values increase network-speed but may reduce HDD-speed
   # type: JOBS
   u2j:
-  # web-client: default upload chunksize (MiB); sets \033[33mmin,default,max\033[0m in the settings gui. Each HTTP POST will aim for \033[33mdefault\033[0m, and never exceed \033[33mmax\033[0m. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [\033[32m1,1,1\033[0m]
+  # web-client: default upload chunksize (MiB); sets min,default,max in the settings gui. Each HTTP POST will aim for default, and never exceed max. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [1,1,1]
   # type: N,N,N
   # default: 1,64,96
   u2sz:
-  # web-client: default setting for when to replace/overwrite existing files; [\033[32m0\033[0m]=never, [\033[32m1\033[0m]=if-client-newer, [\033[32m2\033[0m]=always (volflag=u2ow)
+  # web-client: default setting for when to replace/overwrite existing files; [0]=never, [1]=if-client-newer, [2]=always (volflag=u2ow)
   # type: NUM
   u2ow:
-  # upload order; [\033[32ms\033[0m]=smallest-first, [\033[32mn\033[0m]=alphabetical, [\033[32mfs\033[0m]=force-s, [\033[32mfn\033[0m]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
+  # upload order; [s]=smallest-first, [n]=alphabetical, [fs]=force-s, [fn]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
   # type: TXT
   # default: s
   u2sort:
@@ -331,7 +331,7 @@ uploadOptions:
   writeuplog:
 
 networkOptions:
-  # IPs and/or unix-sockets to listen on (comma-separated list; see \033[33m--help-bind\033[0m). Default: all IPv4 and IPv6
+  # IPs and/or unix-sockets to listen on (comma-separated list; see --help-bind). Default: all IPv4 and IPv6
   # type: IP
   # default: ::
   i:
@@ -342,30 +342,30 @@ networkOptions:
   # include link-local IPv4/IPv6 in mDNS replies, even if the NIC has routable IPs (breaks some mDNS clients)
   # type: BOOLEAN
   ll:
-  # which ip to associate clients with; [\033[32m0\033[0m]=tcp, [\033[32m1\033[0m]=origin (first x-fwd, unsafe), [\033[32m-1\033[0m]=closest-proxy, [\033[32m-2\033[0m]=second-hop, [\033[32m-3\033[0m]=third-hop
+  # which ip to associate clients with; [0]=tcp, [1]=origin (first x-fwd, unsafe), [-1]=closest-proxy, [-2]=second-hop, [-3]=third-hop
   # type: DEPTH
   rproxy:
   # if reverse-proxied, which http header to read the client's real ip from
   # type: NAME
   # default: x-forwarded-for
   xffhdr:
-  # list of trusted reverse-proxy CIDRs (comma-separated); only accept the real-ip header (\033[33m--xff-hdr\033[0m) and IdP headers if the incoming connection is from an IP within either of these subnets. Specify [\033[32mlan\033[0m] to allow all LAN / private / non-internet IPs. Can be disabled with [\033[32many\033[0m] if you are behind cloudflare (or similar) and are using \033[32m--xff-hdr=cf-connecting-ip\033[0m (or similar)
+  # list of trusted reverse-proxy CIDRs (comma-separated); only accept the real-ip header (--xff-hdr) and IdP headers if the incoming connection is from an IP within either of these subnets. Specify [lan] to allow all LAN / private / non-internet IPs. Can be disabled with [any] if you are behind cloudflare (or similar) and are using --xff-hdr=cf-connecting-ip (or similar)
   # type: CIDR
   # default: 127.0.0.0/8, ::1/128
   xffsrc:
-  # only accept connections from IP-addresses inside \033[33mCIDR\033[0m (comma-separated); examples: [\033[32mlan\033[0m] or [\033[32m10.89.0.0/16, 192.168.33.0/24\033[0m]
+  # only accept connections from IP-addresses inside CIDR (comma-separated); examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
   # type: CIDR
   # default: [empty string] 
   ipa:
-  # if reverse-proxying on a location instead of a dedicated domain/subdomain, provide the base location here; example: [\033[32m/foo/bar\033[0m]
+  # if reverse-proxying on a location instead of a dedicated domain/subdomain, provide the base location here; example: [/foo/bar]
   # type: PATH
   # default: [empty string] 
   rploc:
-  # write list of listening-on ip:port to textfile at \033[33mPATH\033[0m when http-servers have started
+  # write list of listening-on ip:port to textfile at PATH when http-servers have started
   # type: PATH
   # default: [empty string] 
   wrheps:
-  # write list of accessible-on ip:port to textfile at \033[33mPATH\033[0m when http-servers have started
+  # write list of accessible-on ip:port to textfile at PATH when http-servers have started
   # type: PATH
   # default: [empty string] 
   wrhaon:
@@ -375,7 +375,7 @@ networkOptions:
   # socket timeout (read/write request/response bodies). Use 60 on fast servers (default is extremely safe). Disable with 0 if reverse-proxied for a 2%% speed boost
   # type: SEC
   stbody:
-  # socket read size in bytes (indirectly affects filesystem writes; recommendation: keep equal-to or lower-than \033[33m--iobuf\033[0m)
+  # socket read size in bytes (indirectly affects filesystem writes; recommendation: keep equal-to or lower-than --iobuf)
   # type: B
   srdsz:
   # socket write size in bytes
@@ -387,7 +387,7 @@ networkOptions:
   # debug: response delay in seconds
   # type: SEC
   rspslp:
-  # debug: response delay, random duration 0..\033[33mSEC\033[0m
+  # debug: response delay, random duration 0..SEC
   # type: SEC
   rspjtr:
 
@@ -401,11 +401,11 @@ ssl_TlsOptions:
   # path to file containing a concatenation of TLS key and certificate chain
   # type: PATH
   cert:
-  # set allowed ssl/tls versions; [\033[32mhelp\033[0m] shows available versions; default is what your python version considers safe
+  # set allowed ssl/tls versions; [help] shows available versions; default is what your python version considers safe
   # type: LIST
   # default: [empty string] 
   sslver:
-  # set allowed ssl/tls ciphers; [\033[32mhelp\033[0m] shows available ciphers
+  # set allowed ssl/tls ciphers; [help] shows available ciphers
   # type: LIST
   # default: [empty string] 
   ciphers:
@@ -425,7 +425,7 @@ tlsCertificateGeneratorOptions:
   # type: N,N
   # default: [empty string] 
   crtns:
-  # do not add wildcard entries for each \033[33m--crt-ns\033[0m
+  # do not add wildcard entries for each --crt-ns
   # type: BOOLEAN
   crtexact:
   # do not add autodetected IP addresses into cert
@@ -461,39 +461,39 @@ tlsCertificateGeneratorOptions:
   # backdate in hours
   # type: HRS
   crtback:
-  # algorithm and keysize; one of these: \033[32mecdsa-256 rsa-4096 rsa-2048\033[0m
+  # algorithm and keysize; one of these: ecdsa-256 rsa-4096 rsa-2048
   # type: S-N
   # default: ecdsa-256
   crtalg:
 
 idp_IdentityProvider_UserAuthenticationOptions:
-  # bypass the copyparty authentication checks if the request-header \033[33mHN\033[0m contains a username to associate the request with (for use with authentik/oauth/...)\n\033[1;31mWARNING:\033[0m if you enable this, make sure clients are unable to specify this header themselves; must be washed away and replaced by a reverse-proxy
+  # bypass the copyparty authentication checks if the request-header HN contains a username to associate the request with (for use with authentik/oauth/...)\nWARNING: if you enable this, make sure clients are unable to specify this header themselves; must be washed away and replaced by a reverse-proxy
   # type: HN
   # default: [empty string] 
   idphusr:
-  # assume the request-header \033[33mHN\033[0m contains the groupname of the requesting user; can be referenced in config files for group-based access control
+  # assume the request-header HN contains the groupname of the requesting user; can be referenced in config files for group-based access control
   # type: HN
   # default: [empty string] 
   idphgrp:
-  # optional but recommended safeguard; your reverse-proxy will insert a secret header named \033[33mHN\033[0m into all requests, and the other IdP headers will be ignored if this header is not present
+  # optional but recommended safeguard; your reverse-proxy will insert a secret header named HN into all requests, and the other IdP headers will be ignored if this header is not present
   # type: HN
   # default: [empty string] 
   idphkey:
-  # if there are multiple groups in \033[33m--idp-h-grp\033[0m, they are separated by one of the characters in \033[33mRE\033[0m
+  # if there are multiple groups in --idp-h-grp, they are separated by one of the characters in RE
   # type: RE
   # default: |:;+,
   idpgsep:
   # where to store the known IdP users/groups (if you run multiple copyparty instances, make sure they use different DBs)
   # type: PATH
   idpdb:
-  # how to use \033[33m--idp-db\033[0m; [\033[32m0\033[0m] = entirely disable, [\033[32m1\033[0m] = write-only (effectively disabled), [\033[32m2\033[0m] = remember users, [\033[32m3\033[0m] = remember users and groups.\nNOTE: Will remember and restore the IdP-volumes of all users for all eternity if set to 2 or 3, even when user is deleted from your IdP
+  # how to use --idp-db; [0] = entirely disable, [1] = write-only (effectively disabled), [2] = remember users, [3] = remember users and groups.\nNOTE: Will remember and restore the IdP-volumes of all users for all eternity if set to 2 or 3, even when user is deleted from your IdP
   # type: N
   idpstore:
   # comma-separated list of users allowed to use /?idp (the cache management UI)
   # type: U,U
   # default: [empty string] 
   idpadm:
-  # generate a session-token for IdP users which is written to cookie \033[33mcppws\033[0m (or \033[33mcppwd\033[0m if plaintext), to reduce the load on the IdP server, lifetime \033[33mS\033[0m seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with \033[33m--ses-db\033[0m wiped)
+  # generate a session-token for IdP users which is written to cookie cppws (or cppwd if plaintext), to reduce the load on the IdP server, lifetime S seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with --ses-db wiped)
   # type: S
   idpcookie:
   # disable basic-authentication support; do not accept passwords from the 'Authenticate' header at all. NOTE: This breaks support for the android app
@@ -515,7 +515,7 @@ idp_IdentityProvider_UserAuthenticationOptions:
   # type: NAME
   # default: acct
   grpall:
-  # \033[34mREPEATABLE:\033[0m users with IP matching \033[33mCIDR\033[0m are auto-authenticated as username \033[33mUSR\033[0m; example: [\033[32m172.16.24.0/24=dave]
+  # REPEATABLE: users with IP matching CIDR are auto-authenticated as username USR; example: [172.16.24.0/24=dave]
   # type: CIDR=USR
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -525,7 +525,7 @@ userChangeablePasswordsOptions:
   # allow users to change their own passwords
   # type: BOOLEAN
   chpw:
-  # \033[34mREPEATABLE:\033[0m do not allow password-changes for this comma-separated list of usernames
+  # REPEATABLE: do not allow password-changes for this comma-separated list of usernames
   # type: U,U,U
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -536,7 +536,7 @@ userChangeablePasswordsOptions:
   # minimum password length
   # type: N
   chpwlen:
-  # verbosity of summary on config load [\033[32m0\033[0m] = nothing at all, [\033[32m1\033[0m] = number of users, [\033[32m2\033[0m] = list users with default-pw, [\033[32m3\033[0m] = list all users
+  # verbosity of summary on config load [0] = nothing at all, [1] = number of users, [2] = list users with default-pw, [3] = list all users
   # type: LVL
   chpwv:
 
@@ -544,7 +544,7 @@ zeroconfOptions:
   # enable all zeroconf backends (mdns, ssdp)
   # type: BOOLEAN
   z:
-  # enable zeroconf ONLY on the comma-separated list of subnets and/or interface names/indexes\n └─example: \033[32meth0, wlo1, virhost0, 192.168.123.0/24, fd00:fda::/96\033[0m
+  # enable zeroconf ONLY on the comma-separated list of subnets and/or interface names/indexes\n └─example: eth0, wlo1, virhost0, 192.168.123.0/24, fd00:fda::/96
   # type: NETS
   # default: [empty string] 
   zon:
@@ -552,13 +552,13 @@ zeroconfOptions:
   # type: NETS
   # default: [empty string] 
   zoff:
-  # check for network changes every \033[33mSEC\033[0m seconds (0=disable)
+  # check for network changes every SEC seconds (0=disable)
   # type: SEC
   zchk:
   # verbose all zeroconf backends
   # type: BOOLEAN
   zv:
-  # rejoin multicast groups every \033[33mSEC\033[0m seconds (workaround for some switches/routers which cause mDNS to suddenly stop working after some time); try [\033[32m300\033[0m] or [\033[32m180\033[0m]\n └─note: can be due to firewalls; make sure UDP port 5353 is open in both directions (on clients too)
+  # rejoin multicast groups every SEC seconds (workaround for some switches/routers which cause mDNS to suddenly stop working after some time); try [300] or [180]\n └─note: can be due to firewalls; make sure UDP port 5353 is open in both directions (on clients too)
   # type: SEC
   mchop:
 
@@ -592,7 +592,7 @@ zeroconfMdnsOptions_AlsoSeeHelpZm:
   # disable workaround for avahi-bug #379 (corruption in Avahi's mDNS reflection feature)
   # type: BOOLEAN
   zmnwa1:
-  # list of services to announce -- d=webdav h=http f=ftp s=smb -- lowercase=plaintext uppercase=TLS -- default: all enabled services except http/https (\033[32mDdfs\033[0m if \033[33m--ftp\033[0m and \033[33m--smb\033[0m is set, \033[32mDd\033[0m otherwise)
+  # list of services to announce -- d=webdav h=http f=ftp s=smb -- lowercase=plaintext uppercase=TLS -- default: all enabled services except http/https (Ddfs if --ftp and --smb is set, Dd otherwise)
   # type: dhf
   # default: [empty string] 
   zms:
@@ -625,7 +625,7 @@ zeroconfMdnsOptions_AlsoSeeHelpZm:
   # disable NSEC replies -- try this if some clients don't see copyparty
   # type: BOOLEAN
   zmnoneg:
-  # send unsolicited announce every \033[33mSEC\033[0m; useful if clients have IPs in a subnet which doesn't overlap with the server, or to avoid some firewall issues
+  # send unsolicited announce every SEC; useful if clients have IPs in a subnet which doesn't overlap with the server, or to avoid some firewall issues
   # type: SEC
   zmspam:
 
@@ -644,7 +644,7 @@ zeroconfSsdpOptions:
   # verbose SSDP
   # type: BOOLEAN
   zsv:
-  # location to include in the url (or a complete external URL), for example [\033[32mpriv/?pw=hunter2\033[0m] (goes directly to /priv/ with password hunter2) or [\033[32m?hc=priv&pw=hunter2\033[0m] (shows mounting options for /priv/ with password)
+  # location to include in the url (or a complete external URL), for example [priv/?pw=hunter2] (goes directly to /priv/ with password hunter2) or [?hc=priv&pw=hunter2] (shows mounting options for /priv/ with password)
   # type: PATH
   # default: /?hc
   zsl:
@@ -653,10 +653,10 @@ zeroconfSsdpOptions:
   zsid:
 
 ftpOptions_TcpOnly_:
-  # enable FTP server on \033[33mPORT\033[0m, for example \033[32m3921
+  # enable FTP server on PORT, for example 3921
   # type: PORT
   ftp:
-  # enable FTPS server on \033[33mPORT\033[0m, for example \033[32m3990
+  # enable FTPS server on PORT, for example 3990
   # type: PORT
   ftps:
   # verbose
@@ -665,27 +665,27 @@ ftpOptions_TcpOnly_:
   # only listen on IPv4
   # type: BOOLEAN
   ftp4:
-  # only accept connections from IP-addresses inside \033[33mCIDR\033[0m (comma-separated); specify [\033[32many\033[0m] to disable inheriting \033[33m--ipa\033[0m. Examples: [\033[32mlan\033[0m] or [\033[32m10.89.0.0/16, 192.168.33.0/24\033[0m]
+  # only accept connections from IP-addresses inside CIDR (comma-separated); specify [any] to disable inheriting --ipa. Examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
   # type: CIDR
   # default: [empty string] 
   ftpipa:
   # if target file exists, reject upload instead of overwrite
   # type: BOOLEAN
   ftpnoow:
-  # grace period for resuming interrupted uploads (any client can write to any file last-modified more recently than \033[33mSEC\033[0m seconds ago)
+  # grace period for resuming interrupted uploads (any client can write to any file last-modified more recently than SEC seconds ago)
   # type: SEC
   ftpwt:
   # the NAT address to use for passive connections
   # type: ADDR
   # default: [empty string] 
   ftpnat:
-  # the range of TCP ports to use for passive connections, for example \033[32m12000-13000
+  # the range of TCP ports to use for passive connections, for example 12000-13000
   # type: P-P
   # default: [empty string] 
   ftppr:
 
 webdavOptions:
-  # enable full write support, even if client may not be webdav. \033[1;31mWARNING:\033[0m This has side-effects -- PUT-operations will now \033[1;31mOVERWRITE\033[0m existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
+  # enable full write support, even if client may not be webdav. WARNING: This has side-effects -- PUT-operations will now OVERWRITE existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
   # type: BOOLEAN
   daw:
   # allow depth:infinite requests (recursive file listing); extremely server-heavy but required for spec compliance -- luckily few clients rely on this
@@ -700,12 +700,12 @@ webdavOptions:
   # force auth for all folders (required by davfs2 when only some folders are world-readable) (volflag=davauth)
   # type: BOOLEAN
   davauth:
-  # regex of tricky user-agents which expect 401 from GET requests; disable with [\033[32mno\033[0m] or blank
+  # regex of tricky user-agents which expect 401 from GET requests; disable with [no] or blank
   # type: PTN
   davua1:
 
 tftpOptions_UdpOnly_:
-  # enable TFTP server on \033[33mPORT\033[0m, for example \033[32m69 \033[0mor \033[32m3969
+  # enable TFTP server on PORT, for example 69 or 3969
   # type: PORT
   tftp:
   # only listen on IPv4
@@ -727,17 +727,17 @@ tftpOptions_UdpOnly_:
   # if someone tries to download a directory, return an error instead of showing its directory listing
   # type: BOOLEAN
   tftpnols:
-  # only accept connections from IP-addresses inside \033[33mCIDR\033[0m (comma-separated); specify [\033[32many\033[0m] to disable inheriting \033[33m--ipa\033[0m. Examples: [\033[32mlan\033[0m] or [\033[32m10.89.0.0/16, 192.168.33.0/24\033[0m]
+  # only accept connections from IP-addresses inside CIDR (comma-separated); specify [any] to disable inheriting --ipa. Examples: [lan] or [10.89.0.0/16, 192.168.33.0/24]
   # type: CIDR
   # default: [empty string] 
   tftpipa:
-  # the range of UDP ports to use for data transfer, for example \033[32m12000-13000
+  # the range of UDP ports to use for data transfer, for example 12000-13000
   # type: P-P
   # default: [empty string] 
   tftppr:
 
 smb_CifsOptions:
-  # enable smb (read-only) -- this requires running copyparty as root on linux and macos unless \033[33m--smb-port\033[0m is set above 1024 and your OS does port-forwarding from 445 to that.\n\033[1;31mWARNING:\033[0m this protocol is DANGEROUS and buggy! Never expose to the internet!
+  # enable smb (read-only) -- this requires running copyparty as root on linux and macos unless --smb-port is set above 1024 and your OS does port-forwarding from 445 to that.\nWARNING: this protocol is DANGEROUS and buggy! Never expose to the internet!
   # type: BOOLEAN
   smb:
   # enable write support (please dont)
@@ -769,12 +769,12 @@ smb_CifsOptions:
   smbvvv:
 
 handlers_SeeHelpHandlers_:
-  # \033[34mREPEATABLE:\033[0m handle 404s by executing \033[33mPY\033[0m file
+  # REPEATABLE: handle 404s by executing PY file
   # type: PY
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   on404:
-  # \033[34mREPEATABLE:\033[0m handle 403s by executing \033[33mPY\033[0m file
+  # REPEATABLE: handle 403s by executing PY file
   # type: PY
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -784,57 +784,57 @@ handlers_SeeHelpHandlers_:
   hothandlers:
 
 eventHooks_SeeHelpHooks_:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file upload starts
+  # REPEATABLE: execute CMD before a file upload starts
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xbu:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after  a file upload finishes
+  # REPEATABLE: execute CMD after  a file upload finishes
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xau:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after  all uploads finish and volume is idle
+  # REPEATABLE: execute CMD after  all uploads finish and volume is idle
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xiu:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file copy
+  # REPEATABLE: execute CMD before a file copy
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xbc:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after  a file copy
+  # REPEATABLE: execute CMD after  a file copy
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xac:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file move/rename
+  # REPEATABLE: execute CMD before a file move/rename
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xbr:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after  a file move/rename
+  # REPEATABLE: execute CMD after  a file move/rename
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xar:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file delete
+  # REPEATABLE: execute CMD before a file delete
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xbd:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after  a file delete
+  # REPEATABLE: execute CMD after  a file delete
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xad:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m on message
+  # REPEATABLE: execute CMD on message
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   xm:
-  # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m if someone gets banned (pw/404/403/url)
+  # REPEATABLE: execute CMD if someone gets banned (pw/404/403/url)
   # type: CMD
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -902,7 +902,7 @@ optOuts:
   # disable ability to abort ongoing copy/move
   # type: BOOLEAN
   nofsabrt:
-  # no title hostname; don't show \033[33m--name\033[0m in <title>
+  # no title hostname; don't show --name in <title>
   # type: BOOLEAN
   nth:
   # no info hostname -- don't show in UI
@@ -914,11 +914,11 @@ optOuts:
   # no powered-by-copyparty branding in UI
   # type: BOOLEAN
   nb:
-  # reject download-as-zip if more than \033[33mN\033[0m files in total; optionally takes a unit suffix: [\033[32m256\033[0m], [\033[32m9K\033[0m], [\033[32m4G\033[0m] (volflag=zipmaxn)
+  # reject download-as-zip if more than N files in total; optionally takes a unit suffix: [256], [9K], [4G] (volflag=zipmaxn)
   # type: N
   # default: 0
   zipmaxn:
-  # reject download-as-zip if total download size exceeds \033[33mSZ\033[0m bytes; optionally takes a unit suffix: [\033[32m256M\033[0m], [\033[32m4G\033[0m], [\033[32m2T\033[0m] (volflag=zipmaxs)
+  # reject download-as-zip if total download size exceeds SZ bytes; optionally takes a unit suffix: [256M], [4G], [2T] (volflag=zipmaxs)
   # type: SZ
   # default: 0
   zipmaxs:
@@ -929,13 +929,13 @@ optOuts:
   # authenticated users bypass the zip size limit (volflag=zipmaxu)
   # type: BOOLEAN
   zipmaxu:
-  # who can download as zip/tar? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=authenticated-with-read-access, [\033[32m3\033[0m]=everyone-with-read-access (volflag=zip_who)\n\033[1;31mWARNING:\033[0m if a nested volume has a more restrictive value than a parent volume, then this will be \033[33mignored\033[0m if the download is initiated from the parent, more lenient volume
+  # who can download as zip/tar? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=zip_who)\nWARNING: if a nested volume has a more restrictive value than a parent volume, then this will be ignored if the download is initiated from the parent, more lenient volume
   # type: LVL
   zipwho:
-  # regex of user-agents to reject from download-as-zip/tar; disable with [\033[32mno\033[0m] or blank
+  # regex of user-agents to reject from download-as-zip/tar; disable with [no] or blank
   # type: PTN
   uanozip:
-  # disable download as zip/tar; same as \033[33m--zip-who=0\033[0m
+  # disable download as zip/tar; same as --zip-who=0
   # type: BOOLEAN
   nozip:
   # disable download as compressed tar (?tar=gz, ?tar=bz2, ?tar=xz, ?tar=gz:9, ...)
@@ -950,20 +950,20 @@ optOuts:
   # disable streaming a growing files with ?tail (volflag=notail)
   # type: BOOLEAN
   notail:
-  # do not write uploader-IP into the database; will also disable unpost, you may want \033[32m--forget-ip\033[0m instead (volflag=no_db_ip)
+  # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead (volflag=no_db_ip)
   # type: BOOLEAN
   nodbip:
 
 safetyOptions:
-  # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of\033[32m --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
+  # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
   s:
-  # further increase safety: Prevent js-injection, accidental move/delete, broken symlinks, webdav, 404 on 403, ban on excessive 404s.\n └─Alias of\033[32m -s --unpost=0 --no-del --no-mv --hardlink --vague-403 -nih
+  # further increase safety: Prevent js-injection, accidental move/delete, broken symlinks, webdav, 404 on 403, ban on excessive 404s.\n └─Alias of -s --unpost=0 --no-del --no-mv --hardlink --vague-403 -nih
   # type: BOOLEAN
   ss:
-  # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of\033[32m -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
+  # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
   # type: BOOLEAN
   sss:
-  # do a sanity/safety check of all volumes on startup; arguments \033[33mUSER\033[0m,\033[33mVOL\033[0m,\033[33mFLAGS\033[0m (see \033[33m--help-ls\033[0m); example [\033[32m**,*,ln,p,r\033[0m]
+  # do a sanity/safety check of all volumes on startup; arguments USER,VOL,FLAGS (see --help-ls); example [**,*,ln,p,r]
   # type: U[,V[,F]]
   # default: [empty string] 
   ls:
@@ -988,43 +988,43 @@ safetyOptions:
   # send 404 instead of 403 (security through ambiguity, very enterprise)
   # type: BOOLEAN
   vague403:
-  # don't send folder listings as HTML, force clients to use the embedded json instead -- slight protection against misbehaving search engines which ignore \033[33m--no-robots\033[0m
+  # don't send folder listings as HTML, force clients to use the embedded json instead -- slight protection against misbehaving search engines which ignore --no-robots
   # type: BOOLEAN
   forcejs:
   # adds http and html headers asking search engines to not index anything (volflag=norobots)
   # type: BOOLEAN
   norobots:
-  # logout clients after \033[33mH\033[0m hours of inactivity; [\033[32m0.0028\033[0m]=10sec, [\033[32m0.1\033[0m]=6min, [\033[32m24\033[0m]=day, [\033[32m168\033[0m]=week, [\033[32m720\033[0m]=month, [\033[32m8760\033[0m]=year)
+  # logout clients after H hours of inactivity; [0.0028]=10sec, [0.1]=6min, [24]=day, [168]=week, [720]=month, [8760]=year)
   # type: H
   logout:
-  # more than \033[33mN\033[0m wrong passwords in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes; disable with [\033[32mno\033[0m]
+  # more than N wrong passwords in W minutes = ban for B minutes; disable with [no]
   # type: N,W,B
   # default: 9,60,1440
   banpw:
-  # more than \033[33mN\033[0m password-changes in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes; disable with [\033[32mno\033[0m]
+  # more than N password-changes in W minutes = ban for B minutes; disable with [no]
   # type: N,W,B
   # default: 5,60,1440
   banpwc:
-  # hitting more than \033[33mN\033[0m 404's in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes; only affects users who cannot see directory listings because their access is either g/G/h
+  # hitting more than N 404's in W minutes = ban for B minutes; only affects users who cannot see directory listings because their access is either g/G/h
   # type: N,W,B
   # default: 50,60,1440
   ban404:
-  # hitting more than \033[33mN\033[0m 403's in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes; [\033[32m1440\033[0m]=day, [\033[32m10080\033[0m]=week, [\033[32m43200\033[0m]=month
+  # hitting more than N 403's in W minutes = ban for B minutes; [1440]=day, [10080]=week, [43200]=month
   # type: N,W,B
   # default: 9,2,1440
   ban403:
-  # hitting more than \033[33mN\033[0m 422's in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes (invalid requests, attempted exploits ++)
+  # hitting more than N 422's in W minutes = ban for B minutes (invalid requests, attempted exploits ++)
   # type: N,W,B
   # default: 9,2,1440
   ban422:
-  # hitting more than \033[33mN\033[0m sus URL's in \033[33mW\033[0m minutes = ban for \033[33mB\033[0m minutes; applies only to permissions g/G/h (decent replacement for \033[33m--ban-404\033[0m if that can't be used)
+  # hitting more than N sus URL's in W minutes = ban for B minutes; applies only to permissions g/G/h (decent replacement for --ban-404 if that can't be used)
   # type: N,W,B
   # default: 9,2,1440
   banurl:
-  # URLs which are considered sus / eligible for banning; disable with blank or [\033[32mno\033[0m]
+  # URLs which are considered sus / eligible for banning; disable with blank or [no]
   # type: R
   susurls:
-  # harmless URLs ignored from 404-bans; disable with blank or [\033[32mno\033[0m]
+  # harmless URLs ignored from 404-bans; disable with blank or [no]
   # type: R
   nonsusurls:
   # if a client is banned, reject its connection as soon as possible; not a good idea to enable when proxied behind cloudflare since it could ban your reverse-proxy
@@ -1036,30 +1036,30 @@ safetyOptions:
   # reject HTTP-request from client if more than N characters in Cookie header
   # type: N
   cookiecmax:
-  # if a client maxes out the server connection limit, downgrade it from connection:keep-alive to connection:close for \033[33mMIN\033[0m minutes (and also kill its active connections) -- disable with 0
+  # if a client maxes out the server connection limit, downgrade it from connection:keep-alive to connection:close for MIN minutes (and also kill its active connections) -- disable with 0
   # type: MIN
   aclose:
-  # if a client maxes out the server connection limit without sending headers, ban it for \033[33mB\033[0m minutes; disable with [\033[32m0\033[0m]
+  # if a client maxes out the server connection limit without sending headers, ban it for B minutes; disable with [0]
   # type: B
   loris:
-  # Access-Control-Allow-Origin; list of origins (domains/IPs without port) to accept requests from; [\033[32mhttps://1.2.3.4\033[0m]. Default [\033[32m*\033[0m] allows requests from all sites but removes cookies and http-auth; only ?pw=hunter2 survives
+  # Access-Control-Allow-Origin; list of origins (domains/IPs without port) to accept requests from; [https://1.2.3.4]. Default [*] allows requests from all sites but removes cookies and http-auth; only ?pw=hunter2 survives
   # type: V[,V]
   # default: *
   acao:
-  # Access-Control-Allow-Methods; list of methods to accept from offsite ('*' behaves like \033[33m--acao\033[0m's description)
+  # Access-Control-Allow-Methods; list of methods to accept from offsite ('*' behaves like --acao's description)
   # type: V[,V]
   # default: GET,HEAD
   acam:
 
 saltingOptions:
-  # account-pw hashing algorithm; one of these, best to worst: \033[32margon2 scrypt sha2 none\033[0m (each optionally followed by alg-specific comma-sep. config)
+  # account-pw hashing algorithm; one of these, best to worst: argon2 scrypt sha2 none (each optionally followed by alg-specific comma-sep. config)
   # type: ALG
   # default: none
   ahalg:
-  # account-pw salt; ignored if \033[33m--ah-alg\033[0m is none (default)
+  # account-pw salt; ignored if --ah-alg is none (default)
   # type: SALT
   ahsalt:
-  # generate hashed password for \033[33mPW\033[0m, or read passwords from STDIN if \033[33mPW\033[0m is [\033[32m-\033[0m]
+  # generate hashed password for PW, or read passwords from STDIN if PW is [-]
   # type: PW
   # default: [empty string] 
   ahgen:
@@ -1076,13 +1076,13 @@ saltingOptions:
   # type: SALT
   # default: hunter2
   warksalt:
-  # on startup, print the effective value of \033[33m--ah-salt\033[0m (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # on startup, print the effective value of --ah-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
   # type: BOOLEAN
   showahsalt:
-  # on startup, print the effective value of \033[33m--fk-salt\033[0m (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # on startup, print the effective value of --fk-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
   # type: BOOLEAN
   showfksalt:
-  # on startup, print the effective value of \033[33m--dk-salt\033[0m (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
+  # on startup, print the effective value of --dk-salt (the autogenerated value in $XDG_CONFIG_HOME unless otherwise specified)
   # type: BOOLEAN
   showdksalt:
 
@@ -1093,7 +1093,7 @@ shutdownOptions:
   # continue running even if it's impossible to receive connections at all
   # type: BOOLEAN
   ignebindall:
-  # shutdown after \033[33mWHEN\033[0m has finished; [\033[32mcfg\033[0m] config parsing, [\033[32midx\033[0m] volscan + multimedia indexing
+  # shutdown after WHEN has finished; [cfg] config parsing, [idx] volscan + multimedia indexing
   # type: WHEN
   # default: [empty string] 
   exit:
@@ -1102,7 +1102,7 @@ loggingOptions:
   # quiet; disable most STDOUT messages
   # type: BOOLEAN
   q:
-  # logfile; use .txt for plaintext or .xz for compressed. Example: \033[32mcpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz\033[0m (NB: some errors may appear on STDOUT only)
+  # logfile; use .txt for plaintext or .xz for compressed. Example: cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz (NB: some errors may appear on STDOUT only)
   # type: PATH
   # default: [empty string] 
   lo:
@@ -1133,13 +1133,13 @@ loggingOptions:
   # debug: print http-server threadpool scaling
   # type: BOOLEAN
   loghtp:
-  # print request \033[33mHEADER\033[0m; [\033[32m*\033[0m]=all
+  # print request HEADER; [*]=all
   # type: HEADER
   ihead:
-  # print response \033[33mHEADER\033[0m; [\033[32m*\033[0m]=all
+  # print response HEADER; [*]=all
   # type: HEADER
   ohead:
-  # dont log URLs matching regex \033[33mRE\033[0m
+  # dont log URLs matching regex RE
   # type: RE
   lfurl:
 
@@ -1159,10 +1159,10 @@ adminPanelOptions:
   # don't show list of incoming files in controlpanel
   # type: BOOLEAN
   nouplist:
-  # who can see active downloads in the controlpanel? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=everyone
+  # who can see active downloads in the controlpanel? [0]=nobody, [1]=admins, [2]=everyone
   # type: LVL
   dllist:
-  # who can see recent uploads on the ?ru page? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=everyone (volflag=ups_who)
+  # who can see recent uploads on the ?ru page? [0]=nobody, [1]=admins, [2]=everyone (volflag=ups_who)
   # type: LVL
   upswho:
   # let everyone see upload timestamps on the ?ru page, not just admins
@@ -1195,11 +1195,11 @@ thumbnailOptions:
   # max memory usage (GiB) permitted by thumbnailer; not very accurate
   # type: GB
   thrammax:
-  # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [\033[32my\033[0m]=crop, [\033[32mn\033[0m]=nocrop, [\033[32mfy\033[0m]=force-y, [\033[32mfn\033[0m]=force-n (volflag=crop)
+  # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [y]=crop, [n]=nocrop, [fy]=force-y, [fn]=force-n (volflag=crop)
   # type: TXT
   # default: y
   thcrop:
-  # show thumbs at 3x resolution; client can override in UI unless force. [\033[32my\033[0m]=yes, [\033[32mn\033[0m]=no, [\033[32mfy\033[0m]=force-yes, [\033[32mfn\033[0m]=force-no (volflag=th3x)
+  # show thumbs at 3x resolution; client can override in UI unless force. [y]=yes, [n]=no, [fy]=force-yes, [fn]=force-no (volflag=th3x)
   # type: TXT
   # default: n
   thx3:
@@ -1219,16 +1219,16 @@ thumbnailOptions:
   # use swresample instead of soxr for audio thumbs (faster, lower accuracy, avoids issues on some FFmpeg builds)
   # type: BOOLEAN
   thffswr:
-  # activity labeling cooldown -- avoids doing keepalive pokes (updating the mtime) on thumbnail folders more often than \033[33mSEC\033[0m seconds
+  # activity labeling cooldown -- avoids doing keepalive pokes (updating the mtime) on thumbnail folders more often than SEC seconds
   # type: SEC
   thpoke:
   # cleanup interval; 0=disabled
   # type: SEC
   thclean:
-  # max folder age -- folders which haven't been poked for longer than \033[33m--th-poke\033[0m seconds will get deleted every \033[33m--th-clean\033[0m seconds
+  # max folder age -- folders which haven't been poked for longer than --th-poke seconds will get deleted every --th-clean seconds
   # type: SEC
   thmaxage:
-  # folder thumbnails to stat/look for; enabling \033[33m-e2d\033[0m will make these case-insensitive, and try them as dotfiles (.folder.jpg), and also automatically select thumbnails for all folders that contain pics, even if none match this pattern
+  # folder thumbnails to stat/look for; enabling -e2d will make these case-insensitive, and try them as dotfiles (.folder.jpg), and also automatically select thumbnails for all folders that contain pics, even if none match this pattern
   # type: N,N
   # default: folder.png,folder.jpg,cover.png,cover.jpg
   thcovers:
@@ -1269,7 +1269,7 @@ transcodingOptions:
   # target bitrate for transcoding to opus; set 0 to disable
   # type: KBPS
   qopus:
-  # target quality for transcoding to mp3, for example [\033[32m192k\033[0m] (CBR) or [\033[32mq0\033[0m] (CQ/CRF, q0=maxquality, q9=smallest); set 0 to disable
+  # target quality for transcoding to mp3, for example [192k] (CBR) or [q0] (CQ/CRF, q0=maxquality, q9=smallest); set 0 to disable
   # type: QUALITY
   # default: q2
   qmp3:
@@ -1291,27 +1291,27 @@ transcodingOptions:
   # disable batch audio transcoding by folder download (zip/tar)
   # type: BOOLEAN
   nobacode:
-  # delete cached transcode output after \033[33mSEC\033[0m seconds
+  # delete cached transcode output after SEC seconds
   # type: SEC
   acmaxage:
 
 tailingOptions_RealtimeStreamingOfAGrowingFile_:
-  # who can tail? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=authenticated-with-read-access, [\033[32m3\033[0m]=everyone-with-read-access (volflag=tail_who)
+  # who can tail? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=tail_who)
   # type: LVL
   tailwho:
-  # do not allow starting a new tail if more than \033[33mN\033[0m active downloads
+  # do not allow starting a new tail if more than N active downloads
   # type: N
   tailcmax:
-  # terminate connection after \033[33mSEC\033[0m seconds; [\033[32m0\033[0m]=never (volflag=tail_tmax)
+  # terminate connection after SEC seconds; [0]=never (volflag=tail_tmax)
   # type: SEC
   tailtmax:
-  # check for new data every \033[33mSEC\033[0m seconds (volflag=tail_rate)
+  # check for new data every SEC seconds (volflag=tail_rate)
   # type: SEC
   tailrate:
-  # send a zerobyte if connection is idle for \033[33mSEC\033[0m seconds to prevent disconnect
+  # send a zerobyte if connection is idle for SEC seconds to prevent disconnect
   # type: SEC
   tailka:
-  # check if file was replaced (new fd) if idle for \033[33mSEC\033[0m seconds (volflag=tail_fd)
+  # check if file was replaced (new fd) if idle for SEC seconds (volflag=tail_fd)
   # type: SEC
   tailfd:
 
@@ -1326,7 +1326,7 @@ rssOptions:
   # type: E,E
   # default: [empty string] 
   rssfext:
-  # default sort order (url-param 'sort'); [\033[32mm\033[0m]=last-modified [\033[32mu\033[0m]=upload-time [\033[32mn\033[0m]=filename [\033[32ms\033[0m]=filesize; Uppercase=oldest-first. Note that upload-time is 0 for non-uploaded files
+  # default sort order (url-param 'sort'); [m]=last-modified [u]=upload-time [n]=filename [s]=filesize; Uppercase=oldest-first. Note that upload-time is 0 for non-uploaded files
   # type: ORD
   # default: m
   rsssort:
@@ -1335,10 +1335,10 @@ generalDbOptions:
   # enable up2k database; this enables file search, upload-undo, improves deduplication
   # type: BOOLEAN
   e2d:
-  # scan writable folders for new files on startup; sets \033[33m-e2d\033[0m
+  # scan writable folders for new files on startup; sets -e2d
   # type: BOOLEAN
   e2ds:
-  # scans all folders on startup; sets \033[33m-e2ds\033[0m
+  # scans all folders on startup; sets -e2ds
   # type: BOOLEAN
   e2dsa:
   # verify file integrity; rehash all files and compare with db
@@ -1354,7 +1354,7 @@ generalDbOptions:
   # type: PATH
   # default: [empty string] 
   hist:
-  # override where the volume databases are to be placed; default is the same as \033[33m--hist\033[0m (volflag=dbpath)
+  # override where the volume databases are to be placed; default is the same as --hist (volflag=dbpath)
   # type: PATH
   # default: [empty string] 
   dbpath:
@@ -1368,7 +1368,7 @@ generalDbOptions:
   # do not show total recursive size of folders in listings, show inode size instead; slightly faster (volflag=nodirsz)
   # type: BOOLEAN
   nodirsz:
-  # if the directory-sizes in the UI are bonkers, use this along with \033[33m-e2dsa\033[0m to rebuild the index from scratch
+  # if the directory-sizes in the UI are bonkers, use this along with -e2dsa to rebuild the index from scratch
   # type: BOOLEAN
   redirsz:
   # disable rescan acceleration; do full database integrity check -- makes the db ~5%% smaller and bootup/rescans 3~10x slower
@@ -1380,10 +1380,10 @@ generalDbOptions:
   # never forget indexed files, even when deleted from disk -- makes it impossible to ever upload the same file twice -- only useful for offloading uploads to a cloud service or something (volflag=noforget)
   # type: BOOLEAN
   noforget:
-  # remove uploader-IP from database (and make unpost impossible) \033[33mMIN\033[0m minutes after upload, for GDPR reasons. Default [\033[32m0\033[0m] is never-forget. [\033[32m1440\033[0m]=day, [\033[32m10080\033[0m]=week, [\033[32m43200\033[0m]=month. (volflag=forget_ip)
+  # remove uploader-IP from database (and make unpost impossible) MIN minutes after upload, for GDPR reasons. Default [0] is never-forget. [1440]=day, [10080]=week, [43200]=month. (volflag=forget_ip)
   # type: MIN
   forgetip:
-  # database durability profile; sets the tradeoff between robustness and speed, see \033[33m--help-dbd\033[0m (volflag=dbd)
+  # database durability profile; sets the tradeoff between robustness and speed, see --help-dbd (volflag=dbd)
   # type: PROFILE
   # default: wal
   dbd:
@@ -1393,19 +1393,19 @@ generalDbOptions:
   # num cpu cores to use for file hashing; set 0 or 1 for single-core hashing
   # type: CORES
   hashmt:
-  # rescan filesystem for changes every \033[33mSEC\033[0m seconds; 0=off (volflag=scan)
+  # rescan filesystem for changes every SEC seconds; 0=off (volflag=scan)
   # type: SEC
   remaxage:
-  # defer any scheduled volume reindexing until \033[33mSEC\033[0m seconds after last db write (uploads, renames, ...)
+  # defer any scheduled volume reindexing until SEC seconds after last db write (uploads, renames, ...)
   # type: SEC
   dbact:
-  # search deadline -- terminate searches running for more than \033[33mSEC\033[0m seconds
+  # search deadline -- terminate searches running for more than SEC seconds
   # type: SEC
   srchtime:
   # max search results to allow clients to fetch; 125 results will be shown initially
   # type: N
   srchhits:
-  # regex: exclude files from search results if the file-URL matches \033[33mPTN\033[0m (case-sensitive). Example: [\033[32mpassword|logs/[0-9]\033[0m] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
+  # regex: exclude files from search results if the file-URL matches PTN (case-sensitive). Example: [password|logs/[0-9]] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
   # type: PTN
   # default: [empty string] 
   srchexcl:
@@ -1417,10 +1417,10 @@ metadataDbOptions:
   # enable metadata indexing; makes it possible to search for artist/title/codec/resolution/...
   # type: BOOLEAN
   e2t:
-  # scan newly discovered files for metadata on startup; sets \033[33m-e2t\033[0m
+  # scan newly discovered files for metadata on startup; sets -e2t
   # type: BOOLEAN
   e2ts:
-  # delete all metadata from DB and do a full rescan; sets \033[33m-e2ts\033[0m
+  # delete all metadata from DB and do a full rescan; sets -e2ts
   # type: BOOLEAN
   e2tsr:
   # use FFprobe for tags instead; will detect more tags
@@ -1441,7 +1441,7 @@ metadataDbOptions:
   # debug mtp settings and mutagen/FFprobe parsers
   # type: BOOLEAN
   mtagvv:
-  # \033[34mREPEATABLE:\033[0m add/replace metadata mapping
+  # REPEATABLE: add/replace metadata mapping
   # type: M=t,t,t
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
@@ -1449,17 +1449,17 @@ metadataDbOptions:
   # tags to index/display (comma-sep.); either an entire replacement list, or add/remove stuff on the default-list with +foo or /bar
   # type: M,M,M
   mte:
-  # tags to hide by default (comma-sep.); assign/add/remove same as \033[33m-mte\033[0m
+  # tags to hide by default (comma-sep.); assign/add/remove same as -mte
   # type: M,M,M
   mth:
-  # \033[34mREPEATABLE:\033[0m read tag \033[33mM\033[0m using program \033[33mBIN\033[0m to parse the file
+  # REPEATABLE: read tag M using program BIN to parse the file
   # type: M=[f,]BIN
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   mtp:
 
 textfileOptions:
-  # where to store old version of markdown files; [\033[32ms\033[0m]=subfolder, [\033[32mv\033[0m]=volume-histpath, [\033[32mn\033[0m]=nope/disabled (volflag=md_hist)
+  # where to store old version of markdown files; [s]=subfolder, [v]=volume-histpath, [n]=nope/disabled (volflag=md_hist)
   # type: TXT
   # default: s
   mdhist:
@@ -1467,13 +1467,13 @@ textfileOptions:
   # type: TYPE
   # default: [empty string] 
   txteol:
-  # the textfile editor will check for serverside changes every \033[33mSEC\033[0m seconds
+  # the textfile editor will check for serverside changes every SEC seconds
   # type: SEC
   mcr:
   # enable markdown plugins -- neat but dangerous, big XSS risk
   # type: BOOLEAN
   emp:
-  # enable textfile expansion -- replace {{self.ip}} and such; see \033[33m--help-exp\033[0m (volflag=exp)
+  # enable textfile expansion -- replace {{self.ip}} and such; see --help-exp (volflag=exp)
   # type: BOOLEAN
   exp:
   # comma/space-separated list of placeholders to expand in markdown files; add/remove stuff on the default list with +hdr_foo or /vf.scan (volflag=exp_md)
@@ -1482,7 +1482,7 @@ textfileOptions:
   # comma/space-separated list of placeholders to expand in prologue/epilogue files (volflag=exp_lg)
   # type: V,V,V
   explg:
-  # regex of user-agents to reject from viewing documents through ?doc=[...]; disable with [\033[32mno\033[0m] or blank
+  # regex of user-agents to reject from viewing documents through ?doc=[...]; disable with [no] or blank
   # type: PTN
   uanodoc:
 
@@ -1490,11 +1490,11 @@ og_OpenGraph_DiscordEmbedOptions:
   # disable hotlinking and return an html document instead; this is required by open-graph, but can also be useful on its own (volflag=og)
   # type: BOOLEAN
   og:
-  # only disable hotlinking / engage OG behavior if the useragent matches regex \033[33mRE\033[0m (volflag=og_ua)
+  # only disable hotlinking / engage OG behavior if the useragent matches regex RE (volflag=og_ua)
   # type: RE
   # default: [empty string] 
   ogua:
-  # do not return the regular copyparty html, but instead load the jinja2 template at \033[33mPATH\033[0m (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
+  # do not return the regular copyparty html, but instead load the jinja2 template at PATH (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
   # type: PATH
   # default: [empty string] 
   ogtpl:
@@ -1505,7 +1505,7 @@ og_OpenGraph_DiscordEmbedOptions:
   # type: FMT
   # default: jf3
   ogth:
-  # fallback title if there is nothing in the \033[33m-e2t\033[0m database (volflag=og_title)
+  # fallback title if there is nothing in the -e2t database (volflag=og_title)
   # type: TXT
   # default: [empty string] 
   ogtitle:
@@ -1524,11 +1524,11 @@ og_OpenGraph_DiscordEmbedOptions:
   # force default title; do not read from tags (volflag=og_s_title)
   # type: BOOLEAN
   ogstitle:
-  # description text; same for all files, disable with [\033[32m-\033[0m] (volflag=og_desc)
+  # description text; same for all files, disable with [-] (volflag=og_desc)
   # type: TXT
   # default: [empty string] 
   ogdesc:
-  # sitename; defaults to \033[33m--name\033[0m, disable with [\033[32m-\033[0m] (volflag=og_site)
+  # sitename; defaults to --name, disable with [-] (volflag=og_site)
   # type: TXT
   # default: [empty string] 
   ogsite:
@@ -1536,7 +1536,7 @@ og_OpenGraph_DiscordEmbedOptions:
   # type: RGB
   # default: 333
   tcolor:
-  # query-string parceling; translate a request for \033[33m/foo/.uqe/BASE64\033[0m into \033[33m/foo?TEXT\033[0m, or \033[33m/foo/?TEXT\033[0m if the first character in \033[33mTEXT\033[0m is a slash. Automatically enabled for \033[33m--og\033[0m
+  # query-string parceling; translate a request for /foo/.uqe/BASE64 into /foo?TEXT, or /foo/?TEXT if the first character in TEXT is a slash. Automatically enabled for --og
   # type: BOOLEAN
   uqe:
 
@@ -1550,7 +1550,7 @@ uiOptions:
   # default to local timezone instead of UTC
   # type: BOOLEAN
   localtime:
-  # language, for example \033[32meng\033[0m / \033[32mnor\033[0m / ...
+  # language, for example eng / nor / ...
   # type: LANG
   # default: eng
   lang:
@@ -1563,7 +1563,7 @@ uiOptions:
   # default audio/video volume percent
   # type: 0-100
   auvol:
-  # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: \033[32mhref -href ext sz ts tags/Album tags/.tn\033[0m (volflag=sort)
+  # default sort order, comma-separated column IDs (see header tooltips), prefix with '-' for descending. Examples: href -href ext sz ts tags/Album tags/.tn (volflag=sort)
   # type: C,C,C
   # default: href
   sort:
@@ -1579,22 +1579,22 @@ uiOptions:
   # number of confirmations to show when deleting files (2/1/0)
   # type: LVL
   qdel:
-  # don't show files/folders matching \033[33mREGEX\033[0m in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\033[32m\\.(js|css)$\033[0m] (volflag=unlist)
+  # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\\.(js|css)$] (volflag=unlist)
   # type: REGEX
   # default: [empty string] 
   unlist:
-  # \033[33mfavicon-text\033[0m [ \033[33mforeground\033[0m [ \033[33mbackground\033[0m ] ], set blank to disable
+  # favicon-text [ foreground [ background ] ], set blank to disable
   # type: TXT
   # default: c 000 none
   favico:
-  # \033[34mREPEATABLE:\033[0m use thumbnail-image \033[33mVP\033[0m for file-extension \033[33mE\033[0m, example: [\033[32mexe=/.res/exe.png\033[0m] (volflag=ext_th)
+  # REPEATABLE: use thumbnail-image VP for file-extension E, example: [exe=/.res/exe.png] (volflag=ext_th)
   # type: E=VP
   # type: ARRAY
   # REPEATABLE: YES (use YAML array) 
   extth:
   # default: [empty string] 
   mpmc:
-  # \033[33memoji\033[0m or \033[33memoji,css\033[0m Example: [\033[32m🥖,padding:0\033[0m]
+  # emoji or emoji,css Example: [🥖,padding:0]
   # type: TXT
   # default: 🌲
   spinner:
@@ -1632,19 +1632,19 @@ uiOptions:
   # type: TXT
   # default: --name
   bname:
-  # powered-by link; disable with \033[33m-nb\033[0m
+  # powered-by link; disable with -nb
   # type: URL
   pburl:
-  # show version on the control panel (incompatible with \033[33m-nb\033[0m)
+  # show version on the control panel (incompatible with -nb)
   # type: BOOLEAN
   ver:
-  # configure the option to enable/disable k304 on the controlpanel (workaround for buggy reverse-proxies); [\033[32m0\033[0m] = hidden and default-off, [\033[32m1\033[0m] = visible and default-off, [\033[32m2\033[0m] = visible and default-on
+  # configure the option to enable/disable k304 on the controlpanel (workaround for buggy reverse-proxies); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
   # type: NUM
   k304:
-  # configure the option to enable/disable no304 on the controlpanel (workaround for buggy caching in browsers); [\033[32m0\033[0m] = hidden and default-off, [\033[32m1\033[0m] = visible and default-off, [\033[32m2\033[0m] = visible and default-on
+  # configure the option to enable/disable no304 on the controlpanel (workaround for buggy caching in browsers); [0] = hidden and default-off, [1] = visible and default-off, [2] = visible and default-on
   # type: NUM
   no304:
-  # the controlpanel Refresh-button will autorefresh every SEC; [\033[32m0\033[0m] = just once
+  # the controlpanel Refresh-button will autorefresh every SEC; [0] = just once
   # type: SEC
   ctlre:
   # list of capabilities to allow in the iframe 'sandbox' attribute for README.md docs (volflag=md_sbf); see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#sandbox
@@ -1655,7 +1655,7 @@ uiOptions:
   # type: FLAGS
   # default: downloads forms popups scripts top-navigation-by-user-activation
   lgsbf:
-  # the value of the iframe 'allow' attribute for README.md docs, for example [\033[32mfullscreen\033[0m] (volflag=md_sba)
+  # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen] (volflag=md_sba)
   # type: TXT
   # default: [empty string] 
   mdsba:
@@ -1703,28 +1703,28 @@ debugOptions:
   # use mdns-domain instead of server-ip on /?hc
   # type: BOOLEAN
   rclonemdns:
-  # write stacktrace to \033[33mP\033[0math every \033[33mS\033[0m second, for example --stackmon=\033[32m./st/%%Y-%%m/%%d/%%H%%M.xz,60
+  # write stacktrace to Path every S second, for example --stackmon=./st/%%Y-%%m/%%d/%%H%%M.xz,60
   # type: P,S
   # default: [empty string] 
   stackmon:
-  # list active threads every \033[33mSEC\033[0m
+  # list active threads every SEC
   # type: SEC
   logthrs:
-  # log filekey params for files where path matches \033[33mREGEX\033[0m; [\033[32m.\033[0m] (a single dot) = all files
+  # log filekey params for files where path matches REGEX; [.] (a single dot) = all files
   # type: REGEX
   # default: [empty string] 
   logfk:
-  # [up2k] if a client uploads a bitflipped/corrupted chunk, store a copy according to \033[33m--bf-nc\033[0m and \033[33m--bf-dir\033[0m
+  # [up2k] if a client uploads a bitflipped/corrupted chunk, store a copy according to --bf-nc and --bf-dir
   # type: BOOLEAN
   bakflips:
-  # bak-flips: stop if there's more than \033[33mNUM\033[0m files at \033[33m--kf-dir\033[0m already; default: 6.3 GiB max (200*32M)
+  # bak-flips: stop if there's more than NUM files at --kf-dir already; default: 6.3 GiB max (200*32M)
   # type: NUM
   bfnc:
-  # bak-flips: store corrupted chunks at \033[33mPATH\033[0m; default: folder named 'bf' wherever copyparty was started
+  # bak-flips: store corrupted chunks at PATH; default: folder named 'bf' wherever copyparty was started
   # type: PATH
   # default: bf
   bfdir:
-  # bak-flips: log corruption info to a textfile at \033[33mPATH\033[0m
+  # bak-flips: log corruption info to a textfile at PATH
   # type: PATH
   # default: [empty string] 
   bflog:
@@ -1766,7 +1766,7 @@ volumes:
         # type: BOOLEAN
         reflink:
         # verify on-disk data before using it for dedup
-        # how careful to be when deduplicating files; [\033[32m1\033[0m] = just verify the filesize, [\033[32m50\033[0m] = verify file contents have not been altered (volflag=safededup)
+        # how careful to be when deduplicating files; [1] = just verify the filesize, [50] = verify file contents have not been altered (volflag=safededup)
         # type: N
         safededup:
         # take dupe data from clients, even if available on HDD
@@ -1779,13 +1779,13 @@ volumes:
         nodupe:
         # unix-permission for new dirs/folders
         # Example: 755
-        # unix file permissions to use when creating directories; see --help-chmod. Examples: [\033[32m755\033[0m] = owner-RW + all-R, [\033[32m777\033[0m] = full-yolo (volflag=chmod_d)
+        # unix file permissions to use when creating directories; see --help-chmod. Examples: [755] = owner-RW + all-R, [777] = full-yolo (volflag=chmod_d)
         # type: UGO
         # default: 755
         chmod_d:
         # unix-permission for new files
         # Example: 644
-        # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [\033[32m644\033[0m] = owner-RW + all-R, [\033[32m755\033[0m] = owner-RWX + all-RX, [\033[32m777\033[0m] = full-yolo (volflag=chmod_f)
+        # unix file permissions to use when creating files; default is probably 644 (OS-decided), see --help-chmod. Examples: [644] = owner-RW + all-R, [755] = owner-RWX + all-RX, [777] = full-yolo (volflag=chmod_f)
         # type: UGO
         # default: [empty string] 
         chmod_f:
@@ -1800,7 +1800,7 @@ volumes:
         # type: N
         gid:
         # force use of sparse files, mainly for s3-backed storage
-        # rebuild mountpoint cache every \033[33mSEC\033[0m to keep track of sparse-files support; keep low on servers with removable media
+        # rebuild mountpoint cache every SEC to keep track of sparse-files support; keep low on servers with removable media
         # type: SEC
         sparse:
         # deny use of sparse files, mainly for slow storage
@@ -1809,12 +1809,12 @@ volumes:
         # Please input the text that should appear in the copyparty config verbatim as this key's value.
         # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
         nosparse:
-        # enable full WebDAV write support (dangerous);PUT-operations will now [1;31mOVERWRITE[0;35m existing files
-        # enable full write support, even if client may not be webdav. \033[1;31mWARNING:\033[0m This has side-effects -- PUT-operations will now \033[1;31mOVERWRITE\033[0m existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
+        # enable full WebDAV write support (dangerous);PUT-operations will now OVERWRITE existing files
+        # enable full write support, even if client may not be webdav. WARNING: This has side-effects -- PUT-operations will now OVERWRITE existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
         # type: BOOLEAN
         daw:
         # forces all uploads into the top folder of the vfs
-        # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [\033[32m0\033[0m] = only when necessary (non-https), [\033[32m1\033[0m] = always (all browsers), [\033[32m2\033[0m] = always on chrome/firefox, [\033[32m3\033[0m] = always on chrome, [\033[32mN\033[0m] = chrome-version N and newer (recommendation: 137)
+        # when to use a wasm-hasher instead of the browser's builtin; faster on chrome, but buggy in older chrome versions. [0] = only when necessary (non-https), [1] = always (all browsers), [2] = always on chrome/firefox, [3] = always on chrome, [N] = chrome-version N and newer (recommendation: 137)
         # type: N
         nosub:
         # enables filetype detection for nameless uploads
@@ -1822,7 +1822,7 @@ volumes:
         # type: BOOLEAN
         magic:
         # fallback filename for nameless uploads
-        # filename for nameless uploads (when uploader doesn't provide a name); default is [\033[32mput-UNIXTIME-IP.bin\033[0m] (the \033[32m.6f\033[0m means six decimal places) (volflag=put_name)
+        # filename for nameless uploads (when uploader doesn't provide a name); default is [put-UNIXTIME-IP.bin] (the .6f means six decimal places) (volflag=put_name)
         # type: TXT
         # default: put-{now.6f}-{cip}.bin
         put_name:
@@ -1882,39 +1882,39 @@ volumes:
         # type: BOOLEAN
         wo_up_readme:
         # force randomized filenames, 9 chars long by default
-        # force randomized filenames, \033[33m--nrand\033[0m chars long (volflag=rand)
+        # force randomized filenames, --nrand chars long (volflag=rand)
         # type: BOOLEAN
         rand:
         # randomized filenames are N chars long
         # Example: N
-        # force randomized filenames, \033[33m--nrand\033[0m chars long (volflag=rand)
+        # force randomized filenames, --nrand chars long (volflag=rand)
         # type: BOOLEAN
         nrand:
         # overwrite existing files? 0=no 1=if-older 2=always
         # Example: N
-        # web-client: default setting for when to replace/overwrite existing files; [\033[32m0\033[0m]=never, [\033[32m1\033[0m]=if-client-newer, [\033[32m2\033[0m]=always (volflag=u2ow)
+        # web-client: default setting for when to replace/overwrite existing files; [0]=never, [1]=if-client-newer, [2]=always (volflag=u2ow)
         # type: NUM
         u2ow:
         # [f]orce [c]lient-last-modified or [u]pload-time
         # Example: fc
-        # how to timestamp uploaded files; [\033[32mc\033[0m]=client-last-modified, [\033[32mu\033[0m]=upload-time, [\033[32mfc\033[0m]=force-c, [\033[32mfu\033[0m]=force-u (volflag=u2ts)
+        # how to timestamp uploaded files; [c]=client-last-modified, [u]=upload-time, [fc]=force-c, [fu]=force-u (volflag=u2ts)
         # type: TXT
         # default: c
         u2ts:
         # allow aborting unfinished uploads? 0=no 1=strict 2=ip-chk 3=acct-chk
         # Example: 1
-        # clients can abort incomplete uploads by using the unpost tab (requires \033[33m-e2d\033[0m). [\033[32m0\033[0m] = never allowed (disable feature), [\033[32m1\033[0m] = allow if client has the same IP as the upload AND is using the same account, [\033[32m2\033[0m] = just check the IP, [\033[32m3\033[0m] = just check account-name (volflag=u2abort)
+        # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
         # type: NUM
         u2abort:
         # allow filesizes between 1 KiB and 3MiB
         # Example: 1k-3m
-        # web-client: default upload chunksize (MiB); sets \033[33mmin,default,max\033[0m in the settings gui. Each HTTP POST will aim for \033[33mdefault\033[0m, and never exceed \033[33mmax\033[0m. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [\033[32m1,1,1\033[0m]
+        # web-client: default upload chunksize (MiB); sets min,default,max in the settings gui. Each HTTP POST will aim for default, and never exceed max. Cloudflare max is 96. Big values are good for cross-atlantic but may increase HDD fragmentation on some FS. Disable this optimization with [1,1,1]
         # type: N,N,N
         # default: 1,64,96
         sz:
         # ensure 1 GiB free disk space
         # Example: 1g
-        # ensure \033[33mGiB\033[0m free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [\033[32m256m\033[0m], [\033[32m4\033[0m], [\033[32m2T\033[0m] (volflag=df)
+        # ensure GiB free disk space by rejecting upload requests; assumes gigabytes unless a unit suffix is given: [256m], [4], [2T] (volflag=df)
         # type: GiB
         # default: 0
         df:
@@ -1936,21 +1936,21 @@ volumes:
         rotf:
         # uploads are deleted after 1 hour
         # Example: 3600
-        # generate a session-token for IdP users which is written to cookie \033[33mcppws\033[0m (or \033[33mcppwd\033[0m if plaintext), to reduce the load on the IdP server, lifetime \033[33mS\033[0m seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with \033[33m--ses-db\033[0m wiped)
+        # generate a session-token for IdP users which is written to cookie cppws (or cppwd if plaintext), to reduce the load on the IdP server, lifetime S seconds.\n └─note: The expiration time is a client hint only; the actual lifetime of the session-token is infinite (until next restart with --ses-db wiped)
         # type: S
         lifetime:
 
       database_General:
         # enable database; makes files searchable + enables upload-undo
-        # clients can abort incomplete uploads by using the unpost tab (requires \033[33m-e2d\033[0m). [\033[32m0\033[0m] = never allowed (disable feature), [\033[32m1\033[0m] = allow if client has the same IP as the upload AND is using the same account, [\033[32m2\033[0m] = just check the IP, [\033[32m3\033[0m] = just check account-name (volflag=u2abort)
+        # clients can abort incomplete uploads by using the unpost tab (requires -e2d). [0] = never allowed (disable feature), [1] = allow if client has the same IP as the upload AND is using the same account, [2] = just check the IP, [3] = just check account-name (volflag=u2abort)
         # type: NUM
         e2d:
         # scan writable folders for new files on startup; also sets -e2d
-        # scan writable folders for new files on startup; sets \033[33m-e2d\033[0m
+        # scan writable folders for new files on startup; sets -e2d
         # type: BOOLEAN
         e2ds:
         # scans all folders for new files on startup; also sets -e2d
-        # scans all folders on startup; sets \033[33m-e2ds\033[0m
+        # scans all folders on startup; sets -e2ds
         # type: BOOLEAN
         e2dsa:
         # enable multimedia indexing; makes it possible to search for tags
@@ -1958,11 +1958,11 @@ volumes:
         # type: BOOLEAN
         e2t:
         # scan existing files for tags on startup; also sets -e2t
-        # scan newly discovered files for metadata on startup; sets \033[33m-e2t\033[0m
+        # scan newly discovered files for metadata on startup; sets -e2t
         # type: BOOLEAN
         e2ts:
         # delete all metadata from DB (full rescan); also sets -e2ts
-        # delete all metadata from DB and do a full rescan; sets \033[33m-e2ts\033[0m
+        # delete all metadata from DB and do a full rescan; sets -e2ts
         # type: BOOLEAN
         e2tsr:
         # disables metadata collection for existing files
@@ -2014,7 +2014,7 @@ volumes:
         hist:
         # puts indexes at that location
         # Example: /tmp/cdb
-        # override where the volume databases are to be placed; default is the same as \033[33m--hist\033[0m (volflag=dbpath)
+        # override where the volume databases are to be placed; default is the same as --hist (volflag=dbpath)
         # type: PATH
         # default: [empty string] 
         dbpath:
@@ -2027,7 +2027,7 @@ volumes:
         landmark:
         # scan for new files every 60sec, same as --re-maxage
         # Example: 60
-        # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of\033[32m -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
+        # further increase safety: Enable logging to disk, scan for dangerous symlinks.\n └─Alias of -ss --no-dav --no-logues --no-readme -lo=cpp-%%Y-%%m%%d-%%H%%M%%S.txt.xz --ls=**,*,ln,p,r
         # type: BOOLEAN
         scan:
         # skips hashing file contents if path matches *.iso
@@ -2047,11 +2047,11 @@ volumes:
         noforget:
         # forget uploader-IP after 30 days (GDPR)
         # Example: 43200
-        # remove uploader-IP from database (and make unpost impossible) \033[33mMIN\033[0m minutes after upload, for GDPR reasons. Default [\033[32m0\033[0m] is never-forget. [\033[32m1440\033[0m]=day, [\033[32m10080\033[0m]=week, [\033[32m43200\033[0m]=month. (volflag=forget_ip)
+        # remove uploader-IP from database (and make unpost impossible) MIN minutes after upload, for GDPR reasons. Default [0] is never-forget. [1440]=day, [10080]=week, [43200]=month. (volflag=forget_ip)
         # type: MIN
         forget_ip:
         # never store uploader-IP in the db; disables unpost
-        # do not write uploader-IP into the database; will also disable unpost, you may want \033[32m--forget-ip\033[0m instead (volflag=no_db_ip)
+        # do not write uploader-IP into the database; will also disable unpost, you may want --forget-ip instead (volflag=no_db_ip)
         # type: BOOLEAN
         no_db_ip:
         # avoid excessive reindexing on android sdcardfs
@@ -2062,7 +2062,7 @@ volumes:
         fat32:
         # database speed-durability tradeoff
         # Example: [acid|swal|wal|yolo]
-        # database durability profile; sets the tradeoff between robustness and speed, see \033[33m--help-dbd\033[0m (volflag=dbd)
+        # database durability profile; sets the tradeoff between robustness and speed, see --help-dbd (volflag=dbd)
         # type: PROFILE
         # default: wal
         dbd:
@@ -2087,7 +2087,7 @@ volumes:
         # type: BOOLEAN
         nodotsrch:
         # exclude search results with URL matching this regex
-        # regex: exclude files from search results if the file-URL matches \033[33mPTN\033[0m (case-sensitive). Example: [\033[32mpassword|logs/[0-9]\033[0m] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
+        # regex: exclude files from search results if the file-URL matches PTN (case-sensitive). Example: [password|logs/[0-9]] any URL containing 'password' or 'logs/DIGIT' (volflag=srch_excl)
         # type: PTN
         # default: [empty string] 
         srch_excl:
@@ -2100,7 +2100,7 @@ volumes:
         mte:
         # media-tags to hide by default
         # Example: fmt,res,ac
-        # tags to hide by default (comma-sep.); assign/add/remove same as \033[33m-mte\033[0m
+        # tags to hide by default (comma-sep.); assign/add/remove same as -mte
         # type: M,M,M
         mth:
         # uses the "audio-bpm.py" program togenerate ".bpm" tags from uploads (f = overwrite tags)
@@ -2144,12 +2144,12 @@ volumes:
         # default: 320x256
         thsize:
         # center-cropping (y/n/fy/fn)
-        # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [\033[32my\033[0m]=crop, [\033[32mn\033[0m]=nocrop, [\033[32mfy\033[0m]=force-y, [\033[32mfn\033[0m]=force-n (volflag=crop)
+        # crop thumbnails to 4:3 or keep dynamic height; client can override in UI unless force. [y]=crop, [n]=nocrop, [fy]=force-y, [fn]=force-n (volflag=crop)
         # type: TXT
         # default: y
         crop:
         # 3x resolution (y/n/fy/fn)
-        # show thumbs at 3x resolution; client can override in UI unless force. [\033[32my\033[0m]=yes, [\033[32mn\033[0m]=no, [\033[32mfy\033[0m]=force-yes, [\033[32mfn\033[0m]=force-no (volflag=th3x)
+        # show thumbs at 3x resolution; client can override in UI unless force. [y]=yes, [n]=no, [fy]=force-yes, [fn]=force-no (volflag=th3x)
         # type: TXT
         # default: n
         th3x:
@@ -2163,7 +2163,7 @@ volumes:
         aconvt:
         # use /b.png as thumbnail for file-extension s
         # Example: s
-        # \033[34mREPEATABLE:\033[0m use thumbnail-image \033[33mVP\033[0m for file-extension \033[33mE\033[0m, example: [\033[32mexe=/.res/exe.png\033[0m] (volflag=ext_th)
+        # REPEATABLE: use thumbnail-image VP for file-extension E, example: [exe=/.res/exe.png] (volflag=ext_th)
         # type: E=VP
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
@@ -2172,14 +2172,14 @@ volumes:
       handlers:
         # handle 404s by executing PY file
         # Example: PY
-        # \033[34mREPEATABLE:\033[0m handle 404s by executing \033[33mPY\033[0m file
+        # REPEATABLE: handle 404s by executing PY file
         # type: PY
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         on404:
         # handle 403s by executing PY file
         # Example: PY
-        # \033[34mREPEATABLE:\033[0m handle 403s by executing \033[33mPY\033[0m file
+        # REPEATABLE: handle 403s by executing PY file
         # type: PY
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
@@ -2188,74 +2188,74 @@ volumes:
       eventHooks:
         # execute CMD before a file upload starts
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file upload starts
+        # REPEATABLE: execute CMD before a file upload starts
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xbu:
         # execute CMD after  a file upload finishes
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after        a file upload finishes
+        # REPEATABLE: execute CMD after        a file upload finishes
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xau:
         # execute CMD after  all uploads finish and volume is idle
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after        all uploads finish and volume is idle
+        # REPEATABLE: execute CMD after        all uploads finish and volume is idle
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xiu:
         # execute CMD before a file copy
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file copy
+        # REPEATABLE: execute CMD before a file copy
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xbc:
         # execute CMD after  a file copy
         # Example: CMD
-        # do not add wildcard entries for each \033[33m--crt-ns\033[0m
+        # do not add wildcard entries for each --crt-ns
         # type: BOOLEAN
         xac:
         # execute CMD before a file rename/move
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file move/rename
+        # REPEATABLE: execute CMD before a file move/rename
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xbr:
         # execute CMD after  a file rename/move
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after        a file move/rename
+        # REPEATABLE: execute CMD after        a file move/rename
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xar:
         # execute CMD before a file delete
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m before a file delete
+        # REPEATABLE: execute CMD before a file delete
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xbd:
         # execute CMD after  a file delete
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m after        a file delete
+        # REPEATABLE: execute CMD after        a file delete
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
         xad:
         # execute CMD on message
         # Example: CMD
-        # how to handle url-form POSTs; see \033[33m--help-urlform\033[0m
+        # how to handle url-form POSTs; see --help-urlform
         # type: MODE
         # default: print,xm
         xm:
         # execute CMD if someone gets banned
         # Example: CMD
-        # \033[34mREPEATABLE:\033[0m execute \033[33mCMD\033[0m if someone gets banned (pw/404/403/url)
+        # REPEATABLE: execute CMD if someone gets banned (pw/404/403/url)
         # type: CMD
         # type: ARRAY
         # REPEATABLE: YES (use YAML array) 
@@ -2271,7 +2271,7 @@ volumes:
         # type: BOOLEAN
         gsel:
         # default sort order
-        # upload order; [\033[32ms\033[0m]=smallest-first, [\033[32mn\033[0m]=alphabetical, [\033[32mfs\033[0m]=force-s, [\033[32mfn\033[0m]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
+        # upload order; [s]=smallest-first, [n]=alphabetical, [fs]=force-s, [fn]=force-n -- alphabetical is a bit slower on fiber/LAN but makes it easier to eyeball if everything went fine
         # type: TXT
         # default: s
         sort:
@@ -2284,7 +2284,7 @@ volumes:
         # type: N
         hsortn:
         # dont list files matching REGEX
-        # don't show files/folders matching \033[33mREGEX\033[0m in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\033[32m\\.(js|css)$\033[0m] (volflag=unlist)
+        # don't show files/folders matching REGEX in file list. WARNING: Purely cosmetic! Does not affect API calls, just the browser. Example: [\\.(js|css)$] (volflag=unlist)
         # type: REGEX
         # default: [empty string] 
         unlist:
@@ -2305,7 +2305,7 @@ volumes:
         # type: BOOLEAN
         nodirsz:
         # allows indexing by search engines (default)
-        # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of\033[32m --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
+        # increase safety: Disable thumbnails / potentially dangerous software (ffmpeg/pillow/vips), hide partial uploads, avoid crawlers.\n └─Alias of --dotpart --no-thumb --no-mtag-ff --no-robots --force-js
         robots:
         # kindly asks search engines to leave
         # adds http and html headers asking search engines to not index anything (volflag=norobots)
@@ -2350,7 +2350,7 @@ volumes:
         # default: downloads forms popups scripts top-navigation-by-user-activation
         lg_sbf:
         # value of iframe allow-prop for markdown-sandbox
-        # the value of the iframe 'allow' attribute for README.md docs, for example [\033[32mfullscreen\033[0m] (volflag=md_sba)
+        # the value of the iframe 'allow' attribute for README.md docs, for example [fullscreen] (volflag=md_sba)
         # type: TXT
         # default: [empty string] 
         md_sba:
@@ -2372,12 +2372,12 @@ volumes:
         # type: BOOLEAN
         og:
         # sitename; defaults to --name, disable with '-'
-        # sitename; defaults to \033[33m--name\033[0m, disable with [\033[32m-\033[0m] (volflag=og_site)
+        # sitename; defaults to --name, disable with [-] (volflag=og_site)
         # type: TXT
         # default: [empty string] 
         og_site:
         # description text for all files; disable with '-'
-        # description text; same for all files, disable with [\033[32m-\033[0m] (volflag=og_desc)
+        # description text; same for all files, disable with [-] (volflag=og_desc)
         # type: TXT
         # default: [empty string] 
         og_desc:
@@ -2404,7 +2404,7 @@ volumes:
         og_title_i:
         # fallback title if there's nothing in the db
         # Example: foo
-        # fallback title if there is nothing in the \033[33m-e2t\033[0m database (volflag=og_title)
+        # fallback title if there is nothing in the -e2t database (volflag=og_title)
         # type: TXT
         # default: [empty string] 
         og_title:
@@ -2413,7 +2413,7 @@ volumes:
         # type: BOOLEAN
         og_s_title:
         # custom html; see --og-tpl in --help
-        # do not return the regular copyparty html, but instead load the jinja2 template at \033[33mPATH\033[0m (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
+        # do not return the regular copyparty html, but instead load the jinja2 template at PATH (if path contains 'EXT' then EXT will be replaced with the requested file's extension) (volflag=og_tpl)
         # type: PATH
         # default: [empty string] 
         og_tpl:
@@ -2422,14 +2422,14 @@ volumes:
         # type: BOOLEAN
         og_no_head:
         # if defined: only send OG html if useragent matches this regex
-        # only disable hotlinking / engage OG behavior if the useragent matches regex \033[33mRE\033[0m (volflag=og_ua)
+        # only disable hotlinking / engage OG behavior if the useragent matches regex RE (volflag=og_ua)
         # type: RE
         # default: [empty string] 
         og_ua:
 
       textfiles:
         # where to put markdown backups; s=subfolder, v=volHist, n=nope
-        # where to store old version of markdown files; [\033[32ms\033[0m]=subfolder, [\033[32mv\033[0m]=volume-histpath, [\033[32mn\033[0m]=nope/disabled (volflag=md_hist)
+        # where to store old version of markdown files; [s]=subfolder, [v]=volume-histpath, [n]=nope/disabled (volflag=md_hist)
         # type: TXT
         # default: s
         md_hist:
@@ -2459,22 +2459,22 @@ volumes:
         notail:
         # check if file was replaced (new fd) every 1 sec
         # Example: 1
-        # check if file was replaced (new fd) if idle for \033[33mSEC\033[0m seconds (volflag=tail_fd)
+        # check if file was replaced (new fd) if idle for SEC seconds (volflag=tail_fd)
         # type: SEC
         tail_fd:
         # check for new data every 0.2 sec
         # Example: 0.2
-        # check for new data every \033[33mSEC\033[0m seconds (volflag=tail_rate)
+        # check for new data every SEC seconds (volflag=tail_rate)
         # type: SEC
         tail_rate:
         # kill connection after 30 sec
         # Example: 30
-        # terminate connection after \033[33mSEC\033[0m seconds; [\033[32m0\033[0m]=never (volflag=tail_tmax)
+        # terminate connection after SEC seconds; [0]=never (volflag=tail_tmax)
         # type: SEC
         tail_tmax:
         # restrict ?tail access (1=admins,2=authed,3=everyone)
         # Example: 2
-        # who can tail? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=authenticated-with-read-access, [\033[32m3\033[0m]=everyone-with-read-access (volflag=tail_who)
+        # who can tail? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=tail_who)
         # type: LVL
         tail_who:
 
@@ -2522,23 +2522,23 @@ volumes:
         rmagic:
         # restrict viewing the list of recent uploads
         # Example: 2
-        # who can see recent uploads on the ?ru page? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=everyone (volflag=ups_who)
+        # who can see recent uploads on the ?ru page? [0]=nobody, [1]=admins, [2]=everyone (volflag=ups_who)
         # type: LVL
         ups_who:
         # restrict access to download-as-zip/tar
         # Example: 2
-        # who can download as zip/tar? [\033[32m0\033[0m]=nobody, [\033[32m1\033[0m]=admins, [\033[32m2\033[0m]=authenticated-with-read-access, [\033[32m3\033[0m]=everyone-with-read-access (volflag=zip_who)\n\033[1;31mWARNING:\033[0m if a nested volume has a more restrictive value than a parent volume, then this will be \033[33mignored\033[0m if the download is initiated from the parent, more lenient volume
+        # who can download as zip/tar? [0]=nobody, [1]=admins, [2]=authenticated-with-read-access, [3]=everyone-with-read-access (volflag=zip_who)\nWARNING: if a nested volume has a more restrictive value than a parent volume, then this will be ignored if the download is initiated from the parent, more lenient volume
         # type: LVL
         zip_who:
         # reject download-as-zip if more than 9000 files
         # Example: 9k
-        # reject download-as-zip if more than \033[33mN\033[0m files in total; optionally takes a unit suffix: [\033[32m256\033[0m], [\033[32m9K\033[0m], [\033[32m4G\033[0m] (volflag=zipmaxn)
+        # reject download-as-zip if more than N files in total; optionally takes a unit suffix: [256], [9K], [4G] (volflag=zipmaxn)
         # type: N
         # default: 0
         zipmaxn:
         # reject download-as-zip if size over 2 GiB
         # Example: 2g
-        # reject download-as-zip if total download size exceeds \033[33mSZ\033[0m bytes; optionally takes a unit suffix: [\033[32m256M\033[0m], [\033[32m4G\033[0m], [\033[32m2T\033[0m] (volflag=zipmaxs)
+        # reject download-as-zip if total download size exceeds SZ bytes; optionally takes a unit suffix: [256M], [4G], [2T] (volflag=zipmaxs)
         # type: SZ
         # default: 0
         zipmaxs:
@@ -2557,11 +2557,11 @@ volumes:
         # type: BOOLEAN
         nopipe:
         # ms-windows: timeout for renaming busy files
-        # if a file cannot be renamed because it is busy, continue trying for \033[33mT\033[0m seconds, retry every \033[33mR\033[0m seconds; disable with 0/0 (volflag=mv_retry)
+        # if a file cannot be renamed because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=mv_retry)
         # type: T/R
         mv_retry:
         # ms-windows: timeout for deleting busy files
-        # if a file cannot be deleted because it is busy, continue trying for \033[33mT\033[0m seconds, retry every \033[33mR\033[0m seconds; disable with 0/0 (volflag=rm_retry)
+        # if a file cannot be deleted because it is busy, continue trying for T seconds, retry every R seconds; disable with 0/0 (volflag=rm_retry)
         # type: T/R
         rm_retry:
         # ask webdav clients to login for all folders

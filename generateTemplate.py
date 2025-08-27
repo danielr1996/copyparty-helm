@@ -1,4 +1,5 @@
 import re
+import string
 from re import sub
 import os
 import sys
@@ -26,7 +27,7 @@ def parseHelp(line):
         return ''
 
 def escapeAnsi(text):
-    return text
+    return re.compile(r'(?:\\x1b|\\033|\\e)', flags=re.IGNORECASE).sub('', re.compile(r'(?:\\x1b|\\033|\\e)\[[0-?]*[ -/]*[@-~]', flags=re.IGNORECASE).sub('', re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])').sub('', text)))
 
 def parseConfig(line):
     configOption = '  ' + re.sub('-', '', line.split('"')[1]) + ':\n'

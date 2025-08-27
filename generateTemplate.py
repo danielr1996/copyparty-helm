@@ -25,6 +25,9 @@ def parseHelp(line):
     else:
         return ''
 
+def escapeAnsi(text):
+    return text
+
 def parseConfig(line):
     configOption = '  ' + re.sub('-', '', line.split('"')[1]) + ':\n'
     return configOption
@@ -62,7 +65,6 @@ def createConfigMap():
     with open(COPYPARTY_MAIN) as copyparty:
         yamlContent = '    [global]\n'
         currentGroup = ''
-        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
         for line in copyparty.readlines():
             if 'add_argument' in line:
                 if  'help sections' in line or '        ap2' in line:
@@ -72,7 +74,7 @@ def createConfigMap():
 
                 else:
                     entry = ''
-                    parsedline = ansi_escape.sub('', line)
+                    parsedline = escapeAnsi(line)
                     if 'action="append"' in parsedline:
                         entry = '    {{{{- if .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
                         entry += '      {{{{- range .Values.{group}.{value} }}}}\n'.format(group=currentGroup, value=getConfigKey(line))
@@ -182,7 +184,6 @@ tolerations: []
 
 affinity: {}
 '''
-        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
         for line in copyparty.readlines():
             if 'add_argument' in line:
                 if  'help sections' in line or '        ap2' in line:
@@ -191,7 +192,7 @@ affinity: {}
                     yamlContent += '\n' + re.sub('\W', '_', camelCase((line.split('"')[1]))) + ':\n'
                 else:
                     entry = ''
-                    parsedline = ansi_escape.sub('', line)
+                    parsedline = escapeAnsi(line)
                     entry += parseHelp(parsedline)
                     entry += parseMetavar(parsedline)
                     entry += parseDefault(parsedline)
@@ -206,7 +207,6 @@ affinity: {}
 def getVariableInfo(key):
     with open(COPYPARTY_MAIN) as copyparty:
         yamlContent = ''
-        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
         for line in copyparty.readlines():
             if 'add_argument' in line:
                 if  'help sections' in line or '        ap2' in line:
@@ -216,7 +216,7 @@ def getVariableInfo(key):
                 else:
                     if key in line:
                         entry = ''
-                        parsedline = ansi_escape.sub('', line)
+                        parsedline = escapeAnsi(line)
                         entry += parseHelp(parsedline)
                         entry += parseMetavar(parsedline)
                         entry += parseDefault(parsedline)
@@ -227,7 +227,6 @@ def getVariableInfo(key):
 def getVariableType(key):
     with open(COPYPARTY_MAIN) as copyparty:
         yamlContent = ''
-        ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
         for line in copyparty.readlines():
             if 'add_argument' in line:
                 if  'help sections' in line or '        ap2' in line:
@@ -236,8 +235,7 @@ def getVariableType(key):
                     yamlContent += '\n' + re.sub('\W', '_', camelCase((line.split('"')[1]))) + ':\n'
                 else:
                     if key in line:
-                        entry = ''
-                        parsedline = ansi_escape.sub('', line)
+                        parsedline = escapeAnsi(line)
                         if 'action="append"' in parsedline:
                             return 'ARRAY'
                         elif 'action="store_true"' in parsedline:
@@ -263,7 +261,6 @@ def createVolume():
     accessModes:
       - ReadWriteOnce
     volflags:"""
-    ansi_escape = re.compile(r'\\033\[[0-?]*[ -/]*[@-~]')
     prevkey = ''
     currentkey = ''
     for key in flagcats.keys():
@@ -274,7 +271,7 @@ def createVolume():
                 currentkey = l2key.split('=')[0]
             else:
                 currentkey = l2key
-            content = ansi_escape.sub('', flagcats[key][l2key])
+            content = escapeAnsi(flagcats[key][l2key])
             content = re.sub('\n', '', content)
             volflags += '        # ' + content + '\n'
             if '=' in l2key:

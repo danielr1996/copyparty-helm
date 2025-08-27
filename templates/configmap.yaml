@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "copyparty-helm.fullname" . }}-config
-  namespace: {{ .Values.namespace | default .Release.namespace }}
+  namespace: {{ .Values.namespace | .Release.namespace }}
 
 data:
   copyparty.cfg: |

@@ -1809,7 +1809,7 @@ volumes:
         # Please input the text that should appear in the copyparty config verbatim as this key's value.
         # !!!VARIABLE TEMPLATING INFORMATION NOT FOUND IN COPYPARTY CODE!!!
         nosparse:
-        # enable full WebDAV write support (dangerous);PUT-operations will now OVERWRITE existing files
+        # enable full WebDAV write support (dangerous);PUT-operations will now [1;31mOVERWRITE[0;35m existing files
         # enable full write support, even if client may not be webdav. \033[1;31mWARNING:\033[0m This has side-effects -- PUT-operations will now \033[1;31mOVERWRITE\033[0m existing files, rather than inventing new filenames to avoid loss of data. You might want to instead set this as a volflag where needed. By not setting this flag, uploaded files can get written to a filename which the client does not expect (which might be okay, depending on client)
         # type: BOOLEAN
         daw:
